@@ -910,6 +910,8 @@
       <div id="ncga-import-preview" style="display:none; margin-top:16px;"></div>
     </div>
 
+    <div id="ncga-missing-players" class="admin-only" style="display:none; margin-bottom:20px;"></div>
+
     <div class="card" style="padding:0; overflow:hidden;">
       <div style="padding:24px 24px 0;">
         <div class="card-title">Mapped Players</div>
@@ -920,7 +922,6 @@
           <thead>
             <tr>
               <th>Player</th>
-              <th>GHIN #</th>
               <th>NCGA Handicap</th>
               <th>Source</th>
               <th class="admin-only" style="display:none;"></th>
@@ -999,6 +1000,10 @@ function normalizeDb(parsed) {
   if (!parsed.tournaments) parsed.tournaments = [];
   if (!parsed.roster) parsed.roster = {};
   if (!parsed.ncgaIndex) parsed.ncgaIndex = {};
+  // Strip any legacy GHIN # values from previously-saved data — never stored going forward.
+  Object.values(parsed.ncgaIndex).forEach(info => {
+    if (info && info.ghin) delete info.ghin;
+  });
   return parsed;
 }
 
@@ -1019,6 +1024,9 @@ function saveData(data) {
 
 let db = emptyDb();
 let isAdmin = false;
+// Session-only player -> GHIN # map, used to cross-match the NCGA roster upload
+// to players. NEVER persisted to db / data.json (keeps GHIN out of the public repo).
+let sessionGhinMap = {};
 let deletePendingId = null;
 let hcpSortCol = 'index';
 let lastHcpResults = [];
@@ -1614,7 +1622,6 @@ function renderHcpTable() {
     const key = r.name.toLowerCase().trim();
     const ncga = db.ncgaIndex[key] || {};
     r.ncgaValue = (ncga.value !== undefined && ncga.value !== null && ncga.value !== '') ? parseFloat(ncga.value) : null;
-    r.ghin = ncga.ghin || '';
     r.lowest = (r.ncgaValue !== null && !isNaN(r.ncgaValue))
       ? Math.min(r.index, r.ncgaValue)
       : r.index;
@@ -1661,7 +1668,7 @@ function renderHcpTable() {
         <input type="number" step="0.1" placeholder="—" value="${ncgaDisplay}"
           style="width:72px; padding:5px 8px; font-size:13px; text-align:center;"
           onchange="updateNcgaIndex('${keyEsc}', this.value)"
-          title="${r.ghin ? 'GHIN #' + r.ghin : 'Enter official NCGA Handicap Index'}">
+          title="Enter official NCGA Handicap Index">
         ` : `<span style="font-family:'DM Mono',monospace; color:var(--text2);">${ncgaDisplay || '—'}</span>`}
       </td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;">
@@ -1714,7 +1721,7 @@ function updateNcgaIndex(key, value) {
   }
 
   // Clean up empty entries
-  if (!db.ncgaIndex[key].value && db.ncgaIndex[key].value !== 0 && !db.ncgaIndex[key].ghin) {
+  if (!db.ncgaIndex[key].value && db.ncgaIndex[key].value !== 0) {
     delete db.ncgaIndex[key];
   }
 
@@ -1749,7 +1756,7 @@ function showPlayerDetail(key) {
       <div>
         <div class="modal-title" style="margin-bottom:4px;">${player.name}</div>
         <span class="flight-badge badge-${FLIGHT_COLORS[player.flight] || 'hawk'}">${player.flight}</span>
-        ${player.ghin ? `<span style="font-size:11px; color:var(--text2); margin-left:8px; font-family:'DM Mono',monospace;">GHIN #${player.ghin}</span>` : ''}
+        
       </div>
       <div style="display:flex; gap:24px; text-align:right;">
         <div>
@@ -2104,7 +2111,6 @@ function downloadHandicapExcel() {
     const key = r.name.toLowerCase().trim();
     const ncga = db.ncgaIndex[key] || {};
     r.ncgaValue = (ncga.value !== undefined && ncga.value !== null && ncga.value !== '') ? parseFloat(ncga.value) : null;
-    r.ghin = ncga.ghin || '';
     r.lowest = (r.ncgaValue !== null && !isNaN(r.ncgaValue)) ? Math.min(r.index, r.ncgaValue) : r.index;
   });
 
@@ -2124,7 +2130,7 @@ function downloadHandicapExcel() {
     [`Generated: ${today}`],
     [`Tournaments included: ${db.tournaments.filter(t => t.scores.length > 0).length}`],
     [],
-    ['Rank', 'Player', 'Flight', 'GHIN #', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
+    ['Rank', 'Player', 'Flight', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
   ];
 
   allResults.forEach((r, i) => {
@@ -2132,7 +2138,6 @@ function downloadHandicapExcel() {
       i + 1,
       r.name,
       r.flight,
-      r.ghin || '',
       r.index,
       r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue : '',
       r.lowest,
@@ -2150,7 +2155,6 @@ function downloadHandicapExcel() {
     { wch: 6 },  // Rank
     { wch: 22 }, // Player
     { wch: 12 }, // Flight
-    { wch: 10 }, // GHIN #
     { wch: 16 }, // Tournament Index
     { wch: 14 }, // NCGA Handicap
     { wch: 14 }, // Usable Handicap
@@ -2170,14 +2174,13 @@ function downloadHandicapExcel() {
       [`${flight} Flight — Handicap Index`],
       [`Generated: ${today}`],
       [],
-      ['Rank', 'Player', 'GHIN #', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
+      ['Rank', 'Player', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
     ];
 
     flightResults.forEach((r, i) => {
       rows.push([
         i + 1,
         r.name,
-        r.ghin || '',
         r.index,
         r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue : '',
         r.lowest,
@@ -2189,7 +2192,7 @@ function downloadHandicapExcel() {
     });
 
     const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 10 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 10 }, { wch: 14 }];
+    ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 10 }, { wch: 14 }];
     XLSX.utils.book_append_sheet(wb, ws, flight);
   });
 
@@ -2624,14 +2627,11 @@ function processAllInOneFile(file) {
               const key = display.toLowerCase();
               const flight = rosterMap[key];
 
-              // Stash GHIN # against the player so it can be shown/edited in the Handicap tab,
-              // without overwriting any NCGA index value the user already entered.
+              // Stash GHIN # in a session-only map (never persisted to db/data.json)
+              // so it can be used to match the NCGA roster upload later in this session.
               if (ghinCol !== null) {
                 const ghin = String(row[ghinCol] || '').trim();
-                if (ghin) {
-                  if (!db.ncgaIndex[key]) db.ncgaIndex[key] = {};
-                  db.ncgaIndex[key].ghin = ghin;
-                }
+                if (ghin) sessionGhinMap[key] = ghin;
               }
 
               if (!flight) {
@@ -2782,11 +2782,11 @@ function showNcgaStatus(html, alertClass) {
 }
 
 // Build a map of GHIN # -> player name key from anything we already know
-// (captured from prior Adjusted Gross Score uploads).
+// (captured from this session's Adjusted Gross Score upload — never persisted)
 function buildGhinToPlayerMap() {
   const map = {};
-  Object.entries(db.ncgaIndex).forEach(([key, info]) => {
-    if (info && info.ghin) map[String(info.ghin).trim()] = key;
+  Object.entries(sessionGhinMap).forEach(([key, ghin]) => {
+    if (ghin) map[String(ghin).trim()] = key;
   });
   return map;
 }
@@ -2935,16 +2935,63 @@ function applyNcgaImport() {
   p.matched.forEach(m => {
     if (!db.ncgaIndex[m.key]) db.ncgaIndex[m.key] = {};
     db.ncgaIndex[m.key].value = m.hcp;
-    if (m.ghin) db.ncgaIndex[m.key].ghin = m.ghin;
     db.ncgaIndex[m.key].source = 'NCGA roster';
+    // GHIN # intentionally not stored — data.json is in a public repo.
   });
 
   saveData(db);
   showToast(`Applied NCGA handicap for ${p.matched.length} player(s).`);
   clearNcgaImport();
   renderNcgaTab();
+  renderNcgaMissingPlayers();
   // refresh handicap tab if it's been computed before
   if (document.getElementById('tab-handicap').classList.contains('active')) renderHandicap();
+}
+
+// Returns lowercase-key -> display-name map of every player who has played
+// in a tournament (i.e. appears in db.tournaments scores).
+function getAllTournamentPlayers() {
+  const players = {};
+  db.tournaments.forEach(t => t.scores.forEach(s => {
+    const key = s.player.toLowerCase().trim();
+    if (!players[key]) players[key] = s.player;
+  }));
+  return players;
+}
+
+// Reverse check: tournament players who have NO NCGA handicap on file.
+// Renders a warning card in the NCGA tab listing them, so name-mismatch
+// issues with the roster file can be spotted and fixed.
+function renderNcgaMissingPlayers() {
+  const el = document.getElementById('ncga-missing-players');
+  if (!el) return;
+
+  if (!isAdmin) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+
+  const allPlayers = getAllTournamentPlayers();
+  const missing = Object.entries(allPlayers)
+    .filter(([key]) => !db.ncgaIndex[key] || db.ncgaIndex[key].value === undefined || db.ncgaIndex[key].value === null)
+    .map(([, name]) => name)
+    .sort((a, b) => a.localeCompare(b));
+
+  if (!missing.length) {
+    el.style.display = 'none';
+    el.innerHTML = '';
+    return;
+  }
+
+  el.style.display = 'block';
+  el.innerHTML = `
+    <div class="alert alert-warn">
+      ⚠ <strong>${missing.length} tournament player(s) have no NCGA Handicap on file:</strong><br>
+      ${missing.join(', ')}<br>
+      <span style="font-size:12px;">This is usually a name-format mismatch between the tournament roster and the NCGA export (e.g. nicknames, middle names, or "Last, First" vs "First Last"). You can add these manually as a fallback using the NCGA Handicap input on the Handicap Index tab.</span>
+    </div>
+  `;
 }
 
 function clearNcgaImport() {
@@ -2955,13 +3002,14 @@ function clearNcgaImport() {
 }
 
 function renderNcgaTab() {
+  renderNcgaMissingPlayers();
   const tbody = document.getElementById('ncga-tbody');
   const entries = Object.entries(db.ncgaIndex)
     .filter(([key, info]) => info && info.value !== undefined && info.value !== null)
     .sort((a,b) => a[0].localeCompare(b[0]));
 
   if (!entries.length) {
-    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state" style="padding:40px;">
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state" style="padding:40px;">
       <div class="empty-icon">🪪</div>
       <div class="empty-title">No NCGA Handicaps Yet</div>
       <div class="empty-body">Upload your club's handicap roster above to populate this list.</div>
@@ -2973,7 +3021,6 @@ function renderNcgaTab() {
     const display = key.replace(/\b\w/g, c => c.toUpperCase());
     return `<tr>
       <td style="font-weight:600;">${display}</td>
-      <td style="font-family:'DM Mono',monospace; color:var(--text2);">${info.ghin || '—'}</td>
       <td><span class="hcp-value">${parseFloat(info.value).toFixed(1)}</span></td>
       <td style="font-size:12px; color:var(--text2);">${info.source || 'manual'}</td>
       ${isAdmin ? `<td><button class="btn btn-danger btn-sm" onclick="removeNcgaHandicap('${key.replace(/'/g, "\\'")}')">✕</button></td>` : ''}
@@ -2984,9 +3031,7 @@ function renderNcgaTab() {
 function removeNcgaHandicap(key) {
   if (!requireAdmin()) return;
   if (!db.ncgaIndex[key]) return;
-  delete db.ncgaIndex[key].value;
-  delete db.ncgaIndex[key].source;
-  if (!db.ncgaIndex[key].ghin) delete db.ncgaIndex[key];
+  delete db.ncgaIndex[key];
   saveData(db);
   renderNcgaTab();
   showToast('Removed NCGA handicap.');
