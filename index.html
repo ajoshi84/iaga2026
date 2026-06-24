@@ -855,7 +855,7 @@
 
     <div id="handicap-content" style="display:none;">
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
-        <div class="formula-note" style="margin-bottom:0;">Formula: Score Diff = (Gross − Course Rating) × 113 / Slope · Tournament Index = avg of all differentials × multiplier (2-3 rds: 0.96, 4-5: 0.94, 6-8: 0.92, 9+: 0.90) · Usable Handicap = lower of Tournament Index / NCGA Handicap</div>
+        <div class="formula-note" style="margin-bottom:0;">Formula: Score Diff = (Gross − Course Rating) × 113 / Slope · Tournament Index = avg of 2 lowest differentials × 0.96 · Usable Handicap = lower of Tournament Index / NCGA Handicap</div>
         <button class="btn btn-gold btn-sm" onclick="downloadHandicapExcel()">⬇ Export to Excel</button>
       </div>
 
@@ -879,7 +879,7 @@
                 <th>NCGA Handicap</th>
                 <th class="sortable" data-col="lowest" onclick="sortHcp('lowest')">Usable Handicap</th>
                 <th class="sortable" data-col="rounds" onclick="sortHcp('rounds')">Rounds</th>
-                <th class="sortable" data-col="avgDiff" onclick="sortHcp('avgDiff')">Avg Differential</th>
+                <th>Best 2 Differentials</th>
                 <th>Avg Gross</th>
               </tr>
             </thead>
@@ -921,8 +921,9 @@
         <table class="hcp-table" id="ncga-table">
           <thead>
             <tr>
-              <th>Player</th>
-              <th>NCGA Handicap</th>
+              <th class="sortable" data-col="name" onclick="sortNcga('name')" style="cursor:pointer;">Player</th>
+              <th class="sortable" data-col="ghin" onclick="sortNcga('ghin')" style="cursor:pointer;">GHIN #</th>
+              <th class="sortable" data-col="hcp" onclick="sortNcga('hcp')" style="cursor:pointer;">NCGA Handicap</th>
               <th>Source</th>
               <th class="admin-only" style="display:none;"></th>
             </tr>
@@ -1000,10 +1001,6 @@ function normalizeDb(parsed) {
   if (!parsed.tournaments) parsed.tournaments = [];
   if (!parsed.roster) parsed.roster = {};
   if (!parsed.ncgaIndex) parsed.ncgaIndex = {};
-  // Strip any legacy GHIN # values from previously-saved data — never stored going forward.
-  Object.values(parsed.ncgaIndex).forEach(info => {
-    if (info && info.ghin) delete info.ghin;
-  });
   return parsed;
 }
 
@@ -1032,6 +1029,8 @@ let hcpSortCol = 'index';
 let lastHcpResults = [];
 let hcpSortDir = 'asc';
 let hcpFlightFilter = 'all';
+let ncgaSortCol = 'name';
+let ncgaSortDir = 'asc';
 
 // ─── Initial Data Load ──────────────────────────────────────────────────────────
 async function initApp() {
@@ -1529,20 +1528,15 @@ function confirmDelete() {
 // USGA method: score differential per round, take best depending on # rounds
 // 3-6 rounds: best 1; 6-8: best 2; 9-11: best 3; 12-14: best 4; 15-16: best 5; 17-18: best 6; 19-20: best 7+
 
-// Multiplier tightens as more rounds accumulate — every round always counts
-// (no rounds are ever discarded), but consistency over more rounds reduces
-// the index slightly, similar in spirit to the USGA reduction factor.
-function getMultiplier(rounds) {
-  if (rounds <= 3) return 0.96;
-  if (rounds <= 5) return 0.94;
-  if (rounds <= 8) return 0.92;
-  return 0.90;
+// Always use the average of the 2 lowest score differentials (× 0.96).
+// With only 1 round, use that single differential.
+function getBestCount(rounds) {
+  return rounds < 2 ? 1 : 2;
 }
 
 function computeHandicaps(flightFilter) {
   const players = {};
 
-  // Collect all scores from tournaments with scores
   db.tournaments
     .filter(t => t.scores.length > 0)
     .forEach(t => {
@@ -1572,25 +1566,34 @@ function computeHandicaps(flightFilter) {
   const results = [];
   Object.values(players).forEach(p => {
     const rounds = p.diffs.length;
-    if (rounds < 2) return; // need at least 2 rounds
+    if (rounds < 2) return;
 
-    const multiplier = getMultiplier(rounds);
-    const avgDiff = p.diffs.reduce((a,b) => a+b, 0) / rounds;
-    const index = avgDiff * multiplier;
-    const avgGross = p.grosses.reduce((a,b) => a+b, 0) / p.grosses.length;
+    const bestCount = getBestCount(rounds);
+    const sorted = [...p.diffs].sort((a, b) => a - b);
+    const used = sorted.slice(0, bestCount);
+    const index = used.reduce((a, b) => a + b, 0) / used.length * 0.96;
+    const avgGross = p.grosses.reduce((a, b) => a + b, 0) / p.grosses.length;
 
     if (flightFilter !== 'all' && p.flight !== flightFilter) return;
 
-    // Every round contributes to the index now — no rounds are excluded.
-    const roundDetails = p.rounds.map(r => ({ ...r, usedInIndex: true }));
+    // Mark which rounds were used (lowest 2 differentials)
+    const usedKeys = new Set(
+      [...p.rounds]
+        .sort((a, b) => a.diff - b.diff)
+        .slice(0, bestCount)
+        .map(r => `${r.tournamentId}|${r.diff}`)
+    );
+    const roundDetails = p.rounds.map(r => ({
+      ...r,
+      usedInIndex: usedKeys.has(`${r.tournamentId}|${r.diff}`),
+    }));
 
     results.push({
       name: p.name,
       flight: p.flight,
       index: Math.round(index * 10) / 10,
       rounds,
-      multiplier,
-      avgDiff: Math.round(avgDiff * 10) / 10,
+      usedDiffs: used,
       allDiffs: p.diffs,
       avgGross: Math.round(avgGross * 10) / 10,
       roundDetails,
@@ -1658,6 +1661,8 @@ function renderHcpTable() {
     const keyEsc = key.replace(/'/g, "\\'");
     const ncgaDisplay = r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue.toFixed(1) : '';
     const usingNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue) && r.ncgaValue < r.index;
+    const ncgaInfo = db.ncgaIndex[key] || {};
+    const ghinTip = ncgaInfo.ghin ? `GHIN #${ncgaInfo.ghin}` : 'Enter official NCGA Handicap Index';
     return `<tr class="player-row">
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span class="rank-badge ${rankClass}">${rank}</span></td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer; font-weight:600;">${r.name}</td>
@@ -1668,7 +1673,7 @@ function renderHcpTable() {
         <input type="number" step="0.1" placeholder="—" value="${ncgaDisplay}"
           style="width:72px; padding:5px 8px; font-size:13px; text-align:center;"
           onchange="updateNcgaIndex('${keyEsc}', this.value)"
-          title="Enter official NCGA Handicap Index">
+          title="${ghinTip}">
         ` : `<span style="font-family:'DM Mono',monospace; color:var(--text2);">${ncgaDisplay || '—'}</span>`}
       </td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;">
@@ -1676,7 +1681,7 @@ function renderHcpTable() {
         ${usingNcga ? '<div style="font-size:10px; color:var(--text2); margin-top:2px;">NCGA</div>' : ''}
       </td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer; font-family:'DM Mono',monospace; color:var(--text2);">${r.rounds}</td>
-      <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span style="font-family:'DM Mono',monospace; font-size:13px;">${r.avgDiff.toFixed(1)}</span> <span style="font-size:11px;color:var(--border);">(×${r.multiplier.toFixed(2)})</span></td>
+      <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span style="font-family:'DM Mono',monospace; font-size:13px;">${r.usedDiffs.map(d => d.toFixed(1)).join(', ')}</span> <span style="font-size:11px;color:var(--border);">(best ${r.usedDiffs.length})</span></td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer; font-family:'DM Mono',monospace; color:var(--text2);">${r.avgGross}</td>
     </tr>`;
   }).join('');
@@ -1741,12 +1746,13 @@ function showPlayerDetail(key) {
   const hasNcga = player.ncgaValue !== null && !isNaN(player.ncgaValue);
 
   const rowsHtml = rounds.map(r => `
-    <tr>
+    <tr class="${r.usedInIndex ? 'used-row' : ''}">
       <td>${formatDate(r.date)}</td>
       <td style="font-weight:500;">${r.tournamentName}</td>
       <td style="color:var(--text2);">${r.course}</td>
       <td style="font-family:'DM Mono',monospace;">${r.gross}</td>
       <td style="font-family:'DM Mono',monospace;">${r.diff.toFixed(1)}</td>
+      <td>${r.usedInIndex ? '<span class="used-pill">✓ Used</span>' : '<span class="notused-pill">Not used</span>'}</td>
     </tr>
   `).join('');
 
@@ -1756,7 +1762,7 @@ function showPlayerDetail(key) {
       <div>
         <div class="modal-title" style="margin-bottom:4px;">${player.name}</div>
         <span class="flight-badge badge-${FLIGHT_COLORS[player.flight] || 'hawk'}">${player.flight}</span>
-        
+        ${(db.ncgaIndex[key] && db.ncgaIndex[key].ghin) ? `<span style="font-size:11px; color:var(--text2); margin-left:8px; font-family:'DM Mono',monospace;">GHIN #${db.ncgaIndex[key].ghin}</span>` : ''}
       </div>
       <div style="display:flex; gap:24px; text-align:right;">
         <div>
@@ -1774,7 +1780,7 @@ function showPlayerDetail(key) {
       </div>
     </div>
     <div style="font-size:12px; color:var(--text2); margin-bottom:16px;">
-      ${player.rounds} round(s) played &nbsp;·&nbsp; avg differential ${player.avgDiff.toFixed(1)} × ${player.multiplier.toFixed(2)} &nbsp;·&nbsp; avg gross ${player.avgGross}
+      ${player.rounds} round(s) played &nbsp;·&nbsp; best ${player.usedDiffs.length} differential(s) used (${player.usedDiffs.map(d => d.toFixed(1)).join(', ')}) &nbsp;·&nbsp; avg gross ${player.avgGross}
     </div>
     <div class="scroll-x">
       <table class="player-round-table">
@@ -1785,6 +1791,7 @@ function showPlayerDetail(key) {
             <th>Course</th>
             <th>Gross</th>
             <th>Differential</th>
+            <th>In Index?</th>
           </tr>
         </thead>
         <tbody>${rowsHtml}</tbody>
@@ -2106,12 +2113,13 @@ function downloadHandicapExcel() {
   const allResults = computeHandicaps('all');
   if (!allResults.length) { showToast('No handicap data to export.'); return; }
 
-  // Attach NCGA index + lowest-of-two
+  // Attach NCGA index + lowest-of-two + GHIN (session-only, not stored in db)
   allResults.forEach(r => {
     const key = r.name.toLowerCase().trim();
     const ncga = db.ncgaIndex[key] || {};
     r.ncgaValue = (ncga.value !== undefined && ncga.value !== null && ncga.value !== '') ? parseFloat(ncga.value) : null;
     r.lowest = (r.ncgaValue !== null && !isNaN(r.ncgaValue)) ? Math.min(r.index, r.ncgaValue) : r.index;
+    r.ghin = sessionGhinMap[key] || (db.ncgaIndex[key] && db.ncgaIndex[key].ghin) || '';
   });
 
   // Sort by flight then by lowest index ascending
@@ -2130,7 +2138,7 @@ function downloadHandicapExcel() {
     [`Generated: ${today}`],
     [`Tournaments included: ${db.tournaments.filter(t => t.scores.length > 0).length}`],
     [],
-    ['Rank', 'Player', 'Flight', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
+    ['Rank', 'Player', 'Flight', 'GHIN #', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Best 2 Differentials', 'Avg Gross Score'],
   ];
 
   allResults.forEach((r, i) => {
@@ -2138,12 +2146,12 @@ function downloadHandicapExcel() {
       i + 1,
       r.name,
       r.flight,
+      r.ghin || '',
       r.index,
       r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue : '',
       r.lowest,
       r.rounds,
-      r.avgDiff,
-      r.multiplier,
+      r.usedDiffs.map(d => d.toFixed(1)).join(', '),
       r.avgGross,
     ]);
   });
@@ -2155,12 +2163,12 @@ function downloadHandicapExcel() {
     { wch: 6 },  // Rank
     { wch: 22 }, // Player
     { wch: 12 }, // Flight
+    { wch: 12 }, // GHIN #
     { wch: 16 }, // Tournament Index
     { wch: 14 }, // NCGA Handicap
     { wch: 14 }, // Usable Handicap
     { wch: 14 }, // Rounds
-    { wch: 14 }, // Avg Differential
-    { wch: 10 }, // Multiplier
+    { wch: 24 }, // Best 2 Differentials
     { wch: 14 }, // Avg Gross
   ];
   XLSX.utils.book_append_sheet(wb, wsAll, 'Handicap Index');
@@ -2174,25 +2182,25 @@ function downloadHandicapExcel() {
       [`${flight} Flight — Handicap Index`],
       [`Generated: ${today}`],
       [],
-      ['Rank', 'Player', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Avg Differential', 'Multiplier', 'Avg Gross Score'],
+      ['Rank', 'Player', 'GHIN #', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Rounds Played', 'Best 2 Differentials', 'Avg Gross Score'],
     ];
 
     flightResults.forEach((r, i) => {
       rows.push([
         i + 1,
         r.name,
+        r.ghin || '',
         r.index,
         r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue : '',
         r.lowest,
         r.rounds,
-        r.avgDiff,
-        r.multiplier,
+        r.usedDiffs.map(d => d.toFixed(1)).join(', '),
         r.avgGross,
       ]);
     });
 
     const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 10 }, { wch: 14 }];
+    ws['!cols'] = [{ wch: 6 }, { wch: 22 }, { wch: 12 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 14 }, { wch: 24 }, { wch: 14 }];
     XLSX.utils.book_append_sheet(wb, ws, flight);
   });
 
@@ -2627,11 +2635,14 @@ function processAllInOneFile(file) {
               const key = display.toLowerCase();
               const flight = rosterMap[key];
 
-              // Stash GHIN # in a session-only map (never persisted to db/data.json)
-              // so it can be used to match the NCGA roster upload later in this session.
+              // Store GHIN # in db and also keep in session map for NCGA roster matching.
               if (ghinCol !== null) {
                 const ghin = String(row[ghinCol] || '').trim();
-                if (ghin) sessionGhinMap[key] = ghin;
+                if (ghin) {
+                  sessionGhinMap[key] = ghin;
+                  if (!db.ncgaIndex[key]) db.ncgaIndex[key] = {};
+                  db.ncgaIndex[key].ghin = ghin;
+                }
               }
 
               if (!flight) {
@@ -2782,9 +2793,14 @@ function showNcgaStatus(html, alertClass) {
 }
 
 // Build a map of GHIN # -> player name key from anything we already know
-// (captured from this session's Adjusted Gross Score upload — never persisted)
+// Build GHIN -> playerKey map from both persisted db and session data.
 function buildGhinToPlayerMap() {
   const map = {};
+  // From persisted db (available across sessions)
+  Object.entries(db.ncgaIndex).forEach(([key, info]) => {
+    if (info && info.ghin) map[String(info.ghin).trim()] = key;
+  });
+  // From current session (may have fresher data from latest upload)
   Object.entries(sessionGhinMap).forEach(([key, ghin]) => {
     if (ghin) map[String(ghin).trim()] = key;
   });
@@ -2936,7 +2952,7 @@ function applyNcgaImport() {
     if (!db.ncgaIndex[m.key]) db.ncgaIndex[m.key] = {};
     db.ncgaIndex[m.key].value = m.hcp;
     db.ncgaIndex[m.key].source = 'NCGA roster';
-    // GHIN # intentionally not stored — data.json is in a public repo.
+    if (m.ghin) db.ncgaIndex[m.key].ghin = m.ghin;
   });
 
   saveData(db);
@@ -3001,31 +3017,66 @@ function clearNcgaImport() {
   document.getElementById('ncga-import-status').style.display = 'none';
 }
 
+function sortNcga(col) {
+  if (ncgaSortCol === col) ncgaSortDir = ncgaSortDir === 'asc' ? 'desc' : 'asc';
+  else { ncgaSortCol = col; ncgaSortDir = 'asc'; }
+  renderNcgaTab();
+}
+
 function renderNcgaTab() {
   renderNcgaMissingPlayers();
   const tbody = document.getElementById('ncga-tbody');
-  const entries = Object.entries(db.ncgaIndex)
+
+  // Build sortable array: { key, display, ghin, hcp, source }
+  let entries = Object.entries(db.ncgaIndex)
     .filter(([key, info]) => info && info.value !== undefined && info.value !== null)
-    .sort((a,b) => a[0].localeCompare(b[0]));
+    .map(([key, info]) => ({
+      key,
+      display: key.replace(/\b\w/g, c => c.toUpperCase()),
+      ghin: info.ghin || '',
+      hcp: parseFloat(info.value),
+      source: info.source || 'manual',
+    }));
+
+  // Sort
+  entries.sort((a, b) => {
+    let va = a[ncgaSortCol], vb = b[ncgaSortCol];
+    if (ncgaSortCol === 'name') { va = a.display.toLowerCase(); vb = b.display.toLowerCase(); }
+    if (ncgaSortCol === 'ghin') { va = a.ghin; vb = b.ghin; }
+    if (ncgaSortCol === 'hcp') { va = a.hcp; vb = b.hcp; }
+    if (va < vb) return ncgaSortDir === 'asc' ? -1 : 1;
+    if (va > vb) return ncgaSortDir === 'asc' ? 1 : -1;
+    return 0;
+  });
 
   if (!entries.length) {
-    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state" style="padding:40px;">
+    tbody.innerHTML = `<tr><td colspan="5"><div class="empty-state" style="padding:40px;">
       <div class="empty-icon">🪪</div>
       <div class="empty-title">No NCGA Handicaps Yet</div>
       <div class="empty-body">Upload your club's handicap roster above to populate this list.</div>
     </div></td></tr>`;
+    updateNcgaSortIndicators();
     return;
   }
 
-  tbody.innerHTML = entries.map(([key, info]) => {
-    const display = key.replace(/\b\w/g, c => c.toUpperCase());
-    return `<tr>
-      <td style="font-weight:600;">${display}</td>
-      <td><span class="hcp-value">${parseFloat(info.value).toFixed(1)}</span></td>
-      <td style="font-size:12px; color:var(--text2);">${info.source || 'manual'}</td>
-      ${isAdmin ? `<td><button class="btn btn-danger btn-sm" onclick="removeNcgaHandicap('${key.replace(/'/g, "\\'")}')">✕</button></td>` : ''}
-    </tr>`;
-  }).join('');
+  tbody.innerHTML = entries.map(e => `<tr>
+      <td style="font-weight:600;">${e.display}</td>
+      <td style="font-family:'DM Mono',monospace; color:var(--text2);">${e.ghin || '—'}</td>
+      <td><span class="hcp-value">${e.hcp.toFixed(1)}</span></td>
+      <td style="font-size:12px; color:var(--text2);">${e.source}</td>
+      ${isAdmin ? `<td><button class="btn btn-danger btn-sm" onclick="removeNcgaHandicap('${e.key.replace(/'/g, "\\'")}')">✕</button></td>` : ''}
+    </tr>`).join('');
+
+  updateNcgaSortIndicators();
+}
+
+function updateNcgaSortIndicators() {
+  document.querySelectorAll('#ncga-table th').forEach(th => {
+    th.classList.remove('sort-asc', 'sort-desc');
+    if (th.dataset.col === ncgaSortCol) {
+      th.classList.add(ncgaSortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+    }
+  });
 }
 
 function removeNcgaHandicap(key) {
