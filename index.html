@@ -273,6 +273,19 @@
   }
   .hcp-table tr:hover td { background: rgba(92,190,120,.04); }
   .hcp-table tr.player-row:hover td { background: rgba(212,168,67,.07); }
+
+  /* Row highlight: which index is being used as Usable Handicap */
+  .hcp-table tr.using-tournament td { border-left: 3px solid var(--accent); }
+  .hcp-table tr.using-ncga td { border-left: 3px solid var(--hawk); }
+  .hcp-table tr.no-ncga td { border-left: 3px solid var(--border); }
+  .using-tournament td:first-child::before { content: ''; }
+  .source-pill {
+    display: inline-block; padding: 2px 7px; border-radius: 10px;
+    font-size: 10px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+  }
+  .source-pill-tournament { background: rgba(92,190,120,.18); color: var(--accent); }
+  .source-pill-ncga { background: rgba(92,157,224,.18); color: var(--hawk); }
+  .source-pill-none { background: var(--surface2); color: var(--text2); }
   .hcp-value {
     font-family: 'DM Mono', monospace;
     font-size: 18px;
@@ -856,6 +869,11 @@
     <div id="handicap-content" style="display:none;">
       <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
         <div class="formula-note" style="margin-bottom:0;">Formula: Score Diff = (Gross − Course Rating) × 113 / Slope · Tournament Index = avg of 2 lowest differentials × 0.96 · Usable Handicap = lower of Tournament Index / NCGA Handicap</div>
+        <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:8px; font-size:12px;">
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--accent); display:inline-block;"></span> Using Tournament Index</span>
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--hawk); display:inline-block;"></span> Using NCGA Handicap</span>
+          <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--border); display:inline-block;"></span> No NCGA on file</span>
+        </div>
         <button class="btn btn-gold btn-sm" onclick="downloadHandicapExcel()">⬇ Export to Excel</button>
       </div>
 
@@ -1660,10 +1678,22 @@ function renderHcpTable() {
     const key = r.name.toLowerCase().trim();
     const keyEsc = key.replace(/'/g, "\\'");
     const ncgaDisplay = r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue.toFixed(1) : '';
-    const usingNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue) && r.ncgaValue < r.index;
+    const hasNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue);
+    const usingNcga = hasNcga && r.ncgaValue < r.index;
     const ncgaInfo = db.ncgaIndex[key] || {};
     const ghinTip = ncgaInfo.ghin ? `GHIN #${ncgaInfo.ghin}` : 'Enter official NCGA Handicap Index';
-    return `<tr class="player-row">
+
+    // Row class drives the left-border color stripe
+    const rowClass = usingNcga ? 'using-ncga' : hasNcga ? 'using-tournament' : 'no-ncga';
+
+    // Source pill shown in the Usable Handicap cell
+    const sourcePill = usingNcga
+      ? '<span class="source-pill source-pill-ncga">NCGA</span>'
+      : hasNcga
+        ? '<span class="source-pill source-pill-tournament">Tournament</span>'
+        : '<span class="source-pill source-pill-none">No NCGA</span>';
+
+    return `<tr class="player-row ${rowClass}">
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span class="rank-badge ${rankClass}">${rank}</span></td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer; font-weight:600;">${r.name}</td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span class="flight-badge badge-${FLIGHT_COLORS[r.flight] || 'hawk'}">${r.flight}</span></td>
@@ -1677,8 +1707,10 @@ function renderHcpTable() {
         ` : `<span style="font-family:'DM Mono',monospace; color:var(--text2);">${ncgaDisplay || '—'}</span>`}
       </td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;">
-        <span class="hcp-value ${lowestClass}">${r.lowest.toFixed(1)}</span>
-        ${usingNcga ? '<div style="font-size:10px; color:var(--text2); margin-top:2px;">NCGA</div>' : ''}
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span class="hcp-value ${lowestClass}">${r.lowest.toFixed(1)}</span>
+          ${sourcePill}
+        </div>
       </td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer; font-family:'DM Mono',monospace; color:var(--text2);">${r.rounds}</td>
       <td onclick="showPlayerDetail('${keyEsc}')" style="cursor:pointer;"><span style="font-family:'DM Mono',monospace; font-size:13px;">${r.usedDiffs.map(d => d.toFixed(1)).join(', ')}</span> <span style="font-size:11px;color:var(--border);">(best ${r.usedDiffs.length})</span></td>
@@ -1744,6 +1776,7 @@ function showPlayerDetail(key) {
   const idxClass = player.index <= 10 ? 'hcp-low' : player.index >= 20 ? 'hcp-high' : '';
   const lowestClass = player.lowest <= 10 ? 'hcp-low' : player.lowest >= 20 ? 'hcp-high' : '';
   const hasNcga = player.ncgaValue !== null && !isNaN(player.ncgaValue);
+  const usingNcga = hasNcga && player.ncgaValue < player.index;
 
   const rowsHtml = rounds.map(r => `
     <tr class="${r.usedInIndex ? 'used-row' : ''}">
@@ -1775,7 +1808,12 @@ function showPlayerDetail(key) {
         </div>
         <div>
           <div class="hcp-value ${lowestClass}" style="font-size:24px;">${player.lowest.toFixed(1)}</div>
-          <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px;">Usable Handicap</div>
+          <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Usable Handicap</div>
+          ${usingNcga
+            ? '<span class="source-pill source-pill-ncga">NCGA</span>'
+            : hasNcga
+              ? '<span class="source-pill source-pill-tournament">Tournament</span>'
+              : '<span class="source-pill source-pill-none">No NCGA</span>'}
         </div>
       </div>
     </div>
