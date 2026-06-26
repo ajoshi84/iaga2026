@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0d1a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>IAGA Handicap Index</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1a0f;
+  --surface: #142018;
+  --surface2: #1c2e20;
+  --border: #2a4030;
+  --accent: #5cbe78;
+  --accent2: #a8d5b5;
+  --gold: #d4a843;
+  --gold2: #f0c96a;
+  --text: #e8f0ea;
+  --text2: #8aab92;
+  --maharaj: #e05c5c;
+  --hawk: #5c9de0;
+  --tiger: #e0a35c;
+  --cobra: #5c78e0;
+  --r: 10px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--safe-bottom) + 24px);
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 10% 10%, rgba(92,190,120,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 90%, rgba(212,168,67,.05) 0%, transparent 50%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ── Header ── */
+header {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(13,26,15,.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 16px 20px;
+}
+.header-inner {
+  max-width: 900px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand-eyebrow { font-size: 10px; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; font-family: 'DM Mono', monospace; }
+.brand-title { font-family: 'Playfair Display', serif; font-size: clamp(18px,4vw,26px); font-weight: 900; line-height: 1.1; }
+.brand-title span { color: var(--gold); }
+.last-updated { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; text-align: right; line-height: 1.5; }
+
+/* ── Content ── */
+.page { position: relative; z-index: 1; max-width: 900px; margin: 0 auto; padding: 20px 16px; }
+
+/* ── Flight filter tabs ── */
+.filter-bar {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding-bottom: 4px; margin-bottom: 20px;
+  scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar { display: none; }
+.filter-btn {
+  flex-shrink: 0;
+  padding: 8px 18px; border-radius: 20px;
+  border: 1px solid var(--border); background: var(--surface);
+  color: var(--text2); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all .18s; white-space: nowrap;
+}
+.filter-btn.active { background: var(--accent); border-color: var(--accent); color: #0d1a0f; font-weight: 700; }
+.filter-btn:active { transform: scale(.96); }
+
+/* ── Stats row ── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px; margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px 16px; text-align: center;
+}
+.stat-value { font-family: 'DM Mono', monospace; font-size: 22px; color: var(--gold); font-weight: 500; }
+.stat-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+
+/* ── Sort bar ── */
+.sort-bar {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px; flex-wrap: wrap;
+}
+.sort-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+.sort-btn {
+  padding: 5px 12px; border-radius: 6px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--text2); font-size: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.sort-btn.active { background: var(--surface2); border-color: var(--accent); color: var(--accent); }
+
+/* ── Player cards ── */
+.player-list { display: flex; flex-direction: column; gap: 10px; }
+
+.player-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color .18s, transform .12s;
+  border-left: 4px solid var(--border);
+  -webkit-user-select: none; user-select: none;
+}
+.player-card:active { transform: scale(.99); }
+.player-card.using-tournament { border-left-color: var(--accent); }
+.player-card.using-ncga { border-left-color: var(--hawk); }
+.player-card.no-ncga { border-left-color: var(--border); }
+
+.player-card-header {
+  display: flex; align-items: center;
+  padding: 14px 16px; gap: 12px;
+}
+.player-rank {
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 700;
+  background: var(--surface2); color: var(--text2);
+  flex-shrink: 0;
+}
+.player-rank.gold { background: rgba(212,168,67,.2); color: var(--gold); }
+.player-rank.silver { background: rgba(192,192,192,.15); color: #c0c0c0; }
+.player-rank.bronze { background: rgba(180,120,60,.15); color: #c87941; }
+
+.player-info { flex: 1; min-width: 0; }
+.player-name { font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.player-meta { display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap; }
+
+.flight-chip {
+  display: inline-block; padding: 2px 8px; border-radius: 10px;
+  font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+}
+.chip-maharaj { background: rgba(224,92,92,.18); color: var(--maharaj); }
+.chip-hawk { background: rgba(92,157,224,.18); color: var(--hawk); }
+.chip-tiger { background: rgba(224,163,92,.18); color: var(--tiger); }
+.chip-cobra { background: rgba(92,120,224,.18); color: var(--cobra); }
+
+.player-rounds { font-size: 11px; color: var(--text2); font-family: 'DM Mono', monospace; }
+
+.player-indexes {
+  display: flex; align-items: flex-end; gap: 16px;
+  flex-shrink: 0; text-align: right;
+}
+.index-block { display: flex; flex-direction: column; align-items: flex-end; }
+.index-value {
+  font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 500;
+  line-height: 1;
+}
+.index-value.primary { font-size: 26px; color: var(--gold); }
+.index-value.low { color: var(--accent); }
+.index-value.high { color: var(--maharaj); }
+.index-label { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: .8px; margin-top: 2px; }
+
+.source-chip {
+  display: inline-block; padding: 1px 6px; border-radius: 8px;
+  font-size: 9px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase; margin-top: 3px;
+}
+.source-chip-tournament { background: rgba(92,190,120,.18); color: var(--accent); }
+.source-chip-ncga { background: rgba(92,157,224,.18); color: var(--hawk); }
+.source-chip-none { background: var(--surface2); color: var(--text2); }
+
+/* ── Expandable round detail ── */
+.player-detail {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 12px 16px 14px;
+  animation: slideDown .18s ease;
+}
+.player-detail.open { display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px; margin-bottom: 12px;
+}
+.detail-stat {
+  background: var(--surface2); border-radius: 6px;
+  padding: 8px 12px;
+}
+.detail-stat-value { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 500; }
+.detail-stat-label { font-size: 10px; color: var(--text2); text-transform: uppercase; letter-spacing: .8px; margin-top: 2px; }
+
+.rounds-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.rounds-table th {
+  background: var(--bg); padding: 7px 10px; text-align: left;
+  font-size: 10px; font-weight: 600; color: var(--text2);
+  letter-spacing: .8px; text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.rounds-table td { padding: 8px 10px; border-bottom: 1px solid rgba(42,64,48,.4); }
+.rounds-table tr:last-child td { border-bottom: none; }
+.rounds-table tr.used-round td { background: rgba(92,190,120,.06); }
+.diff-val { font-family: 'DM Mono', monospace; }
+.used-tag {
+  display: inline-block; padding: 1px 7px; border-radius: 8px; font-size: 10px; font-weight: 700;
+  background: rgba(92,190,120,.18); color: var(--accent);
+}
+
+/* ── Legend ── */
+.legend {
+  display: flex; gap: 14px; flex-wrap: wrap;
+  padding: 12px 16px; background: var(--surface); border-radius: var(--r);
+  border: 1px solid var(--border); margin-bottom: 20px;
+  font-size: 12px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; color: var(--text2); }
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* ── Formula section ── */
+.formula-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.formula-toggle {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--text);
+  user-select: none; -webkit-user-select: none;
+}
+.formula-toggle:active { background: var(--surface2); }
+.formula-toggle-icon { font-size: 16px; transition: transform .2s; color: var(--text2); }
+.formula-toggle-icon.open { transform: rotate(180deg); }
+.formula-body { display: none; padding: 0 16px 16px; }
+.formula-body.open { display: block; animation: slideDown .18s ease; }
+
+.formula-steps { display: flex; flex-direction: column; gap: 16px; }
+.formula-step {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--gold); font-size: 12px; font-weight: 700;
+  font-family: 'DM Mono', monospace;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.step-content { flex: 1; }
+.step-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.step-body { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.step-formula {
+  display: inline-block; margin-top: 6px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+  padding: 6px 12px; font-family: 'DM Mono', monospace; font-size: 12px;
+  color: var(--accent2); line-height: 1.5;
+}
+.formula-divider { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
+.formula-note-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--surface2); border-radius: 6px;
+  padding: 10px 12px; font-size: 12px; color: var(--text2); line-height: 1.6;
+}
+.formula-note-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── Loading / Error ── */
+.status-card {
+  text-align: center; padding: 60px 24px;
+  color: var(--text2); position: relative; z-index: 1;
+}
+.status-icon { font-size: 40px; margin-bottom: 14px; }
+.status-title { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+.status-body { font-size: 14px; line-height: 1.6; }
+
+.spinner {
+  width: 36px; height: 36px; margin: 0 auto 16px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Empty state ── */
+.empty-state { text-align: center; padding: 40px 16px; color: var(--text2); }
+
+/* ── Responsive tweaks ── */
+@media (max-width: 480px) {
+  .player-card-header { padding: 12px 14px; gap: 10px; }
+  .player-name { font-size: 14px; }
+  .index-value.primary { font-size: 22px; }
+  .index-value { font-size: 18px; }
+  .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .stat-value { font-size: 18px; }
+  .rounds-table th, .rounds-table td { padding: 6px 8px; }
+  /* Hide course column on very small screens */
+  .col-course { display: none; }
+}
+
+@media (min-width: 640px) {
+  .player-card-header { padding: 16px 20px; }
+  .player-detail { padding: 14px 20px 16px; }
+  .player-name { font-size: 17px; }
+}
+
+/* ── Refresh button ── */
+.btn-refresh {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 8px;
+  background: var(--surface2); border: 1px solid var(--border);
+  color: var(--text2); font-size: 12px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all .15s;
+}
+.btn-refresh:active { background: var(--border); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-eyebrow">⛳ IAGA</div>
+      <div class="brand-title">IAGA <span>Handicap</span> Index</div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+      <button class="btn-refresh" onclick="loadData()">↻ Refresh</button>
+      <div class="last-updated" id="last-updated">Loading…</div>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <!-- Loading state -->
+  <div id="state-loading" class="status-card">
+    <div class="spinner"></div>
+    <div class="status-title">Loading Handicap Data…</div>
+  </div>
+
+  <!-- Error state -->
+  <div id="state-error" class="status-card" style="display:none;">
+    <div class="status-icon">⚠️</div>
+    <div class="status-title">Could not load data</div>
+    <div class="status-body" id="error-msg">Unable to fetch the handicap data. Please try again.</div>
+    <button class="btn-refresh" style="margin-top:16px;" onclick="loadData()">↻ Try Again</button>
+  </div>
+
+  <!-- Main content -->
+  <div id="state-content" style="display:none;">
+
+    <!-- Stats row -->
+    <div class="stats-row" id="stats-row"></div>
+
+    <!-- Legend -->
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent);"></div> Using Tournament Index</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--hawk);"></div> Using NCGA Handicap</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div> No NCGA on file</div>
+    </div>
+
+    <!-- Formula section -->
+    <div class="formula-section">
+      <div class="formula-toggle" onclick="toggleFormula()">
+        <span>📐 How is the Handicap Index calculated?</span>
+        <span class="formula-toggle-icon" id="formula-icon">▾</span>
+      </div>
+      <div class="formula-body" id="formula-body">
+        <div class="formula-steps">
+
+          <div class="formula-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Score Differential</div>
+              <div class="step-body">After each tournament round, a Score Differential is calculated for every player. It adjusts your gross score for the difficulty of the course using Slope Rating and Course Rating — so scores from different courses can be compared fairly.</div>
+              <div class="step-formula">Diff = (Gross Score − Course Rating) × 113 ÷ Slope Rating</div>
+            </div>
+          </div>
+
+          <div class="formula-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Best 2 Differentials</div>
+              <div class="step-body">From all your tournament rounds, we take the <strong style="color:var(--text)">2 lowest</strong> (best) Score Differentials. This rewards peak performance — your handicap reflects your potential, not your average.</div>
+              <div class="step-formula">Select the 2 lowest differentials from all rounds played</div>
+            </div>
+          </div>
+
+          <div class="formula-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Tournament Index</div>
+              <div class="step-body">The two best differentials are averaged, then multiplied by <strong style="color:var(--text)">0.96</strong> — a standard USGA adjustment that accounts for the fact that even low scores may not fully represent your best possible play.</div>
+              <div class="step-formula">Tournament Index = avg(best 2 diffs) × 0.96</div>
+            </div>
+          </div>
+
+          <div class="formula-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">NCGA Handicap</div>
+              <div class="step-body">Your official NCGA / GHIN Handicap Index reflects your performance across all your rounds at all courses — not just IAGA tournaments. This gives a broader picture of your overall ability.</div>
+              <div class="step-formula">Sourced from your GHIN member record (NCGA)</div>
+            </div>
+          </div>
+
+          <div class="formula-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Usable Handicap</div>
+              <div class="step-body">Your <strong style="color:var(--text)">Usable Handicap</strong> is simply whichever is <em style="color:var(--gold)">lower</em> — your Tournament Index or your NCGA Handicap. This ensures the most competitive (lowest) handicap is always used for tournament play.</div>
+              <div class="step-formula">Usable Handicap = min(Tournament Index, NCGA Handicap)</div>
+            </div>
+          </div>
+
+        </div>
+
+        <hr class="formula-divider">
+
+        <div class="formula-note-row">
+          <span class="formula-note-icon">💡</span>
+          <span>A minimum of <strong style="color:var(--text)">2 tournament rounds</strong> is required before a Tournament Index is calculated. Players with fewer than 2 rounds will not appear in the standings.</span>
+        </div>
+
+        <div class="formula-note-row" style="margin-top:8px;">
+          <span class="formula-note-icon">📋</span>
+          <span>Each flight plays from different tee boxes with different Slope and Course Ratings — so differentials are always calculated using the correct tee settings for your flight.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flight filters -->
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" onclick="setFlight('all', this)">All Flights</button>
+      <button class="filter-btn" onclick="setFlight('Maharaj', this)">Maharaj</button>
+      <button class="filter-btn" onclick="setFlight('Hawk', this)">Hawk</button>
+      <button class="filter-btn" onclick="setFlight('Tiger', this)">Tiger</button>
+      <button class="filter-btn" onclick="setFlight('Cobra', this)">Cobra</button>
+    </div>
+
+    <!-- Sort bar -->
+    <div class="sort-bar">
+      <span class="sort-label">Sort by</span>
+      <button class="sort-btn active" data-sort="usable" onclick="setSort('usable', this)">Usable Handicap</button>
+      <button class="sort-btn" data-sort="name" onclick="setSort('name', this)">Name</button>
+      <button class="sort-btn" data-sort="tournament" onclick="setSort('tournament', this)">Tournament Index</button>
+      <button class="sort-btn" data-sort="rounds" onclick="setSort('rounds', this)">Rounds</button>
+    </div>
+
+    <!-- Player list -->
+    <div class="player-list" id="player-list"></div>
+  </div>
+</div>
+
+<script>
+const DATA_URL = 'https://raw.githubusercontent.com/ajoshi84/iaga2026/main/data.json';
+const FLIGHTS = ['Maharaj', 'Hawk', 'Tiger', 'Cobra'];
+const FLIGHT_COLORS = { Maharaj: 'maharaj', Hawk: 'hawk', Tiger: 'tiger', Cobra: 'cobra' };
+
+let db = null;
+let allResults = [];
+let currentFlight = 'all';
+let currentSort = 'usable';
+
+// ── Data Loading ─────────────────────────────────────────────────────────────
+async function loadData() {
+  showState('loading');
+  try {
+    const resp = await fetch(DATA_URL + '?t=' + Date.now());
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    db = await resp.json();
+    if (!db.tournaments) db.tournaments = [];
+    if (!db.ncgaIndex) db.ncgaIndex = {};
+    const now = new Date().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+    document.getElementById('last-updated').textContent = `Updated ${now}`;
+    allResults = computeHandicaps();
+    renderStats();
+    renderPlayers();
+    showState('content');
+  } catch (err) {
+    document.getElementById('error-msg').textContent = `Could not load data: ${err.message}`;
+    showState('error');
+  }
+}
+
+function showState(state) {
+  document.getElementById('state-loading').style.display = state === 'loading' ? 'block' : 'none';
+  document.getElementById('state-error').style.display = state === 'error' ? 'block' : 'none';
+  document.getElementById('state-content').style.display = state === 'content' ? 'block' : 'none';
+}
+
+// ── Handicap Calculation (mirrors main app) ──────────────────────────────────
+function calcDiff(gross, courseRating, slope) {
+  return (gross - courseRating) * 113 / slope;
+}
+
+function getBestCount(rounds) { return rounds < 2 ? 1 : 2; }
+
+function computeHandicaps() {
+  const players = {};
+  db.tournaments
+    .filter(t => t.scores && t.scores.length > 0)
+    .forEach(t => {
+      t.scores.forEach(s => {
+        const key = s.player.toLowerCase().trim();
+        if (!players[key]) players[key] = { name: s.player, flight: s.flight, diffs: [], grosses: [], rounds: [] };
+        const diff = parseFloat(s.diff);
+        const gross = parseFloat(s.gross);
+        if (!isNaN(diff) && !isNaN(gross)) {
+          players[key].diffs.push(diff);
+          players[key].grosses.push(gross);
+          players[key].rounds.push({ tournamentId: t.id, tournamentName: t.name, course: t.course, date: t.date, gross, diff });
+        }
+      });
+    });
+
+  const results = [];
+  Object.values(players).forEach(p => {
+    if (p.diffs.length < 2) return;
+    const bestCount = getBestCount(p.diffs.length);
+    const sorted = [...p.diffs].sort((a,b) => a - b);
+    const used = sorted.slice(0, bestCount);
+    const index = used.reduce((a,b) => a+b, 0) / used.length * 0.96;
+    const avgGross = p.grosses.reduce((a,b) => a+b, 0) / p.grosses.length;
+
+    const usedKeys = new Set(
+      [...p.rounds].sort((a,b) => a.diff - b.diff)
+        .slice(0, bestCount)
+        .map(r => `${r.tournamentId}|${r.diff}`)
+    );
+
+    const ncgaInfo = db.ncgaIndex[p.name.toLowerCase().trim()] || {};
+    const ncgaValue = (ncgaInfo.value !== undefined && ncgaInfo.value !== null) ? parseFloat(ncgaInfo.value) : null;
+    const hasNcga = ncgaValue !== null && !isNaN(ncgaValue);
+    const usingNcga = hasNcga && ncgaValue < index;
+    const usable = hasNcga ? Math.min(index, ncgaValue) : index;
+
+    results.push({
+      name: p.name,
+      flight: p.flight,
+      index: Math.round(index * 10) / 10,
+      rounds: p.diffs.length,
+      usedDiffs: used,
+      avgGross: Math.round(avgGross * 10) / 10,
+      ncgaValue: hasNcga ? Math.round(ncgaValue * 10) / 10 : null,
+      hasNcga,
+      usingNcga,
+      usable: Math.round(usable * 10) / 10,
+      roundDetails: p.rounds.map(r => ({ ...r, usedInIndex: usedKeys.has(`${r.tournamentId}|${r.diff}`) }))
+        .sort((a,b) => b.date.localeCompare(a.date)),
+    });
+  });
+
+  return results;
+}
+
+// ── Stats ────────────────────────────────────────────────────────────────────
+function renderStats() {
+  const filtered = getFiltered();
+  const withNcga = filtered.filter(r => r.hasNcga).length;
+  const tournaments = db.tournaments.filter(t => t.scores && t.scores.length > 0).length;
+  document.getElementById('stats-row').innerHTML = `
+    <div class="stat-card">
+      <div class="stat-value">${filtered.length}</div>
+      <div class="stat-label">Players</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${tournaments}</div>
+      <div class="stat-label">Tournaments</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-value">${withNcga}</div>
+      <div class="stat-label">NCGA Mapped</div>
+    </div>
+  `;
+}
+
+// ── Filtering & Sorting ──────────────────────────────────────────────────────
+function getFiltered() {
+  return currentFlight === 'all'
+    ? allResults
+    : allResults.filter(r => r.flight === currentFlight);
+}
+
+function getSorted(list) {
+  return [...list].sort((a, b) => {
+    if (currentSort === 'name') return a.name.localeCompare(b.name);
+    if (currentSort === 'tournament') return a.index - b.index;
+    if (currentSort === 'rounds') return b.rounds - a.rounds;
+    return a.usable - b.usable; // default: usable handicap
+  });
+}
+
+function setFlight(flight, btn) {
+  currentFlight = flight;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderStats();
+  renderPlayers();
+}
+
+function setSort(sort, btn) {
+  currentSort = sort;
+  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderPlayers();
+}
+
+// ── Player List ──────────────────────────────────────────────────────────────
+function renderPlayers() {
+  const list = document.getElementById('player-list');
+  const players = getSorted(getFiltered());
+
+  if (!players.length) {
+    list.innerHTML = `<div class="empty-state">
+      <div style="font-size:36px; margin-bottom:12px;">🏌️</div>
+      <div style="font-size:16px; font-weight:600; color:var(--text);">No players yet</div>
+      <div style="font-size:13px; margin-top:6px;">At least 2 tournament rounds are needed to calculate an index.</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = players.map((r, i) => {
+    const rank = i + 1;
+    const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+    const usableClass = r.usable <= 10 ? 'low' : r.usable >= 20 ? 'high' : '';
+    const cardClass = r.usingNcga ? 'using-ncga' : r.hasNcga ? 'using-tournament' : 'no-ncga';
+    const flightChip = `chip-${FLIGHT_COLORS[r.flight] || 'hawk'}`;
+    const sourceChip = r.usingNcga
+      ? '<span class="source-chip source-chip-ncga">NCGA</span>'
+      : r.hasNcga
+        ? '<span class="source-chip source-chip-tournament">Tournament</span>'
+        : '<span class="source-chip source-chip-none">No NCGA</span>';
+    const id = `player-${rank}`;
+
+    return `
+    <div class="player-card ${cardClass}" onclick="toggleDetail('${id}')">
+      <div class="player-card-header">
+        <div class="player-rank ${rankClass}">${rank}</div>
+        <div class="player-info">
+          <div class="player-name">${r.name}</div>
+          <div class="player-meta">
+            <span class="flight-chip ${flightChip}">${r.flight}</span>
+            <span class="player-rounds">${r.rounds} round${r.rounds !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
+        <div class="player-indexes">
+          ${r.hasNcga ? `
+          <div class="index-block">
+            <div class="index-value" style="color:var(--text2);">${r.index.toFixed(1)}</div>
+            <div class="index-label">Tournament</div>
+          </div>` : ''}
+          <div class="index-block">
+            <div class="index-value primary ${usableClass}">${r.usable.toFixed(1)}</div>
+            <div class="index-label">Usable HCP</div>
+            ${sourceChip}
+          </div>
+        </div>
+      </div>
+      <div class="player-detail" id="${id}">
+        <div class="detail-grid">
+          <div class="detail-stat">
+            <div class="detail-stat-value" style="color:var(--gold);">${r.index.toFixed(1)}</div>
+            <div class="detail-stat-label">Tournament Index</div>
+          </div>
+          <div class="detail-stat">
+            <div class="detail-stat-value" style="${r.hasNcga ? '' : 'color:var(--text2);'}">${r.hasNcga ? r.ncgaValue.toFixed(1) : '—'}</div>
+            <div class="detail-stat-label">NCGA Handicap</div>
+          </div>
+          <div class="detail-stat">
+            <div class="detail-stat-value ${usableClass}" style="color:var(--gold);">${r.usable.toFixed(1)}</div>
+            <div class="detail-stat-label">Usable Handicap</div>
+          </div>
+          <div class="detail-stat">
+            <div class="detail-stat-value" style="color:var(--text2);">${r.avgGross}</div>
+            <div class="detail-stat-label">Avg Gross</div>
+          </div>
+          <div class="detail-stat">
+            <div class="detail-stat-value" style="color:var(--text2);">${r.usedDiffs.map(d => d.toFixed(1)).join(', ')}</div>
+            <div class="detail-stat-label">Best 2 Diffs Used</div>
+          </div>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="rounds-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Tournament</th>
+                <th class="col-course">Course</th>
+                <th>Gross</th>
+                <th>Diff</th>
+                <th>Used?</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${r.roundDetails.map(rd => `
+              <tr class="${rd.usedInIndex ? 'used-round' : ''}">
+                <td>${formatDate(rd.date)}</td>
+                <td>${rd.tournamentName}</td>
+                <td class="col-course" style="color:var(--text2);">${rd.course}</td>
+                <td class="diff-val">${rd.gross}</td>
+                <td class="diff-val">${rd.diff.toFixed(1)}</td>
+                <td>${rd.usedInIndex ? '<span class="used-tag">✓</span>' : '<span style="color:var(--text2);font-size:11px;">—</span>'}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleDetail(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const isOpen = el.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.player-detail.open').forEach(d => d.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ── Utilities ─────────────────────────────────────────────────────────────────
+function formatDate(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  return new Date(+y, +m - 1, +day).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+// ── Formula toggle ────────────────────────────────────────────────────────────
+function toggleFormula() {
+  const body = document.getElementById('formula-body');
+  const icon = document.getElementById('formula-icon');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  icon.classList.toggle('open', !isOpen);
+}
+
+// ── Init ─────────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
