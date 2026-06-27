@@ -302,11 +302,74 @@
   .gh-result-err { background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:8px;padding:10px 14px;font-size:13px; }
   code { font-family: monospace; }
 
+  /* ── MOBILE RESPONSIVE ── */
   @media (max-width: 640px) {
-    .header { padding: 1rem; }
-    .main { padding: 1rem; }
-    .nav { padding: 0 1rem; }
-    .raffle-drum { font-size: 34px; }
+    /* Header */
+    .header { padding: 0.75rem 1rem; }
+    .logo { width: 38px; height: 38px; font-size: 18px; }
+    .brand-text h1 { font-size: 17px; }
+    .brand-text p { display: none; }
+    .season-badge { font-size: 11px; padding: 4px 10px; }
+
+    /* Nav — scrollable row, smaller text */
+    .nav { padding: 0 0.5rem; overflow-x: auto; -webkit-overflow-scrolling: touch; gap: 0; }
+    .nav::-webkit-scrollbar { display: none; }
+    .nav-tab { padding: 10px 12px; font-size: 12px; flex-shrink: 0; }
+
+    /* Main padding */
+    .main { padding: 0.75rem; }
+
+    /* Cards */
+    .card { padding: 1rem; border-radius: 10px; margin-bottom: 0.875rem; }
+    .card-title { font-size: 14px; }
+
+    /* Form rows stack vertically */
+    .form-row { flex-direction: column; gap: 10px; }
+    .form-group { width: 100%; }
+    input[type="text"], input[type="date"], input[type="password"], select {
+      min-width: 0; width: 100%; font-size: 16px; /* 16px prevents iOS zoom */
+    }
+
+    /* Buttons full-width on mobile */
+    .btn { width: 100%; justify-content: center; padding: 12px 16px; font-size: 15px; }
+    .btn + .btn { margin-top: 8px; }
+
+    /* Raffle stage */
+    .raffle-stage { padding: 1.5rem 1rem; border-radius: 10px; }
+    .raffle-drum { font-size: 30px; min-height: 56px; }
+    .raffle-sub { font-size: 13px; }
+    .raffle-controls { flex-direction: column; gap: 8px; }
+    .raffle-controls .btn { width: 100%; }
+
+    /* Winner card */
+    #raffleWinnerCard .btn { width: auto; }
+
+    /* Player chips — slightly larger touch targets */
+    .player-chip { padding: 7px 14px; font-size: 13px; }
+
+    /* Tournament winners panel */
+    #tournWinnersList { gap: 6px; }
+
+    /* History rows stack */
+    .history-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .history-row .btn { width: auto; align-self: flex-end; }
+
+    /* Season summary grid — 2 cols on phone */
+    .summary-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat-card .stat-val { font-size: 24px; }
+
+    /* Tables — hide less important cols */
+    .leaderboard td:last-child, .leaderboard th:last-child { display: none; }
+
+    /* Toast — full width at bottom */
+    .toast { left: 1rem; right: 1rem; max-width: none; bottom: 1rem; text-align: center; }
+
+    /* Upload zone — smaller on mobile */
+    .upload-zone { padding: 1.5rem 1rem; }
+    .upload-zone .upload-icon { font-size: 28px; }
+
+    /* Settings page inputs */
+    #page-settings .form-row { flex-direction: column; }
   }
 </style>
 </head>
@@ -416,15 +479,15 @@
       </div>
     </div>
 
-    <div id="raffleWinnerCard" style="display:none;" class="card">
-      <div class="card-title"><span class="dot"></span> Winner Confirmed</div>
+    <div id="raffleWinnerCard" style="display:none;" class="card" style="background:var(--green-50);border-color:var(--green-100);">
       <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
-        <div style="width:56px; height:56px; border-radius:50%; background:var(--amber-50); border:2px solid var(--amber-200); display:flex; align-items:center; justify-content:center; font-size:24px;">🏆</div>
-        <div>
-          <div style="font-size:22px; font-weight:700; color:var(--green-800);" id="winnerConfirm"></div>
-          <div style="font-size:13px; color:var(--gray-400);" id="winnerTournament"></div>
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--amber-50); border:2px solid var(--amber-200); display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0;">🏆</div>
+        <div style="flex:1; min-width:0;">
+          <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.07em; color:var(--green-600); margin-bottom:4px;" id="winnerDrawLabel"></div>
+          <div style="font-size:24px; font-weight:800; color:var(--green-800); line-height:1.1;" id="winnerConfirm"></div>
+          <div style="font-size:12px; color:var(--gray-400); margin-top:3px;" id="winnerTournament"></div>
         </div>
-        <button class="btn btn-green" style="margin-left:auto;" onclick="saveWinner()">Save to History</button>
+        <div style="background:var(--green-100);color:var(--green-700);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;flex-shrink:0;">✓ Saved</div>
       </div>
     </div>
 
@@ -956,7 +1019,10 @@ function renderRafflePage() {
     wonPanel.style.display = 'block';
     document.getElementById('tournWinnersTitle').textContent = APP.currentTournament || 'This Tournament';
     wonList.innerHTML = APP.tournamentWinners.map((w,i) =>
-      `<div class="winner-badge" style="font-size:13px;">🏆 #${i+1} ${w}</div>`
+      `<div class="winner-badge" style="font-size:13px; flex-direction:column; align-items:flex-start; gap:2px; padding:8px 14px;">
+        <span style="font-size:10px; font-weight:500; color:var(--amber-600); letter-spacing:0.06em; text-transform:uppercase;">Draw #${i+1}</span>
+        <span>🏆 ${w}</span>
+      </div>`
     ).join('');
   } else {
     wonPanel.style.display = 'none';
@@ -973,6 +1039,9 @@ function startRoll() {
   document.getElementById('raffleWinnerCard').style.display = 'none';
   document.getElementById('rollBtn').disabled = true;
 
+  // Pick the winner ONCE up front — animation is purely cosmetic
+  const winner = eligible[Math.floor(Math.random() * eligible.length)];
+
   const drum = document.getElementById('raffleDrum');
   const sub = document.getElementById('raffleSub');
   drum.classList.add('rolling');
@@ -981,34 +1050,32 @@ function startRoll() {
   let ticks = 0; const maxTicks = 28 + Math.floor(Math.random()*12);
   let speed = 80;
   function tick() {
-    drum.textContent = eligible[Math.floor(Math.random()*eligible.length)];
+    // Show random decoys during spin, reveal true winner on last tick
+    const decoy = ticks < maxTicks - 1
+      ? eligible[Math.floor(Math.random() * eligible.length)]
+      : winner;
+    drum.textContent = decoy;
     ticks++;
     if (ticks < maxTicks * 0.5) speed = 80;
     else if (ticks < maxTicks * 0.8) speed = 140;
     else speed = 260;
-    if (ticks >= maxTicks) { finishRoll(eligible); return; }
+    if (ticks >= maxTicks) { finishRoll(winner); return; }
     rollInterval = setTimeout(tick, speed);
   }
   tick();
 }
 
-function finishRoll(eligible) {
-  const winner = eligible[Math.floor(Math.random()*eligible.length)];
+function finishRoll(winner) {
   APP.currentWinner = winner;
   APP.rolling = false;
   const drum = document.getElementById('raffleDrum');
   drum.classList.remove('rolling');
   drum.textContent = winner;
-  document.getElementById('raffleSub').textContent = '🎉 Winner selected!';
+  document.getElementById('raffleSub').textContent = '🎉 Winner!';
   document.getElementById('rollBtn').disabled = false;
-
-  // Show winner card
-  document.getElementById('winnerConfirm').textContent = winner;
-  document.getElementById('winnerTournament').textContent = APP.currentTournament || 'Tournament';
-  document.getElementById('raffleWinnerCard').style.display = 'block';
-
   confetti();
-  renderRafflePage();
+  // Auto-save immediately
+  saveWinner();
 }
 
 function resetRaffle() {
@@ -1038,32 +1105,36 @@ function newTournament() {
 function saveWinner() {
   if (!APP.currentWinner) return;
   const tournName = APP.currentTournament || document.getElementById('tournName').value.trim() || 'Unnamed Tournament';
+  const drawNum = APP.tournamentWinners.length + 1;
   const entry = {
     id: Date.now(),
     tournament: tournName,
     date: document.getElementById('tournDate').value || new Date().toISOString().split('T')[0],
-    winner: APP.currentWinner
+    winner: APP.currentWinner,
+    draw: drawNum
   };
   APP.history.push(entry);
   if (!APP.tournamentWinners.includes(APP.currentWinner)) {
     APP.tournamentWinners.push(APP.currentWinner);
   }
-  APP.excluded.add(APP.currentWinner);  // auto-exclude from future draws this session
-  // Auto-save winner name to player pool if not already there
+  APP.excluded.add(APP.currentWinner);
   if (!APP.players.includes(APP.currentWinner)) {
     APP.players.push(APP.currentWinner);
     localStorage.setItem('iaga_players', JSON.stringify(APP.players));
   }
+  // Show winner card with draw number
+  document.getElementById('winnerDrawLabel').textContent = 'Draw #' + drawNum + ' — Auto-saved ✓';
+  document.getElementById('winnerConfirm').textContent = APP.currentWinner;
+  document.getElementById('winnerTournament').textContent = tournName;
+  document.getElementById('raffleWinnerCard').style.display = 'block';
   APP.currentWinner = null;
   persist();
-  toast('Winner saved — they are now excluded from further draws this tournament.');
   renderHistory();
   renderSeason();
   renderPlayerPool();
   renderRafflePage();
-  document.getElementById('raffleWinnerCard').style.display = 'none';
-  document.getElementById('raffleDrum').textContent = '—';
-  document.getElementById('raffleSub').textContent = eligibleCount() > 0 ? 'Ready for next draw' : 'All players have won a raffle this tournament';
+  const remaining = eligibleCount();
+  document.getElementById('raffleSub').textContent = remaining > 0 ? 'Ready for next draw (' + remaining + ' eligible)' : 'All players have won this tournament';
 }
 
 function eligibleCount() {
