@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IAGA Raffle Selector</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --green-50: #EAF3DE; --green-100: #C0DD97; --green-200: #97C459;
+    --green-400: #639922; --green-600: #3B6D11; --green-800: #27500A; --green-900: #173404;
+    --amber-50: #FAEEDA; --amber-100: #FAC775; --amber-200: #EF9F27;
+    --amber-400: #BA7517; --amber-600: #854F0B; --amber-800: #633806;
+    --gray-50: #F1EFE8; --gray-100: #D3D1C7; --gray-200: #B4B2A9;
+    --gray-400: #888780; --gray-600: #5F5E5A; --gray-800: #444441; --gray-900: #2C2C2A;
+    --teal-50: #E1F5EE; --teal-100: #9FE1CB; --teal-400: #1D9E75; --teal-600: #0F6E56; --teal-800: #085041;
+    --radius: 10px;
+    --radius-lg: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--green-900);
+    min-height: 100vh;
+    color: #1a1a1a;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--green-800);
+    border-bottom: 2px solid var(--green-600);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .logo {
+    width: 48px; height: 48px;
+    background: var(--amber-200);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .brand-text h1 {
+    font-size: 22px; font-weight: 700; color: #fff; letter-spacing: 0.02em;
+  }
+  .brand-text p {
+    font-size: 12px; color: var(--green-100); letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .season-badge {
+    background: var(--amber-200);
+    color: var(--amber-800);
+    font-size: 12px; font-weight: 600;
+    padding: 5px 14px; border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+
+  /* NAV TABS */
+  .nav {
+    background: var(--green-800);
+    padding: 0 2rem;
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--green-600);
+  }
+  .nav-tab {
+    padding: 10px 20px;
+    font-size: 13px; font-weight: 500;
+    color: var(--green-100);
+    cursor: pointer;
+    border-bottom: 2.5px solid transparent;
+    transition: color 0.15s, border-color 0.15s;
+    white-space: nowrap;
+  }
+  .nav-tab:hover { color: #fff; }
+  .nav-tab.active { color: var(--amber-100); border-bottom-color: var(--amber-200); }
+
+  /* MAIN CONTENT */
+  .main { padding: 2rem; max-width: 1100px; margin: 0 auto; }
+
+  /* PAGE */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    border: 1px solid #e5e5e5;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-size: 15px; font-weight: 600; color: var(--green-800);
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--amber-200);
+    display: inline-block;
+  }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 2px dashed var(--green-100);
+    border-radius: var(--radius);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--green-50);
+    transition: all 0.2s;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--green-400); background: #dcefd0; }
+  .upload-zone .upload-icon { font-size: 36px; margin-bottom: 10px; }
+  .upload-zone p { font-size: 14px; color: var(--gray-600); }
+  .upload-zone strong { color: var(--green-600); }
+  #fileInput { display: none; }
+
+  /* PREVIEW TABLE */
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    background: var(--green-50); color: var(--green-800);
+    font-weight: 600; padding: 8px 12px; text-align: left;
+    border-bottom: 1.5px solid var(--green-100);
+  }
+  td { padding: 7px 12px; border-bottom: 1px solid #f0f0f0; color: var(--gray-800); }
+  tr:hover td { background: #fafafa; }
+
+  /* FORM INPUTS */
+  .form-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 12px; font-weight: 500; color: var(--gray-600); text-transform: uppercase; letter-spacing: 0.05em; }
+  input[type="text"], select {
+    padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px;
+    font-size: 14px; color: var(--gray-900); background: #fff;
+    outline: none; transition: border-color 0.15s;
+    min-width: 160px;
+  }
+  input[type="text"]:focus, select:focus { border-color: var(--green-400); }
+
+  /* BUTTONS */
+  .btn {
+    padding: 9px 20px; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-green { background: var(--green-600); color: #fff; }
+  .btn-green:hover { opacity: 0.88; }
+  .btn-amber { background: var(--amber-200); color: var(--amber-800); }
+  .btn-amber:hover { opacity: 0.88; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--green-200); color: var(--green-600); }
+  .btn-outline:hover { background: var(--green-50); }
+  .btn-red { background: #fee2e2; color: #991b1b; border: 1.5px solid #fca5a5; }
+  .btn-red:hover { background: #fecaca; }
+
+  /* RAFFLE SPINNER */
+  .raffle-stage {
+    background: linear-gradient(135deg, var(--green-800) 0%, var(--green-900) 100%);
+    border-radius: var(--radius-lg);
+    padding: 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1.25rem;
+  }
+  .raffle-stage::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(239,159,39,0.12) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .raffle-label {
+    font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--green-100); margin-bottom: 12px;
+  }
+  .raffle-drum {
+    font-size: 48px; font-weight: 800; color: #fff;
+    min-height: 70px; display: flex; align-items: center; justify-content: center;
+    letter-spacing: -0.02em;
+    transition: opacity 0.1s;
+  }
+  .raffle-drum.rolling { opacity: 0.6; }
+  .raffle-sub {
+    font-size: 14px; color: var(--green-100); margin-top: 8px; min-height: 22px;
+  }
+  .raffle-controls { display: flex; gap: 12px; justify-content: center; margin-top: 1.5rem; flex-wrap: wrap; }
+
+  /* CONFETTI PARTICLE */
+  .confetti-piece {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    animation: confettiFall 1.5s ease-in forwards;
+    pointer-events: none;
+  }
+  @keyframes confettiFall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(300px) rotate(720deg); opacity: 0; }
+  }
+
+  /* PLAYER POOL */
+  .player-grid {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 0.75rem;
+  }
+  .player-chip {
+    background: var(--green-50); border: 1px solid var(--green-100);
+    color: var(--green-800); border-radius: 20px;
+    padding: 5px 14px; font-size: 13px; font-weight: 500;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .player-chip:hover { border-color: var(--green-400); }
+  .player-chip.excluded {
+    background: #fee2e2; border-color: #fca5a5; color: #991b1b;
+    text-decoration: line-through; opacity: 0.6;
+  }
+  .player-chip.winner {
+    background: var(--amber-50); border-color: var(--amber-200); color: var(--amber-800);
+    font-weight: 700;
+  }
+
+  /* HISTORY */
+  .history-row {
+    background: #fff; border: 1px solid #eee; border-radius: var(--radius);
+    padding: 1rem 1.25rem; margin-bottom: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .history-tournament { font-size: 14px; font-weight: 600; color: var(--green-800); }
+  .history-date { font-size: 12px; color: var(--gray-400); }
+  .winner-badge {
+    background: var(--amber-50); border: 1.5px solid var(--amber-200);
+    color: var(--amber-800); border-radius: 20px;
+    padding: 4px 14px; font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .history-note { font-size: 12px; color: var(--gray-400); }
+
+  /* SEASON SUMMARY */
+  .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+  .stat-card {
+    background: var(--green-800); border-radius: var(--radius);
+    padding: 1.1rem 1.25rem; text-align: center;
+  }
+  .stat-card .stat-val { font-size: 30px; font-weight: 700; color: var(--amber-100); }
+  .stat-card .stat-lbl { font-size: 11px; color: var(--green-100); text-transform: uppercase; letter-spacing: 0.07em; margin-top: 4px; }
+
+  .leaderboard { width: 100%; border-collapse: collapse; }
+  .leaderboard th { background: var(--green-50); color: var(--green-800); font-weight: 600; font-size: 12px; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .leaderboard td { padding: 9px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; }
+  .leaderboard tr:first-child td { font-weight: 700; color: var(--amber-800); }
+  .rank-1 td:first-child::before { content: '🏆 '; }
+  .rank-2 td:first-child::before { content: '🥈 '; }
+  .rank-3 td:first-child::before { content: '🥉 '; }
+  .rank-pill { display: inline-block; background: var(--amber-50); border: 1px solid var(--amber-200); color: var(--amber-800); border-radius: 12px; padding: 2px 10px; font-size: 12px; font-weight: 600; }
+
+  /* EMPTY STATE */
+  .empty { text-align: center; padding: 3rem 1rem; color: var(--gray-400); }
+  .empty .empty-icon { font-size: 40px; margin-bottom: 12px; }
+  .empty p { font-size: 14px; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--green-800); color: #fff;
+    border-radius: 10px; padding: 12px 20px;
+    font-size: 14px; font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    opacity: 0; transform: translateY(10px);
+    transition: all 0.3s; pointer-events: none; z-index: 100;
+    max-width: 300px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* SECTION LABEL */
+  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--gray-400); margin-bottom: 8px; }
+
+  /* TAG */
+  .tag { display: inline-block; background: var(--teal-50); border: 1px solid var(--teal-100); color: var(--teal-600); border-radius: 12px; padding: 2px 10px; font-size: 12px; font-weight: 500; }
+
+  /* DIVIDER */
+  .divider { border: none; border-top: 1px solid #f0f0f0; margin: 1.25rem 0; }
+
+  /* RESPONSIVE */
+  /* GITHUB STATUS */
+  .gh-ok   { background: #22c55e !important; }
+  .gh-err  { background: #ef4444 !important; }
+  .gh-busy { background: var(--amber-200) !important; animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  .gh-result-ok  { background:var(--teal-50);border:1px solid var(--teal-100);color:var(--teal-600);border-radius:8px;padding:10px 14px;font-size:13px; }
+  .gh-result-err { background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:8px;padding:10px 14px;font-size:13px; }
+  code { font-family: monospace; }
+
+  @media (max-width: 640px) {
+    .header { padding: 1rem; }
+    .main { padding: 1rem; }
+    .nav { padding: 0 1rem; }
+    .raffle-drum { font-size: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="logo">⛳</div>
+    <div class="brand-text">
+      <h1>IAGA Raffle</h1>
+      <p>Indian American Golf Association</p>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div id="ghDot" title="GitHub sync status" style="width:8px;height:8px;border-radius:50%;background:#888;cursor:pointer;" onclick="switchTab('settings')"></div>
+    <div class="season-badge" id="seasonBadge">Season 2025</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-tab active" onclick="switchTab('setup')">Setup &amp; Upload</div>
+  <div class="nav-tab" onclick="switchTab('raffle')">Raffle</div>
+  <div class="nav-tab" onclick="switchTab('history')">History</div>
+  <div class="nav-tab" onclick="switchTab('season')">Season Summary</div>
+  <div class="nav-tab" onclick="switchTab('settings')" id="settingsTab">⚙ GitHub</div>
+</div>
+
+<div class="main">
+
+  <!-- SETUP PAGE -->
+  <div class="page active" id="page-setup">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Tournament Setup</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tournament Name</label>
+          <input type="text" id="tournName" placeholder="e.g. Spring Open 2025" style="min-width:220px">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="tournDate" style="min-width:160px; padding:8px 12px; border:1px solid #ddd; border-radius:8px; font-size:14px; outline:none;">
+        </div>
+        <div class="form-group">
+          <label>Season Year</label>
+          <input type="text" id="seasonYear" placeholder="2025" style="min-width:100px; max-width:100px">
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-green" onclick="applySetup()">✓ Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Upload Player List</div>
+
+      <div style="background:var(--amber-50);border:1.5px solid var(--amber-200);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+        <div style="font-size:13px;color:var(--amber-800);">
+          <strong>⛳ Wente (June 27, 2025)</strong> — 72 players pre-loaded from today's tee sheet
+        </div>
+        <button class="btn btn-amber" style="padding:7px 16px;font-size:13px;white-space:nowrap;" onclick="loadWentePlayers()">Load Players →</button>
+      </div>
+
+      <p style="font-size:13px; color:var(--gray-400); margin-bottom:1rem;">
+        Upload a file with player names. Accepted formats: <strong>CSV, Excel (.xlsx/.xls), Word (.docx)</strong>.<br>
+        First column should contain player names, or use a column header "Name", "Player", etc.
+      </p>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="onDrag(event)" ondragleave="offDrag(event)" ondrop="onDrop(event)">
+        <div class="upload-icon">📂</div>
+        <p><strong>Click to upload</strong> or drag &amp; drop a file here</p>
+        <p style="margin-top:6px; font-size:12px;">CSV &bull; XLSX &bull; XLS &bull; DOCX &bull; TXT</p>
+      </div>
+      <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,.docx,.txt" onchange="handleFile(event)">
+
+      <div id="manualSection" style="margin-top:1.25rem;">
+        <hr class="divider">
+        <div class="section-label">Or add players manually</div>
+        <div class="form-row">
+          <input type="text" id="manualName" placeholder="Player name" style="flex:1" onkeydown="if(event.key==='Enter') addManual()">
+          <button class="btn btn-outline" onclick="addManual()">+ Add Player</button>
+          <button class="btn btn-red" onclick="clearPlayers()" style="margin-left:auto;">🗑 Clear All</button>
+        </div>
+      </div>
+
+      <div id="previewSection" style="display:none; margin-top:1rem;">
+        <hr class="divider">
+        <div class="section-label">Player pool — <span id="playerCount">0</span> players</div>
+        <div class="player-grid" id="playerPool"></div>
+        <p style="font-size:12px; color:var(--gray-400); margin-top:10px;">Click a name to toggle exclusion from the raffle.</p>
+        <div style="margin-top:1rem;">
+          <button class="btn btn-green" onclick="switchTab('raffle')">Proceed to Raffle →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RAFFLE PAGE -->
+  <div class="page" id="page-raffle">
+    <div class="raffle-stage" id="raffleStage">
+      <div class="raffle-label">IAGA Raffle Selector</div>
+      <div class="raffle-drum" id="raffleDrum">—</div>
+      <div class="raffle-sub" id="raffleSub">Ready to draw</div>
+      <div class="raffle-controls">
+        <button class="btn btn-amber" id="rollBtn" onclick="startRoll()">🎲 Draw Winner</button>
+        <button class="btn btn-outline" style="color:#fff; border-color:rgba(255,255,255,0.3);" onclick="resetRaffle()">↺ Redo Draw</button>
+        <button class="btn btn-outline" style="color:var(--amber-100); border-color:rgba(239,159,39,0.5);" onclick="newTournament()">⛳ New Tournament</button>
+      </div>
+    </div>
+
+    <div id="raffleWinnerCard" style="display:none;" class="card">
+      <div class="card-title"><span class="dot"></span> Winner Confirmed</div>
+      <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+        <div style="width:56px; height:56px; border-radius:50%; background:var(--amber-50); border:2px solid var(--amber-200); display:flex; align-items:center; justify-content:center; font-size:24px;">🏆</div>
+        <div>
+          <div style="font-size:22px; font-weight:700; color:var(--green-800);" id="winnerConfirm"></div>
+          <div style="font-size:13px; color:var(--gray-400);" id="winnerTournament"></div>
+        </div>
+        <button class="btn btn-green" style="margin-left:auto;" onclick="saveWinner()">Save to History</button>
+      </div>
+    </div>
+
+    <div class="card" id="tournWinnersPanel" style="display:none; background:var(--amber-50); border-color:var(--amber-200);">
+      <div class="card-title" style="color:var(--amber-800);"><span class="dot" style="background:var(--amber-400);"></span> Already won this tournament: <span id="tournWinnersTitle"></span></div>
+      <div id="tournWinnersList" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
+      <p style="font-size:12px; color:var(--amber-600); margin-top:10px;">These players are excluded from all remaining draws this tournament.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Eligible Players (<span id="eligibleCount">0</span>)</div>
+      <div id="eligibleList" class="player-grid">
+        <div class="empty"><p>Upload a player list in Setup first.</p></div>
+      </div>
+      <p style="font-size:12px; color:var(--gray-400); margin-top:10px;">Click a player to exclude them from this draw.</p>
+    </div>
+  </div>
+
+  <!-- HISTORY PAGE -->
+  <div class="page" id="page-history">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Tournament Winner History</div>
+      <div id="historyList">
+        <div class="empty"><div class="empty-icon">📋</div><p>No winners recorded yet. Run a raffle to get started.</p></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:0;">
+      <div class="card-title"><span class="dot"></span> Add Past Result Manually</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Tournament</label>
+          <input type="text" id="pastTourn" placeholder="Tournament name">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="pastDate">
+        </div>
+        <div class="form-group">
+          <label>Winner Name</label>
+          <input type="text" id="pastWinner" placeholder="Player name">
+        </div>
+        <div class="form-group">
+          <label>&nbsp;</label>
+          <button class="btn btn-green" onclick="addManualHistory()">+ Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEASON SUMMARY PAGE -->
+  <div class="page" id="page-season">
+    <div class="summary-grid" id="summaryGrid">
+      <div class="stat-card"><div class="stat-val" id="statTournaments">0</div><div class="stat-lbl">Tournaments</div></div>
+      <div class="stat-card"><div class="stat-val" id="statPlayers">0</div><div class="stat-lbl">Unique Players</div></div>
+      <div class="stat-card"><div class="stat-val" id="statWins">0</div><div class="stat-lbl">Raffle Draws</div></div>
+      <div class="stat-card"><div class="stat-val" id="statTop">—</div><div class="stat-lbl">Most Wins</div></div>
+    </div>
+
+    <div class="card">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:8px;">
+        <div class="card-title" style="margin-bottom:0;"><span class="dot"></span> Season Leaderboard</div>
+        <button class="btn btn-outline" onclick="exportCSV()">⬇ Export CSV</button>
+      </div>
+      <div class="table-wrap">
+        <table class="leaderboard">
+          <thead><tr><th>Player</th><th>Raffle Wins</th><th>Tournaments Won</th></tr></thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+      <div id="leaderboardEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">🏌️</div><p>No season data yet.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> Full Season Log</div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Tournament</th><th>Date</th><th>Raffle Winner</th></tr></thead>
+          <tbody id="seasonLog"></tbody>
+        </table>
+      </div>
+      <div id="seasonLogEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">📅</div><p>No events logged.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- SETTINGS PAGE -->
+  <div class="page" id="page-settings">
+
+    <div class="card" id="ghStatusCard" style="display:none;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div id="ghStatusDot" style="width:10px;height:10px;border-radius:50%;background:#ccc;flex-shrink:0;"></div>
+        <div>
+          <div id="ghStatusText" style="font-size:14px;font-weight:600;color:var(--green-800);">Not connected</div>
+          <div id="ghStatusSub" style="font-size:12px;color:var(--gray-400);"></div>
+        </div>
+        <button class="btn btn-outline" style="margin-left:auto;" onclick="ghSync()">↻ Sync now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> GitHub Connection</div>
+      <p style="font-size:13px;color:var(--gray-600);margin-bottom:1.25rem;">
+        The app saves <code style="background:var(--green-50);padding:2px 6px;border-radius:4px;font-size:12px;">raffle-history.json</code> to the root of your GitHub repo on every save.
+        Data is loaded from GitHub on startup and always wins over local cache.
+      </p>
+
+      <div class="form-row" style="margin-bottom:1rem;">
+        <div class="form-group" style="flex:1;">
+          <label>GitHub Username</label>
+          <input type="text" id="ghUser" placeholder="e.g. anirudh-iaga" style="width:100%;">
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Repository Name</label>
+          <input type="text" id="ghRepo" placeholder="e.g. iaga-golf" style="width:100%;">
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label>Branch</label>
+          <input type="text" id="ghBranch" placeholder="main" style="width:100%;max-width:120px;">
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:1.25rem;">
+        <label>Personal Access Token (PAT)</label>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" style="flex:1;">
+          <button class="btn btn-outline" onclick="togglePat()" id="patToggle" style="padding:8px 12px;font-size:12px;">Show</button>
+        </div>
+        <p style="font-size:11px;color:var(--gray-400);margin-top:6px;">
+          Generate at <strong>GitHub → Settings → Developer settings → Personal access tokens → Fine-grained</strong>.
+          Needs <strong>Contents: Read &amp; Write</strong> on your repo. Token is stored only in your browser's localStorage.
+        </p>
+      </div>
+
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn btn-green" onclick="saveGhSettings()">💾 Save &amp; Test Connection</button>
+        <button class="btn btn-outline" onclick="clearGhSettings()">✕ Clear credentials</button>
+      </div>
+
+      <div id="ghTestResult" style="margin-top:1rem;display:none;"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title"><span class="dot"></span> How it works</div>
+      <div style="font-size:13px;color:var(--gray-600);line-height:1.8;">
+        <p style="margin-bottom:8px;"><strong style="color:var(--green-800);">On load</strong> — fetches <code style="background:var(--green-50);padding:1px 5px;border-radius:3px;">raffle-history.json</code> from GitHub. If found, it replaces any local data.</p>
+        <p style="margin-bottom:8px;"><strong style="color:var(--green-800);">On save</strong> — every time a winner is confirmed or a manual entry is added, the file is written back to GitHub automatically.</p>
+        <p style="margin-bottom:8px;"><strong style="color:var(--green-800);">Offline fallback</strong> — if GitHub is unreachable, the app falls back to localStorage so you never lose data mid-raffle.</p>
+        <p><strong style="color:var(--green-800);">Multi-device</strong> — anyone with the app open (e.g. on a laptop at the course) will load the same history since it reads from GitHub each time.</p>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /main -->
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── GITHUB CONFIG ── */
+const GH = {
+  get user()   { return localStorage.getItem('iaga_gh_user') || ''; },
+  get repo()   { return localStorage.getItem('iaga_gh_repo') || ''; },
+  get branch() { return localStorage.getItem('iaga_gh_branch') || 'main'; },
+  get token()  { return localStorage.getItem('iaga_gh_token') || ''; },
+  get ready()  { return !!(this.user && this.repo && this.token); },
+  filePath: 'raffle-history.json',
+};
+
+const APP = {
+  players: [],
+  excluded: new Set(),
+  currentWinner: null,
+  currentTournament: '',
+  tournamentWinners: [],
+  history: JSON.parse(localStorage.getItem('iaga_history') || '[]'),
+  rolling: false,
+  ghSha: null,   // current blob SHA needed for GitHub PUT
+};
+
+/* ── GITHUB API ── */
+function ghHeaders() {
+  return { 'Authorization': 'token ' + GH.token, 'Accept': 'application/vnd.github+json', 'Content-Type': 'application/json' };
+}
+function ghApiUrl() {
+  return `https://api.github.com/repos/${GH.user}/${GH.repo}/contents/${GH.filePath}`;
+}
+
+async function ghLoad() {
+  if (!GH.ready) { setDot('off'); return; }
+  setDot('busy');
+  try {
+    const r = await fetch(ghApiUrl() + '?ref=' + GH.branch, { headers: ghHeaders() });
+    if (r.status === 404) {
+      // File doesn't exist yet — that's fine, will be created on first save
+      setDot('ok'); APP.ghSha = null;
+      updateStatusCard('Connected — no history file yet. It will be created on your first save.', true);
+      return;
+    }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const data = await r.json();
+    APP.ghSha = data.sha;
+    const decoded = JSON.parse(atob(data.content.replace(/\n/g, '')));
+    APP.history = decoded;
+    localStorage.setItem('iaga_history', JSON.stringify(APP.history));
+    setDot('ok');
+    updateStatusCard('Synced from GitHub — ' + APP.history.length + ' records loaded.', true);
+    renderHistory(); renderSeason();
+  } catch(e) {
+    setDot('err');
+    updateStatusCard('GitHub load failed: ' + e.message + '. Using local data.', false);
+  }
+}
+
+async function ghSave() {
+  if (!GH.ready) return;  // silently skip — localStorage already saved
+  setDot('busy');
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(APP.history, null, 2))));
+  const body = { message: 'IAGA raffle update ' + new Date().toISOString(), content, branch: GH.branch };
+  if (APP.ghSha) body.sha = APP.ghSha;
+  try {
+    const r = await fetch(ghApiUrl(), { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+    if (!r.ok) {
+      const err = await r.json();
+      throw new Error(err.message || 'HTTP ' + r.status);
+    }
+    const data = await r.json();
+    APP.ghSha = data.content.sha;
+    setDot('ok');
+    updateStatusCard('Saved to GitHub ✓ — ' + new Date().toLocaleTimeString(), true);
+  } catch(e) {
+    setDot('err');
+    updateStatusCard('GitHub save failed: ' + e.message + '. Data is safe in localStorage.', false);
+  }
+}
+
+async function ghSync() { await ghLoad(); toast('Synced from GitHub'); }
+
+function setDot(state) {
+  const d = document.getElementById('ghDot');
+  const sd = document.getElementById('ghStatusDot');
+  d.className = ''; sd && (sd.className = '');
+  if (state === 'ok')   { d.classList.add('gh-ok');   sd && sd.classList.add('gh-ok');   d.title = 'GitHub: connected'; }
+  if (state === 'err')  { d.classList.add('gh-err');  sd && sd.classList.add('gh-err');  d.title = 'GitHub: error'; }
+  if (state === 'busy') { d.classList.add('gh-busy'); sd && sd.classList.add('gh-busy'); d.title = 'GitHub: syncing…'; }
+  if (state === 'off')  { d.style.background = '#888'; d.title = 'GitHub: not configured'; }
+}
+
+function updateStatusCard(msg, ok) {
+  const card = document.getElementById('ghStatusCard');
+  const text = document.getElementById('ghStatusText');
+  const sub  = document.getElementById('ghStatusSub');
+  if (!card) return;
+  card.style.display = 'block';
+  text.textContent = ok ? 'Connected to GitHub' : 'GitHub issue';
+  text.style.color = ok ? 'var(--green-800)' : '#991b1b';
+  sub.textContent = msg;
+}
+
+/* ── SETTINGS UI ── */
+function loadGhSettingsUI() {
+  document.getElementById('ghUser').value   = GH.user;
+  document.getElementById('ghRepo').value   = GH.repo;
+  document.getElementById('ghBranch').value = GH.branch || 'main';
+  document.getElementById('ghToken').value  = GH.token;
+  if (GH.ready) updateStatusCard('Configured — last sync: ' + (localStorage.getItem('iaga_gh_last') || 'never'), true);
+}
+
+async function saveGhSettings() {
+  const u = document.getElementById('ghUser').value.trim();
+  const r = document.getElementById('ghRepo').value.trim();
+  const b = document.getElementById('ghBranch').value.trim() || 'main';
+  const t = document.getElementById('ghToken').value.trim();
+  if (!u || !r || !t) { toast('Fill in username, repo, and token'); return; }
+  localStorage.setItem('iaga_gh_user', u);
+  localStorage.setItem('iaga_gh_repo', r);
+  localStorage.setItem('iaga_gh_branch', b);
+  localStorage.setItem('iaga_gh_token', t);
+  const res = document.getElementById('ghTestResult');
+  res.style.display = 'block';
+  res.className = '';
+  res.textContent = 'Testing connection…';
+  try {
+    const resp = await fetch(`https://api.github.com/repos/${u}/${r}`, { headers: { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github+json' } });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' — check username, repo, and token permissions.');
+    const data = await resp.json();
+    res.className = 'gh-result-ok';
+    res.textContent = '✓ Connected to ' + data.full_name + (data.private ? ' (private)' : ' (public)') + '. Loading history…';
+    localStorage.setItem('iaga_gh_last', new Date().toLocaleString());
+    await ghLoad();
+  } catch(e) {
+    res.className = 'gh-result-err';
+    res.textContent = '✗ ' + e.message;
+    setDot('err');
+  }
+}
+
+function clearGhSettings() {
+  if (!confirm('Remove GitHub credentials from this browser?')) return;
+  ['iaga_gh_user','iaga_gh_repo','iaga_gh_branch','iaga_gh_token','iaga_gh_last'].forEach(k => localStorage.removeItem(k));
+  document.getElementById('ghUser').value = '';
+  document.getElementById('ghRepo').value = '';
+  document.getElementById('ghBranch').value = '';
+  document.getElementById('ghToken').value = '';
+  document.getElementById('ghTestResult').style.display = 'none';
+  setDot('off');
+  toast('GitHub credentials cleared');
+}
+
+function togglePat() {
+  const inp = document.getElementById('ghToken');
+  const btn = document.getElementById('patToggle');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? 'Show' : 'Hide';
+}
+
+/* ── APP STATE ── */
+// Init
+document.getElementById('tournDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('seasonYear').value = new Date().getFullYear();
+document.getElementById('seasonBadge').textContent = 'Season ' + new Date().getFullYear();
+renderHistory();
+renderSeason();
+// Restore saved player pool from localStorage
+const _savedPlayers = JSON.parse(localStorage.getItem('iaga_players') || '[]');
+if (_savedPlayers.length > 0 && APP.players.length === 0) {
+  APP.players = _savedPlayers;
+  renderPlayerPool();
+}
+// Load from GitHub on startup
+ghLoad();
+
+/* ── TAB NAVIGATION ── */
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', ['setup','raffle','history','season','settings'][i] === tab));
+  document.querySelectorAll('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + tab));
+  if (tab === 'raffle') renderRafflePage();
+  if (tab === 'season') renderSeason();
+  if (tab === 'history') renderHistory();
+  if (tab === 'settings') loadGhSettingsUI();
+}
+
+/* ── SETUP ── */
+function applySetup() {
+  const newName = document.getElementById('tournName').value.trim() || 'Unnamed Tournament';
+  if (newName !== APP.currentTournament) {
+    APP.tournamentWinners = [];
+    APP.currentWinner = null;
+  }
+  APP.currentTournament = newName;
+  const yr = document.getElementById('seasonYear').value.trim();
+  if (yr) document.getElementById('seasonBadge').textContent = 'Season ' + yr;
+  toast('Tournament set: ' + APP.currentTournament);
+  renderRafflePage();
+}
+
+/* ── FILE HANDLING ── */
+function onDrag(e) { e.preventDefault(); document.getElementById('uploadZone').classList.add('drag'); }
+function offDrag(e) { document.getElementById('uploadZone').classList.remove('drag'); }
+function onDrop(e) {
+  e.preventDefault(); offDrag(e);
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+function handleFile(e) { if (e.target.files[0]) processFile(e.target.files[0]); }
+
+function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const reader = new FileReader();
+  if (ext === 'csv' || ext === 'txt') {
+    reader.onload = e => parseCSV(e.target.result);
+    reader.readAsText(file);
+  } else if (ext === 'xlsx' || ext === 'xls') {
+    reader.onload = e => parseExcel(e.target.result);
+    reader.readAsArrayBuffer(file);
+  } else if (ext === 'docx') {
+    reader.onload = e => parseDocx(e.target.result);
+    reader.readAsArrayBuffer(file);
+  } else {
+    toast('Unsupported file type. Use CSV, XLSX, XLS, DOCX, or TXT.'); return;
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const names = [];
+  const headerKw = /^(name|player|golfer|member|participant)/i;
+  let skip = 0;
+  if (lines.length > 0 && headerKw.test(lines[0].split(/[,\t|;]/)[0])) skip = 1;
+  for (let i = skip; i < lines.length; i++) {
+    const col = lines[i].split(/[,\t|;]/)[0].replace(/["']/g,'').trim();
+    if (col) names.push(col);
+  }
+  setPlayers(names, 'Loaded ' + names.length + ' players from CSV');
+}
+
+function parseExcel(buf) {
+  const wb = XLSX.read(buf, { type: 'array' });
+  const ws = wb.Sheets[wb.SheetNames[0]];
+  const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+  const names = [];
+  const headerKw = /^(name|player|golfer|member|participant)/i;
+  let startRow = 0;
+  if (rows.length > 0 && headerKw.test(String(rows[0][0]))) startRow = 1;
+  for (let i = startRow; i < rows.length; i++) {
+    const v = String(rows[i][0] || '').trim();
+    if (v) names.push(v);
+  }
+  setPlayers(names, 'Loaded ' + names.length + ' players from Excel');
+}
+
+function parseDocx(buf) {
+  // Extract text from docx (it's a zip; we grab document.xml and strip tags)
+  try {
+    const wb = XLSX.read(buf, { type: 'array' });
+    // XLSX can't read docx — fall back to manual zip extraction
+  } catch(e) {}
+  // Simple approach: read as binary and extract readable text between XML tags
+  const arr = new Uint8Array(buf);
+  // Try to unzip and read word/document.xml
+  try {
+    const zip = readZip(arr);
+    const xmlEntry = zip['word/document.xml'];
+    if (xmlEntry) {
+      const xmlStr = new TextDecoder().decode(xmlEntry);
+      const text = xmlStr.replace(/<[^>]+>/g, ' ').replace(/\s+/g, '\n');
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 1 && l.length < 80);
+      setPlayers(lines, 'Loaded ' + lines.length + ' entries from Word doc');
+      return;
+    }
+  } catch(e) {}
+  toast('Could not read DOCX. Try saving as CSV or XLSX instead.');
+}
+
+// Minimal ZIP reader (for DOCX)
+function readZip(data) {
+  const files = {};
+  let offset = 0;
+  while (offset < data.length - 4) {
+    const sig = (data[offset] | data[offset+1]<<8 | data[offset+2]<<16 | data[offset+3]<<24) >>> 0;
+    if (sig !== 0x04034b50) break;
+    const fnLen = data[offset+26] | data[offset+27]<<8;
+    const extraLen = data[offset+28] | data[offset+29]<<8;
+    const compSize = data[offset+18] | data[offset+19]<<8 | data[offset+20]<<16 | data[offset+21]<<24;
+    const method = data[offset+8] | data[offset+9]<<8;
+    const fnBytes = data.slice(offset+30, offset+30+fnLen);
+    const fn = new TextDecoder().decode(fnBytes);
+    const dataStart = offset + 30 + fnLen + extraLen;
+    const compData = data.slice(dataStart, dataStart + compSize);
+    if (method === 0) { files[fn] = compData; }
+    else if (method === 8) {
+      try { files[fn] = pako_inflate(compData); } catch(e) {}
+    }
+    offset = dataStart + compSize;
+  }
+  return files;
+}
+
+function setPlayers(names, msg) {
+  // Merge uploaded names with any previously auto-saved winners
+  const saved = JSON.parse(localStorage.getItem('iaga_players') || '[]');
+  const merged = [...new Set([...names, ...saved].filter(n => n.length > 0))];
+  APP.players = merged;
+  localStorage.setItem('iaga_players', JSON.stringify(APP.players));
+  APP.excluded = new Set();
+  renderPlayerPool();
+  toast(msg);
+}
+
+function addManual() {
+  const inp = document.getElementById('manualName');
+  const name = inp.value.trim();
+  if (!name) return;
+  if (APP.players.includes(name)) { toast('Player already in list'); return; }
+  APP.players.push(name);
+  localStorage.setItem('iaga_players', JSON.stringify(APP.players));
+  inp.value = '';
+  renderPlayerPool();
+}
+
+function clearPlayers() {
+  if (!confirm('Clear all players?')) return;
+  APP.players = [];
+  APP.excluded = new Set();
+  renderPlayerPool();
+}
+
+function toggleExclude(name) {
+  if (APP.excluded.has(name)) APP.excluded.delete(name);
+  else APP.excluded.add(name);
+  renderPlayerPool();
+  renderRafflePage();
+}
+
+function renderPlayerPool() {
+  const pool = document.getElementById('playerPool');
+  const sec = document.getElementById('previewSection');
+  const cnt = document.getElementById('playerCount');
+  cnt.textContent = APP.players.length;
+  if (APP.players.length === 0) { sec.style.display = 'none'; pool.innerHTML = ''; return; }
+  sec.style.display = 'block';
+  pool.innerHTML = APP.players.map(p =>
+    `<div class="player-chip ${APP.excluded.has(p) ? 'excluded' : ''}" onclick="toggleExclude('${esc(p)}')">${p}${APP.excluded.has(p) ? ' ✕' : ''}</div>`
+  ).join('');
+}
+
+/* ── RAFFLE ── */
+function renderRafflePage() {
+  const eligible = APP.players.filter(p => !APP.excluded.has(p) && !APP.tournamentWinners.includes(p));
+  document.getElementById('eligibleCount').textContent = eligible.length;
+  const list = document.getElementById('eligibleList');
+  if (eligible.length === 0) {
+    list.innerHTML = '<div class="empty"><p>No eligible players. Add players in Setup.</p></div>';
+    return;
+  }
+  list.innerHTML = eligible.map(p =>
+    `<div class="player-chip ${APP.currentWinner === p ? 'winner' : ''}" onclick="toggleExclude('${esc(p)}')">${p}</div>`
+  ).join('');
+  const drum = document.getElementById('raffleDrum');
+  if (!APP.currentWinner) { drum.textContent = '—'; document.getElementById('raffleSub').textContent = 'Ready to draw'; }
+
+  // Show this-tournament winners panel
+  const wonPanel = document.getElementById('tournWinnersPanel');
+  const wonList = document.getElementById('tournWinnersList');
+  if (APP.tournamentWinners.length > 0) {
+    wonPanel.style.display = 'block';
+    document.getElementById('tournWinnersTitle').textContent = APP.currentTournament || 'This Tournament';
+    wonList.innerHTML = APP.tournamentWinners.map((w,i) =>
+      `<div class="winner-badge" style="font-size:13px;">🏆 #${i+1} ${w}</div>`
+    ).join('');
+  } else {
+    wonPanel.style.display = 'none';
+  }
+}
+
+let rollInterval = null;
+function startRoll() {
+  if (APP.rolling) return;
+  const eligible = APP.players.filter(p => !APP.excluded.has(p) && !APP.tournamentWinners.includes(p));
+  if (eligible.length === 0) { toast('No more eligible players — everyone has won a raffle this tournament!'); return; }
+  APP.rolling = true;
+  APP.currentWinner = null;
+  document.getElementById('raffleWinnerCard').style.display = 'none';
+  document.getElementById('rollBtn').disabled = true;
+
+  const drum = document.getElementById('raffleDrum');
+  const sub = document.getElementById('raffleSub');
+  drum.classList.add('rolling');
+  sub.textContent = 'Drawing...';
+
+  let ticks = 0; const maxTicks = 28 + Math.floor(Math.random()*12);
+  let speed = 80;
+  function tick() {
+    drum.textContent = eligible[Math.floor(Math.random()*eligible.length)];
+    ticks++;
+    if (ticks < maxTicks * 0.5) speed = 80;
+    else if (ticks < maxTicks * 0.8) speed = 140;
+    else speed = 260;
+    if (ticks >= maxTicks) { finishRoll(eligible); return; }
+    rollInterval = setTimeout(tick, speed);
+  }
+  tick();
+}
+
+function finishRoll(eligible) {
+  const winner = eligible[Math.floor(Math.random()*eligible.length)];
+  APP.currentWinner = winner;
+  APP.rolling = false;
+  const drum = document.getElementById('raffleDrum');
+  drum.classList.remove('rolling');
+  drum.textContent = winner;
+  document.getElementById('raffleSub').textContent = '🎉 Winner selected!';
+  document.getElementById('rollBtn').disabled = false;
+
+  // Show winner card
+  document.getElementById('winnerConfirm').textContent = winner;
+  document.getElementById('winnerTournament').textContent = APP.currentTournament || 'Tournament';
+  document.getElementById('raffleWinnerCard').style.display = 'block';
+
+  confetti();
+  renderRafflePage();
+}
+
+function resetRaffle() {
+  APP.currentWinner = null; APP.rolling = false;
+  clearTimeout(rollInterval);
+  document.getElementById('raffleDrum').textContent = '—';
+  document.getElementById('raffleSub').textContent = 'Ready to draw';
+  document.getElementById('raffleWinnerCard').style.display = 'none';
+  document.getElementById('rollBtn').disabled = false;
+  renderRafflePage();
+}
+
+function newTournament() {
+  if (!confirm('Start a new tournament? This will clear all winners for the current tournament session (history is kept).')) return;
+  APP.tournamentWinners = [];
+  APP.currentWinner = null;
+  APP.excluded = new Set();
+  document.getElementById('raffleDrum').textContent = '—';
+  document.getElementById('raffleSub').textContent = 'Ready to draw';
+  document.getElementById('raffleWinnerCard').style.display = 'none';
+  document.getElementById('rollBtn').disabled = false;
+  renderPlayerPool();
+  renderRafflePage();
+  toast('New tournament session started — all players are eligible again.');
+}
+
+function saveWinner() {
+  if (!APP.currentWinner) return;
+  const tournName = APP.currentTournament || document.getElementById('tournName').value.trim() || 'Unnamed Tournament';
+  const entry = {
+    id: Date.now(),
+    tournament: tournName,
+    date: document.getElementById('tournDate').value || new Date().toISOString().split('T')[0],
+    winner: APP.currentWinner
+  };
+  APP.history.push(entry);
+  if (!APP.tournamentWinners.includes(APP.currentWinner)) {
+    APP.tournamentWinners.push(APP.currentWinner);
+  }
+  APP.excluded.add(APP.currentWinner);  // auto-exclude from future draws this session
+  // Auto-save winner name to player pool if not already there
+  if (!APP.players.includes(APP.currentWinner)) {
+    APP.players.push(APP.currentWinner);
+    localStorage.setItem('iaga_players', JSON.stringify(APP.players));
+  }
+  APP.currentWinner = null;
+  persist();
+  toast('Winner saved — they are now excluded from further draws this tournament.');
+  renderHistory();
+  renderSeason();
+  renderPlayerPool();
+  renderRafflePage();
+  document.getElementById('raffleWinnerCard').style.display = 'none';
+  document.getElementById('raffleDrum').textContent = '—';
+  document.getElementById('raffleSub').textContent = eligibleCount() > 0 ? 'Ready for next draw' : 'All players have won a raffle this tournament';
+}
+
+function eligibleCount() {
+  return APP.players.filter(p => !APP.excluded.has(p) && !APP.tournamentWinners.includes(p)).length;
+}
+
+/* ── HISTORY ── */
+function renderHistory() {
+  const list = document.getElementById('historyList');
+  if (APP.history.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>No winners recorded yet.</p></div>';
+    return;
+  }
+  const sorted = [...APP.history].sort((a,b) => new Date(b.date)-new Date(a.date));
+  list.innerHTML = sorted.map(h =>
+    `<div class="history-row">
+      <div>
+        <div class="history-tournament">${h.tournament}</div>
+        <div class="history-date">${fmtDate(h.date)}</div>
+      </div>
+      <div class="winner-badge">🏆 ${h.winner}</div>
+      <button class="btn btn-red" style="padding:6px 12px; font-size:12px;" onclick="deleteEntry(${h.id})">✕</button>
+    </div>`
+  ).join('');
+}
+
+function addManualHistory() {
+  const t = document.getElementById('pastTourn').value.trim();
+  const d = document.getElementById('pastDate').value;
+  const w = document.getElementById('pastWinner').value.trim();
+  if (!t || !w) { toast('Enter tournament name and winner'); return; }
+  APP.history.push({ id: Date.now(), tournament: t, date: d || new Date().toISOString().split('T')[0], winner: w });
+  persist(); renderHistory(); renderSeason();
+  document.getElementById('pastTourn').value = '';
+  document.getElementById('pastWinner').value = '';
+  toast('Added: ' + w + ' → ' + t);
+}
+
+function deleteEntry(id) {
+  if (!confirm('Remove this entry?')) return;
+  APP.history = APP.history.filter(h => h.id !== id);
+  persist(); renderHistory(); renderSeason();
+}
+
+/* ── SEASON SUMMARY ── */
+function renderSeason() {
+  const h = APP.history;
+  const tournaments = [...new Set(h.map(e=>e.tournament))];
+  const players = [...new Set(h.map(e=>e.winner))];
+  document.getElementById('statTournaments').textContent = tournaments.length;
+  document.getElementById('statPlayers').textContent = players.length;
+  document.getElementById('statWins').textContent = h.length;
+
+  // Tally wins
+  const tally = {};
+  h.forEach(e => { tally[e.winner] = (tally[e.winner]||0)+1; });
+  const sorted = Object.entries(tally).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('statTop').textContent = sorted.length ? sorted[0][0].split(' ')[0] : '—';
+
+  // Leaderboard
+  const tbody = document.getElementById('leaderboardBody');
+  if (sorted.length === 0) {
+    tbody.innerHTML = '';
+    document.getElementById('leaderboardEmpty').style.display = 'block';
+  } else {
+    document.getElementById('leaderboardEmpty').style.display = 'none';
+    tbody.innerHTML = sorted.map(([name, wins], i) =>
+      `<tr class="${i===0?'rank-1':i===1?'rank-2':i===2?'rank-3':''}">
+        <td>${name}</td>
+        <td><span class="rank-pill">${wins}</span></td>
+        <td>${[...new Set(h.filter(e=>e.winner===name).map(e=>e.tournament))].join(', ')}</td>
+      </tr>`
+    ).join('');
+  }
+
+  // Season log
+  const logBody = document.getElementById('seasonLog');
+  if (h.length === 0) {
+    logBody.innerHTML = '';
+    document.getElementById('seasonLogEmpty').style.display = 'block';
+  } else {
+    document.getElementById('seasonLogEmpty').style.display = 'none';
+    const logSorted = [...h].sort((a,b)=>new Date(a.date)-new Date(b.date));
+    logBody.innerHTML = logSorted.map((e,i)=>
+      `<tr><td style="color:var(--gray-400)">${i+1}</td><td>${e.tournament}</td><td>${fmtDate(e.date)}</td><td><span class="winner-badge" style="font-size:12px;">🏆 ${e.winner}</span></td></tr>`
+    ).join('');
+  }
+}
+
+function exportCSV() {
+  if (APP.history.length === 0) { toast('No data to export'); return; }
+  const rows = [['#','Tournament','Date','Raffle Winner'],...APP.history.map((h,i)=>[i+1,h.tournament,h.date,h.winner])];
+  const csv = rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'IAGA_Season_' + new Date().getFullYear() + '.csv';
+  a.click();
+}
+
+/* ── HELPERS ── */
+function persist() { localStorage.setItem('iaga_history', JSON.stringify(APP.history)); ghSave(); }
+function esc(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+function fmtDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d + 'T12:00:00');
+  return dt.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+}
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
+function confetti() {
+  const stage = document.getElementById('raffleStage');
+  const colors = ['#EF9F27','#97C459','#5DCAA5','#fff','#FAC775','#639922'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `left:${Math.random()*100}%; top:0; background:${colors[Math.floor(Math.random()*colors.length)]}; width:${6+Math.random()*8}px; height:${6+Math.random()*8}px; animation-delay:${Math.random()*0.5}s; animation-duration:${1+Math.random()}s;`;
+    stage.appendChild(p);
+    setTimeout(()=>p.remove(), 2500);
+  }
+}
+
+/* ── WENTE JUNE 27 PRE-LOADED PLAYERS ── */
+const WENTE_PLAYERS = ["Ony Velez", "Irfan Mehdi", "Aman Sandhu", "Vir Brar", "Zoheb Mukhi", "Madhav Halbe", "Anirudh Joshi", "Harsha Sastry", "Paramdeep Sodhi", "Shekhar Halakatti", "Sunny Bajwa", "Ravi Krishnaiah", "Sunil Mayur", "Aamir Akram", "Ashish Ahluwalia", "Naresh Nagarajan", "Raj Gautam", "Shant Singh", "Omar Sehgal", "Jimmy Singh", "Felix Manickam", "Tarun Goyal", "Kunal Verma", "Aanika Verma", "Shan Swaminathan", "Jitender Gehlaut", "Pankaj Thapar", "Subhasish Saha", "Felix Solomon", "Abhi Desai", "Murali Dharan", "Abhijit Pandit", "Vishal Malakar", "Vivek Mishra", "Nikhil Kapur", "Hasmukh Ranjan", "Hargunwant Randhawa", "Samit Rao", "Sajid Zia", "Sunil Ramaiah", "Rakesh Manocha", "Sujay Ramaiah", "Abhijit Joshi", "Abhijit Bhave", "Abhijit Gune", "Neeraj Kauts", "Sanchit Sharma", "Rajesh Wajge", "Deepak Mayya", "Charandeep Sehgal", "Panch Chandrasekaran", "Sanjiv Bhargava", "Anandkumar Shivajappa", "Rahul Pandit", "Raj Badani", "Savraj Dhillon", "Kulwant Sidhu", "Kanwaljit Mann", "Shashikant Rai", "Rajiv Malik", "Sunil Mehta", "Vineet Sharma", "Ranjan Bhasin", "Anil Gulati", "Vishal Goyal", "Ashok Vaid", "Atul Khanzode", "Nitin Buty", "Chhatrapal Bhende", "Ketki Mathuria", "Ajit Shanware", "Amol Lele"];
+
+function loadWentePlayers() {
+  setPlayers(WENTE_PLAYERS, 'Loaded 72 players from Wente (June 27) tee sheet');
+  // Pre-fill tournament info
+  const tn = document.getElementById('tournName');
+  const td = document.getElementById('tournDate');
+  if (!tn.value) tn.value = 'Wente (June)';
+  if (!td.value || td.value === new Date().toISOString().split('T')[0]) td.value = '2025-06-27';
+  applySetup();
+}
+
+// Fallback pako inflate stub (real pako not loaded; docx text extraction uses our zip reader)
+function pako_inflate(data) { return data; }
+</script>
+</body>
+</html>
