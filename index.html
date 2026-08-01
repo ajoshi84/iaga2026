@@ -874,7 +874,10 @@
           <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--hawk); display:inline-block;"></span> Using NCGA Handicap</span>
           <span style="display:flex; align-items:center; gap:6px;"><span style="width:10px; height:10px; border-radius:50%; background:var(--border); display:inline-block;"></span> No NCGA on file</span>
         </div>
-        <button class="btn btn-gold btn-sm" onclick="downloadHandicapExcel()">⬇ Export to Excel</button>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-secondary btn-sm" onclick="showTournamentIndexList()">📋 Tournament Index Players</button>
+          <button class="btn btn-gold btn-sm" onclick="downloadHandicapExcel()">⬇ Export to Excel</button>
+        </div>
       </div>
 
       <div class="sub-tabs">
@@ -971,6 +974,17 @@
     <div id="player-modal-content"></div>
     <div class="modal-actions">
       <button class="btn btn-secondary" onclick="closePlayerModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Tournament Index Players modal -->
+<div class="modal-overlay" id="ti-list-modal" onclick="if(event.target===this) closeTiListModal()">
+  <div class="modal modal-lg">
+    <div id="ti-list-content"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="copyTiList()">📋 Copy Names</button>
+      <button class="btn btn-secondary" onclick="closeTiListModal()">Close</button>
     </div>
   </div>
 </div>
@@ -2242,7 +2256,35 @@ function downloadHandicapExcel() {
     XLSX.utils.book_append_sheet(wb, ws, flight);
   });
 
-  // ── Sheet 3: Score History per Player ─────────────────────────────────────
+  // ── Sheet 3: Tournament Index Players ─────────────────────────────────────
+  // Players whose Usable Handicap = Tournament Index (lower than NCGA, or no NCGA on file)
+  const tiPlayers = allResults.filter(r => !r.usingNcga).sort((a,b) => {
+    if (a.flight !== b.flight) return FLIGHTS.indexOf(a.flight) - FLIGHTS.indexOf(b.flight);
+    return a.lowest - b.lowest;
+  });
+
+  const tiRows = [
+    ['Players Using Tournament Index'],
+    [`Generated: ${today}`],
+    [`Total: ${tiPlayers.length} of ${allResults.length} player(s)`],
+    [],
+    ['Player', 'Flight', 'Tournament Index', 'NCGA Handicap', 'Usable Handicap', 'Reason'],
+  ];
+  tiPlayers.forEach(r => {
+    tiRows.push([
+      r.name,
+      r.flight,
+      r.index,
+      r.ncgaValue !== null && !isNaN(r.ncgaValue) ? r.ncgaValue : '',
+      r.lowest,
+      !r.hasNcga ? 'No NCGA on file' : 'Tournament Index is lower',
+    ]);
+  });
+  const wsTi = XLSX.utils.aoa_to_sheet(tiRows);
+  wsTi['!cols'] = [{ wch: 22 }, { wch: 12 }, { wch: 16 }, { wch: 14 }, { wch: 14 }, { wch: 24 }];
+  XLSX.utils.book_append_sheet(wb, wsTi, 'Tournament Index Players');
+
+  // ── Sheet 4: Score History per Player ─────────────────────────────────────
   const histRows = [
     ['Player Score History — All Tournaments'],
     [`Generated: ${today}`],
@@ -2808,7 +2850,90 @@ function confirmAllInOne() {
   }, 50);
 }
 
-// ─── NCGA Handicap Tab ──────────────────────────────────────────────────────────
+// ─── Tournament Index Players List ─────────────────────────────────────────────
+function showTournamentIndexList() {
+  const all = computeHandicaps('all');
+
+  // Attach NCGA values so we can check usingNcga
+  all.forEach(r => {
+    const key = r.name.toLowerCase().trim();
+    const ncga = db.ncgaIndex[key] || {};
+    r.ncgaValue = (ncga.value !== undefined && ncga.value !== null) ? parseFloat(ncga.value) : null;
+    r.hasNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue);
+    r.usingNcga = r.hasNcga && r.ncgaValue < r.index;
+    r.lowest = r.hasNcga ? Math.min(r.index, r.ncgaValue) : r.index;
+  });
+
+  // Players using Tournament Index = not using NCGA (either T-Index is lower, or no NCGA on file)
+  const usingT = all.filter(r => !r.usingNcga).sort((a,b) => a.lowest - b.lowest);
+  const usingN = all.filter(r => r.usingNcga).length;
+
+  // Group by flight
+  const byFlight = {};
+  FLIGHTS.forEach(f => { byFlight[f] = []; });
+  usingT.forEach(r => { if (byFlight[r.flight]) byFlight[r.flight].push(r); });
+
+  const flightBlocks = FLIGHTS.map(f => {
+    const players = byFlight[f];
+    if (!players.length) return '';
+    return `
+      <div style="margin-bottom:16px;">
+        <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; font-family:'DM Mono',monospace; margin-bottom:8px;">
+          ${f} Flight (${players.length})
+        </div>
+        ${players.map(r => `
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--bg); border-radius:4px; margin-bottom:4px; border-left:3px solid var(--accent);">
+            <span style="font-weight:500; font-size:14px;">${r.name}</span>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <span style="font-size:12px; color:var(--text2);">T-Index: <span style="font-family:'DM Mono',monospace; color:var(--text);">${r.index.toFixed(1)}</span></span>
+              ${!r.hasNcga ? '<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:var(--surface2); color:var(--text2);">No NCGA</span>' : '<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:rgba(92,190,120,.15); color:var(--accent);">Lower</span>'}
+            </div>
+          </div>`).join('')}
+      </div>`;
+  }).join('');
+
+  document.getElementById('ti-list-content').innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+      <div>
+        <div class="modal-title" style="margin-bottom:4px;">Using Tournament Index</div>
+        <div style="font-size:13px; color:var(--text2);">${usingT.length} player(s) · ${usingN} using NCGA Handicap</div>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin-bottom:16px; font-size:13px;">
+      These players are using their <strong>Tournament Index</strong> as their Usable Handicap — either because it's lower than their NCGA Handicap, or because no NCGA Handicap is on file yet.
+    </div>
+    ${usingT.length ? flightBlocks : '<div class="empty-state" style="padding:32px;"><div style="font-size:13px;">All players are currently using their NCGA Handicap.</div></div>'}
+  `;
+
+  document.getElementById('ti-list-modal').classList.add('open');
+}
+
+function closeTiListModal() {
+  document.getElementById('ti-list-modal').classList.remove('open');
+}
+
+function copyTiList() {
+  const all = computeHandicaps('all');
+  all.forEach(r => {
+    const key = r.name.toLowerCase().trim();
+    const ncga = db.ncgaIndex[key] || {};
+    r.ncgaValue = (ncga.value !== undefined && ncga.value !== null) ? parseFloat(ncga.value) : null;
+    r.hasNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue);
+    r.usingNcga = r.hasNcga && r.ncgaValue < r.index;
+    r.lowest = r.hasNcga ? Math.min(r.index, r.ncgaValue) : r.index;
+  });
+
+  const lines = all
+    .filter(r => !r.usingNcga)
+    .sort((a,b) => a.lowest - b.lowest)
+    .map(r => `${r.name} (${r.flight}) — Index: ${r.index.toFixed(1)}${!r.hasNcga ? ' [No NCGA]' : ''}`);
+
+  navigator.clipboard.writeText(lines.join('\n'))
+    .then(() => showToast(`Copied ${lines.length} player name(s) to clipboard.`))
+    .catch(() => showToast('Copy failed — try manually selecting the text.'));
+}
+
+
 let pendingNcgaImport = null; // staged rows awaiting confirmation
 
 function handleNcgaDrop(e) {
