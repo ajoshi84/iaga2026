@@ -2927,6 +2927,384 @@
           "diff": 3.7104477611940343
         }
       ]
+    },
+    {
+      "id": "T_1787880723876",
+      "course": "Silverado",
+      "date": "2026-08-22",
+      "name": "Silverado",
+      "flights": {
+        "Maharaj": {
+          "tee": "Blue",
+          "slope": 135,
+          "courseRating": 73.4
+        },
+        "Hawk": {
+          "tee": "White",
+          "slope": 130,
+          "courseRating": 71.4
+        },
+        "Tiger": {
+          "tee": "White",
+          "slope": 130,
+          "courseRating": 71.4
+        },
+        "Cobra": {
+          "tee": "Gold",
+          "slope": 128,
+          "courseRating": 69.1
+        }
+      },
+      "scores": [
+        {
+          "player": "Aamir Akram",
+          "flight": "Maharaj",
+          "gross": 94,
+          "diff": 17.242962962962956
+        },
+        {
+          "player": "Ajay Athale",
+          "flight": "Hawk",
+          "gross": 87,
+          "diff": 13.559999999999995
+        },
+        {
+          "player": "Sunny Bajwa",
+          "flight": "Maharaj",
+          "gross": 84,
+          "diff": 8.872592592592587
+        },
+        {
+          "player": "Vatsal Bakshi",
+          "flight": "Maharaj",
+          "gross": 90,
+          "diff": 13.89481481481481
+        },
+        {
+          "player": "Raghava Bharadwaj",
+          "flight": "Hawk",
+          "gross": 99,
+          "diff": 23.990769230769224
+        },
+        {
+          "player": "Manish Bhardwaj",
+          "flight": "Tiger",
+          "gross": 91,
+          "diff": 17.03692307692307
+        },
+        {
+          "player": "Sanjiv Bhargava",
+          "flight": "Tiger",
+          "gross": 101,
+          "diff": 25.729230769230764
+        },
+        {
+          "player": "Abhijit Bhave",
+          "flight": "Cobra",
+          "gross": 95,
+          "diff": 22.864843750000006
+        },
+        {
+          "player": "Chhatrapal Bhende",
+          "flight": "Cobra",
+          "gross": 96,
+          "diff": 23.747656250000006
+        },
+        {
+          "player": "Vir Brar",
+          "flight": "Maharaj",
+          "gross": 86,
+          "diff": 10.546666666666662
+        },
+        {
+          "player": "Nitin Buty",
+          "flight": "Tiger",
+          "gross": 101,
+          "diff": 25.729230769230764
+        },
+        {
+          "player": "Kiran Chaudhri",
+          "flight": "Tiger",
+          "gross": 96,
+          "diff": 21.383076923076917
+        },
+        {
+          "player": "Pratik Chavda",
+          "flight": "Cobra",
+          "gross": 106,
+          "diff": 32.575781250000006
+        },
+        {
+          "player": "Rohit D'Costa",
+          "flight": "Maharaj",
+          "gross": 100,
+          "diff": 22.265185185185178
+        },
+        {
+          "player": "Prabhjot Devgan",
+          "flight": "Tiger",
+          "gross": 95,
+          "diff": 20.51384615384615
+        },
+        {
+          "player": "Amar Dhillon",
+          "flight": "Hawk",
+          "gross": 85,
+          "diff": 11.821538461538456
+        },
+        {
+          "player": "Savraj Dhillon",
+          "flight": "Hawk",
+          "gross": 92,
+          "diff": 17.906153846153842
+        },
+        {
+          "player": "Ashish Gadagkar",
+          "flight": "Hawk",
+          "gross": 89,
+          "diff": 15.298461538461533
+        },
+        {
+          "player": "Raj Gautam",
+          "flight": "Hawk",
+          "gross": 89,
+          "diff": 15.298461538461533
+        },
+        {
+          "player": "Abhijit Gune",
+          "flight": "Tiger",
+          "gross": 93,
+          "diff": 18.77538461538461
+        },
+        {
+          "player": "Sandip Jariwala",
+          "flight": "Tiger",
+          "gross": 99,
+          "diff": 23.990769230769224
+        },
+        {
+          "player": "Abhijit Joshi",
+          "flight": "Cobra",
+          "gross": 101,
+          "diff": 28.161718750000006
+        },
+        {
+          "player": "Anirudh Joshi",
+          "flight": "Hawk",
+          "gross": 90,
+          "diff": 16.167692307692302
+        },
+        {
+          "player": "Neeraj Kauts",
+          "flight": "Tiger",
+          "gross": 103,
+          "diff": 27.467692307692303
+        },
+        {
+          "player": "Zeeshan Khan",
+          "flight": "Cobra",
+          "gross": 102,
+          "diff": 29.044531250000006
+        },
+        {
+          "player": "Virendra Kirloskar",
+          "flight": "Tiger",
+          "gross": 98,
+          "diff": 23.121538461538456
+        },
+        {
+          "player": "Ravi Krishnaiah",
+          "flight": "Maharaj",
+          "gross": 84,
+          "diff": 8.872592592592587
+        },
+        {
+          "player": "Rajiv Malik",
+          "flight": "Cobra",
+          "gross": 89,
+          "diff": 17.567968750000006
+        },
+        {
+          "player": "Kanwaljit Mann",
+          "flight": "Tiger",
+          "gross": 100,
+          "diff": 24.859999999999996
+        },
+        {
+          "player": "Sunil Mayur",
+          "flight": "Maharaj",
+          "gross": 82,
+          "diff": 7.198518518518514
+        },
+        {
+          "player": "Sunil Mehta",
+          "flight": "Hawk",
+          "gross": 92,
+          "diff": 17.906153846153842
+        },
+        {
+          "player": "Zoheb Mukhi",
+          "flight": "Hawk",
+          "gross": 92,
+          "diff": 17.906153846153842
+        },
+        {
+          "player": "Abhijit Pandit",
+          "flight": "Hawk",
+          "gross": 88,
+          "diff": 14.429230769230763
+        },
+        {
+          "player": "Rahul Pandit",
+          "flight": "Tiger",
+          "gross": 97,
+          "diff": 22.252307692307685
+        },
+        {
+          "player": "Shashikant Rai",
+          "flight": "Tiger",
+          "gross": 102,
+          "diff": 26.59846153846153
+        },
+        {
+          "player": "Sunil Ramaiah",
+          "flight": "Hawk",
+          "gross": 83,
+          "diff": 10.083076923076918
+        },
+        {
+          "player": "Hargunwant Randhawa",
+          "flight": "Tiger",
+          "gross": 91,
+          "diff": 17.03692307692307
+        },
+        {
+          "player": "Prabhjot Randhawa",
+          "flight": "Hawk",
+          "gross": 87,
+          "diff": 13.559999999999995
+        },
+        {
+          "player": "Samit Rao",
+          "flight": "Tiger",
+          "gross": 94,
+          "diff": 19.644615384615378
+        },
+        {
+          "player": "Imran Rizvi",
+          "flight": "Tiger",
+          "gross": 86,
+          "diff": 12.690769230769225
+        },
+        {
+          "player": "Subhasish Saha",
+          "flight": "Hawk",
+          "gross": 107,
+          "diff": 30.94461538461538
+        },
+        {
+          "player": "Navneet Sandhu",
+          "flight": "Cobra",
+          "gross": 107,
+          "diff": 33.458593750000006
+        },
+        {
+          "player": "Harsha Sastry",
+          "flight": "Maharaj",
+          "gross": 90,
+          "diff": 13.89481481481481
+        },
+        {
+          "player": "Charandeep Sehgal",
+          "flight": "Tiger",
+          "gross": 101,
+          "diff": 25.729230769230764
+        },
+        {
+          "player": "Kartik Sehgal",
+          "flight": "Hawk",
+          "gross": 104,
+          "diff": 28.33692307692307
+        },
+        {
+          "player": "Omar Sehgal",
+          "flight": "Hawk",
+          "gross": 97,
+          "diff": 22.252307692307685
+        },
+        {
+          "player": "Ajit Shanware",
+          "flight": "Cobra",
+          "gross": 107,
+          "diff": 33.458593750000006
+        },
+        {
+          "player": "Anandkumar Shivajappa",
+          "flight": "Tiger",
+          "gross": 104,
+          "diff": 28.33692307692307
+        },
+        {
+          "player": "Kulwant Sidhu",
+          "flight": "Tiger",
+          "gross": 99,
+          "diff": 23.990769230769224
+        },
+        {
+          "player": "Jimmy Singh",
+          "flight": "Hawk",
+          "gross": 89,
+          "diff": 15.298461538461533
+        },
+        {
+          "player": "Kuldeep Singh",
+          "flight": "Maharaj",
+          "gross": 118,
+          "diff": 37.331851851851845
+        },
+        {
+          "player": "Satwant Singh",
+          "flight": "Hawk",
+          "gross": 104,
+          "diff": 28.33692307692307
+        },
+        {
+          "player": "Shant Singh",
+          "flight": "Maharaj",
+          "gross": 100,
+          "diff": 22.265185185185178
+        },
+        {
+          "player": "Harpreet Soni",
+          "flight": "Hawk",
+          "gross": 93,
+          "diff": 18.77538461538461
+        },
+        {
+          "player": "Ony Velez",
+          "flight": "Maharaj",
+          "gross": 78,
+          "diff": 3.850370370370366
+        },
+        {
+          "player": "Kunal Verma",
+          "flight": "Hawk",
+          "gross": 92,
+          "diff": 17.906153846153842
+        },
+        {
+          "player": "Rajesh Wajge",
+          "flight": "Tiger",
+          "gross": 99,
+          "diff": 23.990769230769224
+        },
+        {
+          "player": "Sajid Zia",
+          "flight": "Tiger",
+          "gross": 98,
+          "diff": 23.121538461538456
+        }
+      ]
     }
   ],
   "roster": {},
@@ -3610,6 +3988,9 @@
       "ghin": "467176",
       "value": 4.8,
       "source": "NCGA roster"
+    },
+    "kartik sehgal": {
+      "ghin": "1983927"
     }
   }
 }
