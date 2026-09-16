@@ -913,7 +913,8 @@
           </div>
         </div>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <button class="btn btn-secondary btn-sm admin-only" style="display:none;" onclick="showTournamentIndexList()">📋 Tournament Index Players</button>
+          <button class="btn btn-secondary btn-sm" onclick="showTournamentIndexList()">📋 Tournament Index Players</button>
+          <button class="btn btn-secondary btn-sm" onclick="showHcpHistoryReport()">📈 History Report</button>
           <button class="btn btn-gold btn-sm" onclick="downloadHandicapExcel()">⬇ Export to Excel</button>
         </div>
       </div>
@@ -1016,6 +1017,17 @@
   </div>
 </div>
 
+<!-- Handicap History Report modal -->
+<div class="modal-overlay" id="hcp-history-modal" onclick="if(event.target===this) closeHcpHistoryModal()">
+  <div class="modal modal-lg" style="max-width:860px;">
+    <div id="hcp-history-content"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary btn-sm" onclick="downloadHcpHistoryExcel()">⬇ Export to Excel</button>
+      <button class="btn btn-secondary" onclick="closeHcpHistoryModal()">Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- Tournament Index Players modal -->
 <div class="modal-overlay" id="ti-list-modal" onclick="if(event.target===this) closeTiListModal()">
   <div class="modal modal-lg">
@@ -1063,7 +1075,7 @@ const ADMIN_USER = 'ajoshi';
 const ADMIN_PASS = 'IAGA2026';
 
 function emptyDb() {
-  return { tournaments: [], roster: {}, ncgaIndex: {}, settings: {} };
+  return { tournaments: [], roster: {}, ncgaIndex: {}, settings: {}, hcpHistory: {} };
 }
 
 function normalizeDb(parsed) {
@@ -1072,6 +1084,7 @@ function normalizeDb(parsed) {
   if (!parsed.roster) parsed.roster = {};
   if (!parsed.ncgaIndex) parsed.ncgaIndex = {};
   if (!parsed.settings) parsed.settings = {};
+  if (!parsed.hcpHistory) parsed.hcpHistory = {};
   return parsed;
 }
 
@@ -1463,8 +1476,88 @@ function saveScores() {
   if (!scores.length) { alert('Please enter at least one player score.'); return; }
 
   t.scores = scores;
+  snapshotHandicaps(t.id);
   saveData(db);
   showToast(`Saved ${scores.length} score(s) for ${t.name}`);
+}
+
+// ─── Handicap History Snapshot ────────────────────────────────────────────────
+// Called after each tournament's scores are saved.
+// Computes every player's current index (using all rounds up to and including
+// this tournament) and appends a snapshot to db.hcpHistory[playerKey].
+// Also flags "new players" — those who had 0 or 1 rounds *before* this tournament.
+function snapshotHandicaps(tournamentId) {
+  const t = db.tournaments.find(x => x.id === tournamentId);
+  if (!t || !t.scores.length) return;
+
+  if (!db.hcpHistory) db.hcpHistory = {};
+
+  // Full handicap computation reuses existing logic via computeHandicaps.
+  // We need per-player round counts BEFORE this tournament to flag new players.
+  const roundsBefore = {}; // playerKey -> count of rounds in prior tournaments
+  db.tournaments
+    .filter(x => x.id !== tournamentId && x.scores.length > 0)
+    .forEach(x => {
+      x.scores.forEach(s => {
+        const key = s.player.toLowerCase().trim();
+        roundsBefore[key] = (roundsBefore[key] || 0) + 1;
+      });
+    });
+
+  // Use computeHandicaps to get current indexes (all flights, current hcpDiffCount)
+  const results = computeHandicaps('all');
+
+  results.forEach(r => {
+    const key = r.name.toLowerCase().trim();
+    if (!db.hcpHistory[key]) db.hcpHistory[key] = [];
+
+    // Check if this tournament is already snapshotted (re-save case)
+    const existing = db.hcpHistory[key].findIndex(s => s.tournamentId === tournamentId);
+    const snap = {
+      tournamentId,
+      tournamentName: t.name,
+      date: t.date,
+      course: t.course,
+      index: r.index,
+      usedDiffs: r.usedDiffs,
+      usedCount: r.usedCount,
+      multiplier: r.multiplier,
+      totalRounds: r.rounds,
+      isNewPlayer: (roundsBefore[key] || 0) < 2, // had fewer than 2 rounds before
+    };
+
+    if (existing >= 0) {
+      db.hcpHistory[key][existing] = snap; // update on re-save
+    } else {
+      db.hcpHistory[key].push(snap);
+    }
+  });
+}
+
+// Returns players who are "new" — had fewer than 2 rounds before the most recent tournament.
+// These players' indexes are based on thin data; group should use tournament index for them.
+function getNewPlayers() {
+  if (!db.hcpHistory) return [];
+  const result = [];
+  Object.entries(db.hcpHistory).forEach(([key, snaps]) => {
+    if (!snaps.length) return;
+    // Sort by date to get the most recent snap
+    const sorted = [...snaps].sort((a,b) => b.date.localeCompare(a.date));
+    const latest = sorted[0];
+    if (latest.isNewPlayer) {
+      result.push({
+        name: key.replace(/\b\w/g, c => c.toUpperCase()),
+        key,
+        flight: db.tournaments
+          .flatMap(t => t.scores)
+          .find(s => s.player.toLowerCase().trim() === key)?.flight || '—',
+        index: latest.index,
+        totalRounds: latest.totalRounds,
+        tournamentName: latest.tournamentName,
+      });
+    }
+  });
+  return result.sort((a,b) => a.name.localeCompare(b.name));
 }
 
 // ─── History Tab ──────────────────────────────────────────────────────────────
@@ -1990,6 +2083,56 @@ function showPlayerDetail(key) {
     </tr>
   `).join('');
 
+  // ── Handicap History section ──────────────────────────────────────────────
+  const history = db.hcpHistory && db.hcpHistory[key]
+    ? [...db.hcpHistory[key]].sort((a,b) => a.date.localeCompare(b.date))
+    : [];
+
+  let historyHtml = '';
+  if (history.length) {
+    // Trend arrow between consecutive snapshots
+    const histRows = history.map((snap, i) => {
+      const prev = history[i - 1];
+      let trend = '';
+      if (prev) {
+        const delta = snap.index - prev.index;
+        const absDelta = Math.abs(delta).toFixed(1);
+        if (delta < -0.05) trend = `<span style="color:var(--accent); font-size:11px;">▼ ${absDelta}</span>`;
+        else if (delta > 0.05) trend = `<span style="color:var(--maharaj); font-size:11px;">▲ ${absDelta}</span>`;
+        else trend = `<span style="color:var(--text2); font-size:11px;">— same</span>`;
+      } else {
+        trend = `<span style="color:var(--text2); font-size:11px;">first</span>`;
+      }
+      const isLatest = i === history.length - 1;
+      return `<tr${isLatest ? ' style="background:rgba(92,190,120,.05);"' : ''}>
+        <td>${formatDate(snap.date)}</td>
+        <td style="font-weight:${isLatest ? '600' : '400'};">${snap.tournamentName}</td>
+        <td style="font-family:'DM Mono',monospace; font-weight:${isLatest ? '600' : '400'}; color:var(--gold);">${snap.index.toFixed(1)}</td>
+        <td style="font-family:'DM Mono',monospace; font-size:12px; color:var(--text2);">${snap.usedDiffs ? snap.usedDiffs.map(d => d.toFixed(1)).join(', ') : '—'}</td>
+        <td>${trend}</td>
+        ${isLatest ? '<td><span style="font-size:10px;padding:2px 6px;border-radius:8px;background:rgba(92,190,120,.18);color:var(--accent);">Current</span></td>' : '<td></td>'}
+      </tr>`;
+    }).join('');
+
+    historyHtml = `
+      <hr class="divider">
+      <div style="font-size:13px; font-weight:600; color:var(--text); margin-bottom:10px;">
+        📈 Handicap Index History (${history.length} snapshot${history.length !== 1 ? 's' : ''})
+      </div>
+      <div class="scroll-x">
+        <table class="player-round-table">
+          <thead><tr>
+            <th>Date</th><th>Tournament</th><th>Index</th><th>Diffs Used</th><th>Change</th><th></th>
+          </tr></thead>
+          <tbody>${histRows}</tbody>
+        </table>
+      </div>`;
+  } else {
+    historyHtml = `
+      <hr class="divider">
+      <div style="font-size:12px; color:var(--text2);">📈 No handicap history snapshots yet — snapshots are recorded each time scores are saved for a tournament.</div>`;
+  }
+
   const content = document.getElementById('player-modal-content');
   content.innerHTML = `
     <div style="display:flex; align-items:flex-start; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:8px;">
@@ -2039,6 +2182,7 @@ function showPlayerDetail(key) {
         <tbody>${rowsHtml}</tbody>
       </table>
     </div>
+    ${historyHtml}
   `;
 
   document.getElementById('player-modal').classList.add('open');
@@ -3023,6 +3167,7 @@ function confirmAllInOne() {
     flights: p.flights,
     scores: p.scores,
   });
+  snapshotHandicaps(id);
   saveData(db);
 
   showToast(`Tournament created: ${p.name} — ${p.scores.length} score(s) loaded.`);
@@ -3048,7 +3193,7 @@ function confirmAllInOne() {
 function showTournamentIndexList() {
   const all = computeHandicaps('all');
 
-  // Attach NCGA values so we can check usingNcga
+  // Attach NCGA values + new-player flag from latest history snapshot
   all.forEach(r => {
     const key = r.name.toLowerCase().trim();
     const ncga = db.ncgaIndex[key] || {};
@@ -3056,11 +3201,23 @@ function showTournamentIndexList() {
     r.hasNcga = r.ncgaValue !== null && !isNaN(r.ncgaValue);
     r.usingNcga = r.hasNcga && r.ncgaValue < r.index;
     r.lowest = r.hasNcga ? Math.min(r.index, r.ncgaValue) : r.index;
+
+    // Is this player new to the index? Check their latest snapshot.
+    const snaps = db.hcpHistory && db.hcpHistory[key];
+    if (snaps && snaps.length) {
+      const latest = [...snaps].sort((a,b) => b.date.localeCompare(a.date))[0];
+      r.isNew = !!latest.isNewPlayer;
+      r.newSince = latest.tournamentName;
+    } else {
+      // No snapshot yet — flag as new if they only have 2 rounds (just qualified)
+      r.isNew = r.rounds === 2;
+      r.newSince = null;
+    }
   });
 
-  // Players using Tournament Index = not using NCGA (either T-Index is lower, or no NCGA on file)
   const usingT = all.filter(r => !r.usingNcga).sort((a,b) => a.lowest - b.lowest);
   const usingN = all.filter(r => r.usingNcga).length;
+  const newCount = usingT.filter(r => r.isNew).length;
 
   // Group by flight
   const byFlight = {};
@@ -3075,27 +3232,45 @@ function showTournamentIndexList() {
         <div style="font-size:11px; color:var(--text2); text-transform:uppercase; letter-spacing:1px; font-family:'DM Mono',monospace; margin-bottom:8px;">
           ${f} Flight (${players.length})
         </div>
-        ${players.map(r => `
-          <div style="display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:var(--bg); border-radius:4px; margin-bottom:4px; border-left:3px solid var(--accent);">
-            <span style="font-weight:500; font-size:14px;">${r.name}</span>
-            <div style="display:flex; gap:12px; align-items:center;">
-              <span style="font-size:12px; color:var(--text2);">T-Index: <span style="font-family:'DM Mono',monospace; color:var(--text);">${r.index.toFixed(1)}</span></span>
-              ${!r.hasNcga ? '<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:var(--surface2); color:var(--text2);">No NCGA</span>' : '<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:rgba(92,190,120,.15); color:var(--accent);">Lower</span>'}
+        ${players.map(r => {
+          const newBadge = r.isNew
+            ? `<span style="font-size:10px; padding:2px 8px; border-radius:8px; background:rgba(212,168,67,.2); color:var(--gold); font-weight:700; border:1px solid rgba(212,168,67,.4);">🆕 New</span>`
+            : '';
+          const reasonBadge = !r.hasNcga
+            ? `<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:var(--surface2); color:var(--text2);">No NCGA</span>`
+            : `<span style="font-size:10px; padding:2px 7px; border-radius:8px; background:rgba(92,190,120,.15); color:var(--accent);">Lower</span>`;
+          return `
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 12px; background:${r.isNew ? 'rgba(212,168,67,.04)' : 'var(--bg)'}; border-radius:4px; margin-bottom:4px; border-left:3px solid ${r.isNew ? 'var(--gold)' : 'var(--accent)'};">
+            <div style="display:flex; align-items:center; gap:8px; min-width:0;">
+              <span style="font-weight:${r.isNew ? '700' : '500'}; font-size:14px;">${r.name}</span>
+              ${newBadge}
             </div>
-          </div>`).join('')}
+            <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
+              <span style="font-size:12px; color:var(--text2);">T-Index: <span style="font-family:'DM Mono',monospace; color:var(--text);">${r.index.toFixed(1)}</span></span>
+              ${reasonBadge}
+            </div>
+          </div>`;
+        }).join('')}
       </div>`;
   }).join('');
+
+  const newSummary = newCount > 0
+    ? `<div class="alert alert-warn" style="margin-bottom:12px; font-size:13px;">
+        🆕 <strong>${newCount} new player(s)</strong> have just qualified for the Tournament Index (reached 2 rounds) — highlighted in gold.
+       </div>`
+    : '';
 
   document.getElementById('ti-list-content').innerHTML = `
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
       <div>
         <div class="modal-title" style="margin-bottom:4px;">Using Tournament Index</div>
-        <div style="font-size:13px; color:var(--text2);">${usingT.length} player(s) · ${usingN} using NCGA Handicap</div>
+        <div style="font-size:13px; color:var(--text2);">${usingT.length} player(s) · ${usingN} using NCGA Handicap${newCount ? ` · ${newCount} newly added` : ''}</div>
       </div>
     </div>
-    <div class="alert alert-info" style="margin-bottom:16px; font-size:13px;">
+    <div class="alert alert-info" style="margin-bottom:12px; font-size:13px;">
       These players are using their <strong>Tournament Index</strong> as their Usable Handicap — either because it's lower than their NCGA Handicap, or because no NCGA Handicap is on file yet.
     </div>
+    ${newSummary}
     ${usingT.length ? flightBlocks : '<div class="empty-state" style="padding:32px;"><div style="font-size:13px;">All players are currently using their NCGA Handicap.</div></div>'}
   `;
 
@@ -3127,6 +3302,168 @@ function copyTiList() {
     .catch(() => showToast('Copy failed — try manually selecting the text.'));
 }
 
+
+// ─── Handicap History Report ───────────────────────────────────────────────────
+function showHcpHistoryReport() {
+  if (!db.hcpHistory || !Object.keys(db.hcpHistory).length) {
+    showToast('No history snapshots yet — save scores for at least 2 tournaments first.');
+    return;
+  }
+
+  const tournaments = db.tournaments
+    .filter(t => t.scores.length > 0)
+    .sort((a,b) => a.date.localeCompare(b.date));
+
+  if (tournaments.length < 1) {
+    showToast('Need at least one tournament with scores.');
+    return;
+  }
+
+  const players = Object.entries(db.hcpHistory)
+    .filter(([, snaps]) => snaps.length >= 1)
+    .map(([key, snaps]) => {
+      const sorted = [...snaps].sort((a,b) => a.date.localeCompare(b.date));
+      const flight = db.tournaments.flatMap(t => t.scores)
+        .find(s => s.player.toLowerCase().trim() === key)?.flight || '—';
+      return { key, name: key.replace(/\b\w/g, c => c.toUpperCase()), flight, snaps: sorted };
+    })
+    .sort((a,b) => {
+      if (a.flight !== b.flight) return FLIGHTS.indexOf(a.flight) - FLIGHTS.indexOf(b.flight);
+      const ai = a.snaps[a.snaps.length-1]?.index ?? 99;
+      const bi = b.snaps[b.snaps.length-1]?.index ?? 99;
+      return ai - bi;
+    });
+
+  const tHeaders = tournaments.map(t =>
+    `<th style="text-align:center; min-width:80px; white-space:nowrap; font-size:11px;">
+      ${t.name}<br><span style="color:var(--text2); font-weight:400;">${formatDate(t.date)}</span>
+    </th>`
+  ).join('');
+
+  const rows = players.map(p => {
+    const cells = tournaments.map(t => {
+      const snap = p.snaps.find(s => s.tournamentId === t.id);
+      const isLatest = t.id === p.snaps[p.snaps.length-1]?.tournamentId;
+      if (!snap) {
+        const hadRounds = p.snaps.some(s => s.date <= t.date);
+        return hadRounds
+          ? `<td style="text-align:center; color:var(--text2); font-size:11px;">DNP</td>`
+          : `<td style="text-align:center; color:var(--text2); font-size:11px;">—</td>`;
+      }
+      const prevSnap = p.snaps[p.snaps.findIndex(s => s.tournamentId === t.id) - 1];
+      let trendIcon = '';
+      if (prevSnap) {
+        const delta = snap.index - prevSnap.index;
+        if (delta < -0.05) trendIcon = `<span style="color:var(--accent); font-size:10px;"> ▼</span>`;
+        else if (delta > 0.05) trendIcon = `<span style="color:var(--maharaj); font-size:10px;"> ▲</span>`;
+      }
+      return `<td style="text-align:center; background:${isLatest ? 'rgba(92,190,120,.06)' : ''};">
+        <span style="font-family:'DM Mono',monospace; font-size:14px; font-weight:${isLatest ? '700' : '400'}; color:${isLatest ? 'var(--gold)' : 'var(--text)'};">${snap.index.toFixed(1)}</span>${trendIcon}
+      </td>`;
+    }).join('');
+    const flightColor = FLIGHT_COLORS[p.flight] || 'hawk';
+    return `<tr>
+      <td style="font-weight:600; white-space:nowrap; position:sticky; left:0; background:var(--surface); border-right:1px solid var(--border); padding-right:12px;">${p.name}</td>
+      <td><span class="flight-badge badge-${flightColor}">${p.flight}</span></td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  document.getElementById('hcp-history-content').innerHTML = `
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+      <div>
+        <div class="modal-title" style="margin-bottom:4px;">📈 Handicap Index History</div>
+        <div style="font-size:13px; color:var(--text2);">${players.length} player(s) · ${tournaments.length} tournament(s) · ▼ improved · ▲ increased</div>
+      </div>
+    </div>
+    <div class="alert alert-info" style="margin-bottom:14px; font-size:12px;">
+      Each cell shows the Tournament Index <em>after</em> that tournament's scores were saved.
+      <strong>DNP</strong> = Did Not Play. <strong>—</strong> = not yet in the system.
+      Highlighted cells = most recent snapshot.
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="player-round-table" style="min-width:500px;">
+        <thead><tr>
+          <th style="position:sticky; left:0; background:var(--bg); z-index:2; min-width:160px;">Player</th>
+          <th>Flight</th>
+          ${tHeaders}
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+
+  document.getElementById('hcp-history-modal').classList.add('open');
+}
+
+function closeHcpHistoryModal() {
+  document.getElementById('hcp-history-modal').classList.remove('open');
+}
+
+function downloadHcpHistoryExcel() {
+  if (!db.hcpHistory || !Object.keys(db.hcpHistory).length) {
+    showToast('No history data to export.'); return;
+  }
+
+  const tournaments = db.tournaments
+    .filter(t => t.scores.length > 0)
+    .sort((a,b) => a.date.localeCompare(b.date));
+
+  const players = Object.entries(db.hcpHistory)
+    .filter(([, snaps]) => snaps.length >= 1)
+    .map(([key, snaps]) => {
+      const sorted = [...snaps].sort((a,b) => a.date.localeCompare(b.date));
+      const flight = db.tournaments.flatMap(t => t.scores)
+        .find(s => s.player.toLowerCase().trim() === key)?.flight || '—';
+      return { key, name: key.replace(/\b\w/g, c => c.toUpperCase()), flight, snaps: sorted };
+    })
+    .sort((a,b) => {
+      if (a.flight !== b.flight) return FLIGHTS.indexOf(a.flight) - FLIGHTS.indexOf(b.flight);
+      return (a.snaps[a.snaps.length-1]?.index ?? 99) - (b.snaps[b.snaps.length-1]?.index ?? 99);
+    });
+
+  const today = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: History Matrix
+  const headerRow = ['Player', 'Flight', ...tournaments.map(t => `${t.name} (${t.date})`)];
+  const dataRows = players.map(p => [
+    p.name, p.flight,
+    ...tournaments.map(t => {
+      const snap = p.snaps.find(s => s.tournamentId === t.id);
+      if (!snap) return p.snaps.some(s => s.date <= t.date) ? 'DNP' : '—';
+      return snap.index;
+    }),
+  ]);
+  const wsMatrix = XLSX.utils.aoa_to_sheet([
+    ['IAGA Handicap Index History'], [`Generated: ${today}`], [],
+    headerRow, ...dataRows,
+  ]);
+  wsMatrix['!cols'] = [{ wch: 24 }, { wch: 12 }, ...tournaments.map(() => ({ wch: 20 }))];
+  XLSX.utils.book_append_sheet(wb, wsMatrix, 'History Matrix');
+
+  // Sheet 2: Per-player detail
+  const detailRows = [
+    ['Player Handicap History — All Snapshots'], [`Generated: ${today}`], [],
+    ['Player', 'Flight', 'Tournament', 'Date', 'Index', 'Diffs Used', 'Rounds at Time'],
+  ];
+  players.forEach(p => {
+    p.snaps.forEach(snap => {
+      detailRows.push([
+        p.name, p.flight, snap.tournamentName, snap.date,
+        snap.index,
+        snap.usedDiffs ? snap.usedDiffs.map(d => d.toFixed(1)).join(', ') : '',
+        snap.totalRounds,
+      ]);
+    });
+  });
+  const wsDetail = XLSX.utils.aoa_to_sheet(detailRows);
+  wsDetail['!cols'] = [{ wch: 24 }, { wch: 12 }, { wch: 26 }, { wch: 12 }, { wch: 10 }, { wch: 24 }, { wch: 14 }];
+  XLSX.utils.book_append_sheet(wb, wsDetail, 'Player Detail');
+
+  XLSX.writeFile(wb, `golf_handicap_history_${new Date().toISOString().split('T')[0]}.xlsx`);
+  showToast('Handicap history exported.');
+}
 
 let pendingNcgaImport = null; // staged rows awaiting confirmation
 
