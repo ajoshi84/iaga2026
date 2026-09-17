@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Handicap Comparison Summary</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #1b4332;
+            border-bottom: 2px solid #2d6a4f;
+            padding-bottom: 10px;
+        }
+        p {
+            font-size: 1.1em;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #2d6a4f;
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+        tr:hover {
+            background-color: #f1f8f5;
+        }
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .flight-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .Maharaj { background-color: #d8f3dc; color: #1b4332; }
+        .Hawk { background-color: #d8e2dc; color: #4a5759; }
+        .Tiger { background-color: #ffe5ec; color: #fb6f92; }
+        .Cobra { background-color: #e0f2fe; color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <h1>Golf Tournament Handicap Index Shifts</h1>
+    <p>Comparative summary showing changes in **Usable Handicap** and underlying **Tournament Index (TI)** between the September 9, 2026 and September 15, 2026 dataset updates following the San Juan Oaks tournament round.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Flight</th>
+                <th>Sep 9 Usable (TI)</th>
+                <th>Sep 15 Usable (TI)</th>
+                <th>Notes / Status Change</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>Ony Velez</strong></td>
+                <td><span class="flight-tag Maharaj">Maharaj</span></td>
+                <td>0.8 (0.8)</td>
+                <td>-0.9 (-0.9)</td>
+                <td>Usable handicap dropped by 1.7 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Vatsal Bakshi</strong></td>
+                <td><span class="flight-tag Maharaj">Maharaj</span></td>
+                <td>6.0 (11.7)</td>
+                <td>6.0 (7.3)</td>
+                <td>Usable handicap unchanged (capped by NCGA), but Tournament Index dropped by 4.4.</td>
+            </tr>
+            <tr>
+                <td><strong>Madhav Halbe</strong></td>
+                <td><span class="flight-tag Maharaj">Maharaj</span></td>
+                <td>6.1 (12.2)</td>
+                <td>6.1 (9.9)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 2.3.</td>
+            </tr>
+            <tr>
+                <td><strong>Sunil Mayur</strong></td>
+                <td><span class="flight-tag Maharaj">Maharaj</span></td>
+                <td>6.7 (7.0)</td>
+                <td>5.3 (5.3)</td>
+                <td>Usable handicap dropped by 1.4 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Harsha Sastry</strong></td>
+                <td><span class="flight-tag Maharaj">Maharaj</span></td>
+                <td>9.3 (10.0)</td>
+                <td>8.5 (8.5)</td>
+                <td>Usable handicap dropped by 0.8 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Amar Dhillon</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>8.0 (12.1)</td>
+                <td>8.0 (8.7)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 3.4.</td>
+            </tr>
+            <tr>
+                <td><strong>Ajay Athale</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>8.8 (8.8)</td>
+                <td>7.3 (7.3)</td>
+                <td>Usable handicap dropped by 1.5 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Prabhjot Randhawa</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>9.2 (12.7)</td>
+                <td>9.2 (10.5)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 2.2.</td>
+            </tr>
+            <tr>
+                <td><strong>Chetan Pungaliya</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>9.7 (11.7)</td>
+                <td>9.7 (10.1)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 1.6.</td>
+            </tr>
+            <tr>
+                <td><strong>Sunil Ramaiah</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>10.1 (12.6)</td>
+                <td>9.6 (9.6)</td>
+                <td>Usable handicap dropped by 0.5 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Vineet Sharma</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>10.2 (18.2)</td>
+                <td>10.2 (14.6)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped sharply by 3.6.</td>
+            </tr>
+            <tr>
+                <td><strong>Pankaj Thapar</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>11.1 (19.0)</td>
+                <td>11.1 (17.9)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 1.1.</td>
+            </tr>
+            <tr>
+                <td><strong>Kunal Verma</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>11.4 (15.2)</td>
+                <td>11.4 (14.3)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 0.9.</td>
+            </tr>
+            <tr>
+                <td><strong>Raj Gautam</strong></td>
+                <td><span class="flight-tag Hawk">Hawk</span></td>
+                <td>11.6 (16.0)</td>
+                <td>11.6 (15.4)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 0.6.</td>
+            </tr>
+            <tr>
+                <td><strong>Anandkumar Shivajappa</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>16.9 (16.9)</td>
+                <td>14.6 (14.6)</td>
+                <td>Usable handicap dropped by 2.3 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Neeraj Kauts</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>15.2 (16.0)</td>
+                <td>14.2 (14.2)</td>
+                <td>Usable handicap dropped by 1.0 stroke.</td>
+            </tr>
+            <tr>
+                <td><strong>Jitender Gehlaut</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>15.6 (19.3)</td>
+                <td>15.6 (15.8)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 3.5.</td>
+            </tr>
+            <tr>
+                <td><strong>Samit Rao</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>16.5 (16.5)</td>
+                <td>15.9 (15.9)</td>
+                <td>Usable handicap dropped by 0.6 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Jigar Patel</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>18.2 (27.8)</td>
+                <td>18.2 (22.6)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped significantly by 5.2.</td>
+            </tr>
+            <tr>
+                <td><strong>Shashikant Rai</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>18.3 (19.4)</td>
+                <td>17.1 (17.1)</td>
+                <td>Usable handicap dropped by 1.2 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Kulwant Sidhu</strong></td>
+                <td><span class="flight-tag Tiger">Tiger</span></td>
+                <td>18.7 (20.6)</td>
+                <td>16.7 (16.7)</td>
+                <td>Usable handicap dropped by 2.0 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Rakesh Manocha</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>18.4 (34.0)</td>
+                <td>18.4 (27.2)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 6.8.</td>
+            </tr>
+            <tr>
+                <td><strong>Manish Bhardwaj</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>18.5 (30.0)</td>
+                <td>15.8 (15.8)</td>
+                <td>Usable handicap dropped by 2.7 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Rajiv Malik</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>19.2 (19.2)</td>
+                <td>17.2 (17.2)</td>
+                <td>Usable handicap dropped by 2.0 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Chhatrapal Bhende</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>19.5 (20.1)</td>
+                <td>17.9 (17.9)</td>
+                <td>Usable handicap dropped by 1.6 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Vishal Goyal</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>21.1 (21.1)</td>
+                <td>20.9 (20.9)</td>
+                <td>Usable handicap dropped by 0.2 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Pankaj Parashar</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>21.7 (21.7)</td>
+                <td>20.5 (20.5)</td>
+                <td>Usable handicap dropped by 1.2 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Navneet Sandhu</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>22.0 (32.0)</td>
+                <td>22.0 (26.5)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 5.5.</td>
+            </tr>
+            <tr>
+                <td><strong>Vinay Joshi</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>22.3 (38.4)</td>
+                <td>22.3 (34.9)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 3.5.</td>
+            </tr>
+            <tr>
+                <td><strong>Ajit Shanware</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>26.2 (26.2)</td>
+                <td>21.3 (21.3)</td>
+                <td>Usable handicap dropped significantly by 4.9 strokes.</td>
+            </tr>
+            <tr>
+                <td><strong>Ranjan Bhasin</strong></td>
+                <td><span class="flight-tag Cobra">Cobra</span></td>
+                <td>26.2 (28.1)</td>
+                <td>26.2 (27.1)</td>
+                <td>Usable handicap unchanged, but Tournament Index dropped by 1.0.</td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
