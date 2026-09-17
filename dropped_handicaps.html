@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Players with Dropped Usable Handicap</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #333;
+            line-height: 1.5;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h2 {
+            margin-top: 0;
+            color: #1a4329;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+        th {
+            background-color: #1a4329;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #fdfdfd;
+        }
+        tr:hover {
+            background-color: #f1f3f5;
+        }
+        .flight-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
+        .maharaj { background-color: #e3f2fd; color: #0d47a1; }
+        .hawk { background-color: #f3e5f5; color: #4a148c; }
+        .tiger { background-color: #fff3e0; color: #e65100; }
+        .cobra { background-color: #e8f5e9; color: #1b5e20; }
+        .drop-value {
+            color: #d32f2f;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Players with Dropped Usable Handicap</h2>
+        <p>This table isolates active players whose final <strong>Usable Handicap decreased</strong> following the addition of the San Juan Oaks tournament data on September 13, 2026.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Flight</th>
+                    <th>Sep 9 Usable</th>
+                    <th>Sep 15 Usable</th>
+                    <th>Handicap Drop</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Ony Velez</strong></td>
+                    <td><span class="flight-tag maharaj">Maharaj</span></td>
+                    <td>0.8</td>
+                    <td>-0.9</td>
+                    <td class="drop-value">-1.7</td>
+                </tr>
+                <tr>
+                    <td><strong>Sunil Mayur</strong></td>
+                    <td><span class="flight-tag maharaj">Maharaj</span></td>
+                    <td>6.7</td>
+                    <td>5.3</td>
+                    <td class="drop-value">-1.4</td>
+                </tr>
+                <tr>
+                    <td><strong>Harsha Sastry</strong></td>
+                    <td><span class="flight-tag maharaj">Maharaj</span></td>
+                    <td>9.3</td>
+                    <td>8.5</td>
+                    <td class="drop-value">-0.8</td>
+                </tr>
+                <tr>
+                    <td><strong>Ajay Athale</strong></td>
+                    <td><span class="flight-tag hawk">Hawk</span></td>
+                    <td>8.8</td>
+                    <td>7.3</td>
+                    <td class="drop-value">-1.5</td>
+                </tr>
+                <tr>
+                    <td><strong>Sunil Ramaiah</strong></td>
+                    <td><span class="flight-tag hawk">Hawk</span></td>
+                    <td>10.1</td>
+                    <td>9.6</td>
+                    <td class="drop-value">-0.5</td>
+                </tr>
+                <tr>
+                    <td><strong>Anandkumar Shivajappa</strong></td>
+                    <td><span class="flight-tag tiger">Tiger</span></td>
+                    <td>16.9</td>
+                    <td>14.6</td>
+                    <td class="drop-value">-2.3</td>
+                </tr>
+                <tr>
+                    <td><strong>Neeraj Kauts</strong></td>
+                    <td><span class="flight-tag tiger">Tiger</span></td>
+                    <td>15.2</td>
+                    <td>14.2</td>
+                    <td class="drop-value">-1.0</td>
+                </tr>
+                <tr>
+                    <td><strong>Samit Rao</strong></td>
+                    <td><span class="flight-tag tiger">Tiger</span></td>
+                    <td>16.5</td>
+                    <td>15.9</td>
+                    <td class="drop-value">-0.6</td>
+                </tr>
+                <tr>
+                    <td><strong>Shashikant Rai</strong></td>
+                    <td><span class="flight-tag tiger">Tiger</span></td>
+                    <td>18.3</td>
+                    <td>17.1</td>
+                    <td class="drop-value">-1.2</td>
+                </tr>
+                <tr>
+                    <td><strong>Kulwant Sidhu</strong></td>
+                    <td><span class="flight-tag tiger">Tiger</span></td>
+                    <td>18.7</td>
+                    <td>16.7</td>
+                    <td class="drop-value">-2.0</td>
+                </tr>
+                <tr>
+                    <td><strong>Manish Bhardwaj</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>18.5</td>
+                    <td>15.8</td>
+                    <td class="drop-value">-2.7</td>
+                </tr>
+                <tr>
+                    <td><strong>Rajiv Malik</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>19.2</td>
+                    <td>17.2</td>
+                    <td class="drop-value">-2.0</td>
+                </tr>
+                <tr>
+                    <td><strong>Chhatrapal Bhende</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>19.5</td>
+                    <td>17.9</td>
+                    <td class="drop-value">-1.6</td>
+                </tr>
+                <tr>
+                    <td><strong>Vishal Goyal</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>21.1</td>
+                    <td>20.9</td>
+                    <td class="drop-value">-0.2</td>
+                </tr>
+                <tr>
+                    <td><strong>Pankaj Parashar</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>21.7</td>
+                    <td>20.5</td>
+                    <td class="drop-value">-1.2</td>
+                </tr>
+                <tr>
+                    <td><strong>Ajit Shanware</strong></td>
+                    <td><span class="flight-tag cobra">Cobra</span></td>
+                    <td>26.2</td>
+                    <td>21.3</td>
+                    <td class="drop-value">-4.9</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
