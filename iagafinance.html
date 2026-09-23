@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Interactive finance dashboard for IAGA (Indo American Golf Association) - spending, revenue, and cash flow across the rewards card and business checking account.">
 <title>IAGA Finance Ledger</title>
-<meta name="description" content="Interactive dashboard of Chase checking (...8097) and rewards card (...6943) activity for the Indo American Golf Association — revenue, tournament spend, cash flow, category drill-down, searchable transactions, and CSV self-update.">
 <style>
   :root{
     color-scheme: light;
@@ -263,6 +263,7 @@
     <button class="tab active" data-view="overview">Overview</button>
     <button class="tab" data-view="card">Card spending</button>
     <button class="tab" data-view="bank">Bank account</button>
+    <button class="tab" data-view="revenue">Revenue</button>
     <button class="tab" data-view="drilldown">Category drill-down</button>
     <button class="tab" data-view="txns">All transactions</button>
     <button class="tab" data-view="update">Update data</button>
@@ -362,12 +363,12 @@
       <div class="kpi">
         <div class="label">Revenue in</div>
         <div class="value blue" id="b-kpi-rev"></div>
-        <div class="delta">129 Stripe deposits</div>
+        <div class="delta" id="b-kpi-rev-sub"></div>
       </div>
       <div class="kpi">
         <div class="label">Card payments out</div>
         <div class="value orange" id="b-kpi-cardpmt"></div>
-        <div class="delta">16 payments to …6943</div>
+        <div class="delta" id="b-kpi-cardpmt-sub"></div>
       </div>
       <div class="kpi">
         <div class="label">Other outflows</div>
@@ -395,6 +396,56 @@
     </div>
   </section>
 
+  <!-- REVENUE -->
+  <section class="view" id="view-revenue">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Total revenue</div>
+        <div class="value blue" id="r-kpi-total"></div>
+        <div class="delta" id="r-kpi-range"></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Deposits</div>
+        <div class="value" id="r-kpi-count"></div>
+        <div class="delta">incoming credits</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Avg deposit</div>
+        <div class="value" id="r-kpi-avg"></div>
+        <div class="delta">per credit</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Avg / month</div>
+        <div class="value" id="r-kpi-avgmonth"></div>
+        <div class="delta" id="r-kpi-avgmonth-sub"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Monthly revenue</h3>
+        <p class="card-sub">Incoming credits by posting date</p>
+        <div id="chart-revenue-monthly"></div>
+      </div>
+      <div class="card">
+        <h3>Revenue by source</h3>
+        <p class="card-sub" id="r-source-sub"></p>
+        <div id="chart-revenue-source"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Largest deposits</h3>
+      <p class="card-sub">Top 10 individual credits to …8097</p>
+      <div class="table-scroll" style="max-height:360px">
+        <table class="txn">
+          <thead><tr><th>Date</th><th>Description</th><th style="text-align:right">Amount</th></tr></thead>
+          <tbody id="r-top-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <!-- DRILLDOWN -->
   <section class="view" id="view-drilldown">
     <div class="filters">
@@ -404,7 +455,7 @@
 
     <div class="kpi-row">
       <div class="kpi">
-        <div class="label">Total spent</div>
+        <div class="label" id="dd-kpi-total-label">Total spent</div>
         <div class="value" id="dd-kpi-total" style="color:var(--dd-color)"></div>
         <div class="delta" id="dd-kpi-group"></div>
       </div>
@@ -414,12 +465,12 @@
         <div class="delta">in this category</div>
       </div>
       <div class="kpi">
-        <div class="label">Avg transaction</div>
+        <div class="label" id="dd-kpi-avg-label">Avg transaction</div>
         <div class="value" id="dd-kpi-avg"></div>
-        <div class="delta">per charge</div>
+        <div class="delta" id="dd-kpi-avg-sub">per charge</div>
       </div>
       <div class="kpi">
-        <div class="label">Top merchant / vendor</div>
+        <div class="label" id="dd-kpi-top-label">Top merchant / vendor</div>
         <div class="value" id="dd-kpi-top" style="font-size:17px"></div>
         <div class="delta" id="dd-kpi-top-amt"></div>
       </div>
@@ -631,7 +682,7 @@ function recategorizeCard(row){
   if (u.includes('POPPY RIDGE')) return 'Golf';
   return row.category || (row.type === 'Payment' ? 'Payment' : '');
 }
-function cleanBankDesc(desc){
+function cleanBankDesc(desc, type){
   if (desc.includes('Payment to Chase card')) return desc.trim();
   if (desc.startsWith('Zelle payment to')){
     const m = desc.match(/Zelle payment to ([A-Za-z ]+?)\s+JPM/);
@@ -639,10 +690,14 @@ function cleanBankDesc(desc){
   }
   if (desc.includes('Online Transfer to CHK')) return 'Online transfer to linked checking (…3908)';
   if (desc.includes('Online Transfer from CHK')) return 'Online transfer from linked checking (…3908)';
+  if (desc.includes('ACCTVERIFY')) return 'Bank verification (micro-deposit)';
   if (desc.includes('ORIG CO NAME:STRIPE')) return 'Stripe registration deposit';
-  if (desc.includes('ORIG CO NAME:PAYPAL')) return desc.includes('ADD TO BALANCE') ? 'PayPal transfer — add to balance' : 'PayPal transfer';
+  if (desc.includes('ORIG CO NAME:PAYPAL')){
+    if (type === 'ACH_CREDIT') return 'PayPal balance transfer';
+    return desc.includes('ADD TO BALANCE') ? 'PayPal transfer — add to balance' : 'PayPal transfer';
+  }
   if (desc.includes('ORIG CO NAME:INTUIT')) return 'Intuit / QuickBooks Online fee';
-  if (desc.includes('ORIG CO NAME:GOOGLE')) return 'Google Workspace charge';
+  if (desc.includes('ORIG CO NAME:GOOGLE')) return type === 'ACH_CREDIT' ? 'Google account-verification deposit' : 'Google Workspace charge';
   if (desc.includes('ORIG CO NAME:MEMBERPLANET')) return 'MemberPlanet dues-platform fee';
   return desc.slice(0,70).trim();
 }
@@ -657,6 +712,16 @@ function vendorBucket(desc){
 function zelleRecipient(desc){
   const m = desc.match(/Zelle payment to ([A-Za-z ]+?)\s+JPM/);
   return m ? m[1].trim() : 'Other recipient';
+}
+function revenueSource(desc){
+  if (desc.includes('ACCTVERIFY')) return 'Bank verification (micro-deposit)';
+  const m = desc.match(/ORIG ID:(\S+)/);
+  const id = m ? m[1] : '';
+  if (id === '4270465600') return 'Stripe deposits ·5600';
+  if (id === '1800948598') return 'Stripe deposits ·8598';
+  if (desc.includes('ORIG CO NAME:PAYPAL')) return 'PayPal balance transfer';
+  if (desc.includes('ORIG CO NAME:STRIPE')) return 'Stripe deposits (other)';
+  return 'Other credits';
 }
 function sumBy(rows, keyFn, valFn){
   const m = {};
@@ -710,6 +775,8 @@ function recompute(cardRows, bankRows){
 
   const vendorTotals = toSortedList(sumBy(debitRows, r=>vendorBucket(r.desc), r=>Math.abs(r.amount)), 'vendor');
   const zelleTotals = toSortedList(sumBy(zelleRows, r=>zelleRecipient(r.desc), r=>Math.abs(r.amount)), 'recipient');
+  const revenueSourceTotals = toSortedList(sumBy(credits, r=>revenueSource(r.desc), r=>r.amount), 'source');
+  const topDeposits = [...credits].sort((a,b)=>b.amount-a.amount).slice(0,10).map(r=>({date:r.date, desc: cleanBankDesc(r.desc, r.type), amount: round2(r.amount)}));
 
   const balByDate = {};
   const balOrder = [];
@@ -726,9 +793,12 @@ function recompute(cardRows, bankRows){
     monthlyRevenue: monthlySumAbs(credits,false),
     monthlyCardPmt: monthlySumAbs(loan,false),
     monthlyOther: monthlySumAbs(otherDebits,false),
+    revenueCount: credits.length,
+    cardPmtCount: loan.length,
+    revenueSourceTotals, topDeposits,
     vendorTotals, zelleTotals, balanceSeries,
     transactions: [...bankRows].sort((a,b)=> b.date.localeCompare(a.date)).map(r => ({
-      date: r.date, desc: cleanBankDesc(r.desc), type: r.type, amount: round2(r.amount)
+      date: r.date, desc: cleanBankDesc(r.desc, r.type), type: r.type, amount: round2(r.amount)
     }))
   };
 
@@ -755,6 +825,17 @@ function recompute(cardRows, bankRows){
       merchants: [{name: vend, amount: round2(rows.reduce((s,r)=>s+Math.abs(r.amount),0))}],
       monthly: monthlySumAbs(rows, true),
       transactions: [...rows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc.slice(0,70), amount: round2(r.amount)}))
+    });
+  });
+  const rgroups = {};
+  credits.forEach(r => { const s = revenueSource(r.desc); (rgroups[s]=rgroups[s]||[]).push(r); });
+  Object.entries(rgroups).forEach(([src, rows]) => {
+    categories.push({
+      id: 'rev:'+src, label: src, group: 'Revenue (…8097)',
+      total: round2(rows.reduce((s,r)=>s+r.amount,0)), count: rows.length,
+      merchants: [{name: src, amount: round2(rows.reduce((s,r)=>s+r.amount,0))}],
+      monthly: monthlySumAbs(rows, false),
+      transactions: [...rows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc: cleanBankDesc(r.desc, r.type), amount: round2(r.amount)}))
     });
   });
   {
@@ -1141,13 +1222,42 @@ function renderCard(){
 function renderBank(){
   const b = DATA.bank;
   document.getElementById('b-kpi-rev').textContent = fmtUSD(b.totalRevenue);
+  document.getElementById('b-kpi-rev-sub').textContent = b.revenueCount + (b.revenueCount===1?' deposit':' deposits');
   document.getElementById('b-kpi-cardpmt').textContent = fmtUSD(Math.abs(b.totalCardPayments));
+  document.getElementById('b-kpi-cardpmt-sub').textContent = b.cardPmtCount + (b.cardPmtCount===1?' payment':' payments') + ' to …6943';
   document.getElementById('b-kpi-other').textContent = fmtUSD(Math.abs(b.totalOtherExpenses));
   document.getElementById('b-kpi-bal').textContent = fmtUSD(b.startBalance) + ' → ' + fmtUSD(b.endBalance);
   document.getElementById('b-kpi-bal-dates').textContent = b.dateRange[0] + ' – ' + b.dateRange[1];
 
   horizontalBarChart('chart-bank-vendor', b.vendorTotals.map(d=>({label:d.vendor, value:-Math.abs(d.amount)})), {color:cssVar('--aqua'), seriesName:'Paid out'});
   horizontalBarChart('chart-bank-zelle', b.zelleTotals.map(d=>({label:d.recipient, value:-Math.abs(d.amount)})), {color:cssVar('--aqua'), seriesName:'Sent'});
+}
+
+function renderRevenue(){
+  const b = DATA.bank;
+  document.getElementById('r-kpi-total').textContent = fmtUSD(b.totalRevenue);
+  document.getElementById('r-kpi-range').textContent = b.dateRange[0] + ' – ' + b.dateRange[1];
+  document.getElementById('r-kpi-count').textContent = b.revenueCount;
+  document.getElementById('r-kpi-avg').textContent = fmtUSD(b.revenueCount ? b.totalRevenue/b.revenueCount : 0);
+  const nMonths = b.monthlyRevenue.length || 1;
+  document.getElementById('r-kpi-avgmonth').textContent = fmtUSD(b.totalRevenue / nMonths);
+  document.getElementById('r-kpi-avgmonth-sub').textContent = 'across ' + nMonths + ' months';
+
+  columnChart('chart-revenue-monthly', b.monthlyRevenue.map(d=>({label:d.month, value:d.amount})), {color:cssVar('--blue'), seriesName:'Revenue'});
+
+  document.getElementById('r-source-sub').textContent = b.revenueSourceTotals.length + ' sources, ' + b.dateRange[0] + ' – ' + b.dateRange[1];
+  horizontalBarChart('chart-revenue-source', b.revenueSourceTotals.map(d=>({label:d.source, value:d.amount})), {color:cssVar('--blue'), seriesName:'Received'});
+
+  const body = document.getElementById('r-top-body');
+  body.innerHTML = '';
+  b.topDeposits.forEach(t => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td'); tdDate.textContent = t.date; tr.appendChild(tdDate);
+    const tdDesc = document.createElement('td'); tdDesc.textContent = t.desc; tr.appendChild(tdDesc);
+    const tdAmt = document.createElement('td'); tdAmt.className = 'amt pos';
+    tdAmt.textContent = fmtUSD(t.amount, {cents:true}); tr.appendChild(tdAmt);
+    body.appendChild(tr);
+  });
 }
 
 /* ---------- category drill-down ---------- */
@@ -1176,12 +1286,18 @@ function renderDrilldown(){
   const id = document.getElementById('dd-select').value;
   const cat = DATA.categories.find(c => c.id === id);
   if (!cat) return;
+  const isRevenue = cat.group.startsWith('Revenue');
   const isCard = cat.group.startsWith('Card');
-  const color = isCard ? cssVar('--orange') : cssVar('--aqua');
+  const color = isCard ? cssVar('--orange') : isRevenue ? cssVar('--blue') : cssVar('--aqua');
 
   const groupTotal = DATA.categories.filter(c => c.group === cat.group).reduce((s,c)=>s+c.total, 0);
   const share = groupTotal ? (cat.total/groupTotal*100) : 0;
   document.getElementById('dd-share').textContent = share.toFixed(0) + '% of ' + cat.group.replace(/\s*\(.*\)/,'').toLowerCase();
+
+  document.getElementById('dd-kpi-total-label').textContent = isRevenue ? 'Total received' : 'Total spent';
+  document.getElementById('dd-kpi-avg-label').textContent = isRevenue ? 'Avg deposit' : 'Avg transaction';
+  document.getElementById('dd-kpi-avg-sub').textContent = isRevenue ? 'per deposit' : 'per charge';
+  document.getElementById('dd-kpi-top-label').textContent = isRevenue ? 'Source' : 'Top merchant / vendor';
 
   const totalEl = document.getElementById('dd-kpi-total');
   totalEl.textContent = fmtUSD(cat.total);
@@ -1195,7 +1311,7 @@ function renderDrilldown(){
 
   document.getElementById('dd-trend-title').textContent = cat.label + ' — monthly trend';
   document.getElementById('dd-trend-sub').textContent = cat.monthly[0].month + ' – ' + cat.monthly[cat.monthly.length-1].month;
-  columnChart('chart-dd-trend', cat.monthly.map(d=>({label:d.month, value:d.amount})), {color, seriesName:'Spend'});
+  columnChart('chart-dd-trend', cat.monthly.map(d=>({label:d.month, value:d.amount})), {color, seriesName: isRevenue ? 'Received' : 'Spend'});
 
   document.getElementById('dd-merchant-sub').textContent = cat.merchants.length + (cat.merchants.length===1?' vendor':' merchants / vendors') + ' in ' + cat.label;
   horizontalBarChart('chart-dd-merchant', cat.merchants.map(d=>({label:d.name, value:d.amount})), {color, seriesName:'Amount'});
@@ -1268,6 +1384,7 @@ function switchTab(name){
   if (name==='overview') renderOverview();
   if (name==='card') renderCard();
   if (name==='bank') renderBank();
+  if (name==='revenue') renderRevenue();
   if (name==='drilldown') renderDrilldown();
   if (name==='txns') renderTxns();
   if (name==='update') renderUpdateStatus();
@@ -1472,5 +1589,6 @@ window.addEventListener('resize', () => {
   }, 150);
 });
 </script>
+
 </body>
 </html>
