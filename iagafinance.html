@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>IAGA Finance Ledger</title>
+<meta name="description" content="Interactive dashboard of Chase checking (...8097) and rewards card (...6943) activity for the Indo American Golf Association — revenue, tournament spend, cash flow, category drill-down, searchable transactions, and CSV self-update.">
+<style>
+  :root{
+    color-scheme: light;
+    --page:            #f9f9f7;
+    --surface:         #fcfcfb;
+    --surface-raised:  #ffffff;
+    --text-primary:    #0b0b0b;
+    --text-secondary:  #52514e;
+    --text-muted:      #898781;
+    --grid:            #e1e0d9;
+    --baseline:        #c3c2b7;
+    --border:          rgba(11,11,11,0.10);
+    --good:            #006300;
+    --blue:            #2a78d6;
+    --blue-soft:       #cde2fb;
+    --orange:          #eb6834;
+    --orange-soft:     #fbdccc;
+    --aqua:            #1baf7a;
+    --aqua-soft:       #cdeee1;
+    --violet:          #4a3aa7;
+    --red:             #e34948;
+    --shadow: 0 1px 2px rgba(11,11,11,0.04), 0 4px 16px rgba(11,11,11,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      color-scheme: dark;
+      --page:            #0d0d0d;
+      --surface:         #1a1a19;
+      --surface-raised:  #212120;
+      --text-primary:    #ffffff;
+      --text-secondary:  #c3c2b7;
+      --text-muted:      #898781;
+      --grid:            #2c2c2a;
+      --baseline:        #383835;
+      --border:          rgba(255,255,255,0.10);
+      --good:            #0ca30c;
+      --blue:            #3987e5;
+      --blue-soft:       #17324f;
+      --orange:          #d95926;
+      --orange-soft:     #452718;
+      --aqua:            #199e70;
+      --aqua-soft:       #123529;
+      --violet:          #9085e9;
+      --red:             #e66767;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    color-scheme: dark;
+    --page:            #0d0d0d;
+    --surface:         #1a1a19;
+    --surface-raised:  #212120;
+    --text-primary:    #ffffff;
+    --text-secondary:  #c3c2b7;
+    --text-muted:      #898781;
+    --grid:            #2c2c2a;
+    --baseline:        #383835;
+    --border:          rgba(255,255,255,0.10);
+    --good:            #0ca30c;
+    --blue:            #3987e5;
+    --blue-soft:       #17324f;
+    --orange:          #d95926;
+    --orange-soft:     #452718;
+    --aqua:            #199e70;
+    --aqua-soft:       #123529;
+    --violet:          #9085e9;
+    --red:             #e66767;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 4px 20px rgba(0,0,0,0.35);
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ height:auto; }
+  body{
+    margin:0;
+    background:var(--page);
+    color:var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 20px 64px;
+  }
+
+  /* header */
+  .hdr{
+    display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+    gap: 16px 24px;
+    margin-bottom: 22px;
+  }
+  .hdr h1{
+    font-size: 26px; font-weight: 700; letter-spacing: -0.01em; margin: 0 0 4px;
+  }
+  .hdr .sub{
+    color: var(--text-secondary); font-size: 13.5px; margin:0;
+  }
+  .hdr .sub b{ color:var(--text-primary); font-weight:600; }
+  .src-pill{
+    display:flex; gap:8px; flex-wrap:wrap;
+  }
+  .pill{
+    font-size: 11.5px; font-weight:600; color:var(--text-secondary);
+    background:var(--surface-raised); border:1px solid var(--border);
+    border-radius:100px; padding:5px 12px; white-space:nowrap;
+  }
+  .pill b{ color:var(--text-primary); }
+
+  /* tabs */
+  .tabs{
+    display:flex; gap:4px; border-bottom:1px solid var(--border);
+    margin-bottom:24px; overflow-x:auto;
+  }
+  .tab{
+    appearance:none; border:none; background:none; cursor:pointer;
+    font: inherit; font-size:14px; font-weight:600; color:var(--text-muted);
+    padding: 10px 16px 12px; border-bottom: 2px solid transparent;
+    white-space:nowrap;
+  }
+  .tab:hover{ color:var(--text-primary); }
+  .tab.active{ color:var(--text-primary); border-bottom-color:var(--blue); }
+
+  .view{ display:none; }
+  .view.active{ display:block; animation: fadein .18s ease; }
+  @keyframes fadein{ from{opacity:.4} to{opacity:1} }
+
+  /* KPI row */
+  .kpi-row{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+    margin-bottom: 20px;
+  }
+  @media (max-width:760px){ .kpi-row{ grid-template-columns:repeat(2,1fr); } }
+  .kpi{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; box-shadow:var(--shadow);
+  }
+  .kpi .label{ font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px; }
+  .kpi .value{ font-size:24px; font-weight:700; letter-spacing:-0.01em; }
+  .kpi .value.blue{ color:var(--blue); }
+  .kpi .value.orange{ color:var(--orange); }
+  .kpi .value.aqua{ color:var(--aqua); }
+  .kpi .delta{ font-size:12.5px; margin-top:6px; font-weight:600; color:var(--text-secondary); }
+  .kpi .delta.good{ color:var(--good); }
+
+  /* cards / chart containers */
+  .grid2{ display:grid; grid-template-columns:1.3fr 1fr; gap:14px; margin-bottom:14px; }
+  @media (max-width:860px){ .grid2{ grid-template-columns:1fr; } }
+  .card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 20px 14px; box-shadow:var(--shadow);
+    margin-bottom:14px;
+  }
+  .card h3{ font-size:14.5px; font-weight:700; margin:0 0 2px; }
+  .card .card-sub{ font-size:12.5px; color:var(--text-muted); margin:0 0 14px; }
+  .legend{ display:flex; gap:16px; flex-wrap:wrap; margin-bottom:10px; }
+  .legend-item{ display:flex; align-items:center; gap:6px; font-size:12.5px; color:var(--text-secondary); font-weight:600; }
+  .legend-swatch{ width:10px; height:10px; border-radius:3px; flex:none; }
+  .legend-line{ width:14px; height:2px; border-radius:2px; flex:none; }
+
+  svg text{ font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .axis-label{ fill:var(--text-muted); font-size:10.5px; }
+  .grid-line{ stroke:var(--grid); stroke-width:1; }
+  .base-line{ stroke:var(--baseline); stroke-width:1; }
+  .bar-label{ fill:var(--text-secondary); font-size:11px; font-weight:600; }
+  .cat-label{ fill:var(--text-secondary); font-size:12px; }
+
+  .tooltip{
+    position:fixed; pointer-events:none; z-index:50;
+    background:var(--surface-raised); border:1px solid var(--border); border-radius:10px;
+    padding:8px 12px; box-shadow:var(--shadow); font-size:12.5px; color:var(--text-secondary);
+    opacity:0; transition:opacity .08s ease; max-width:240px;
+  }
+  .tooltip .tt-title{ font-weight:700; color:var(--text-primary); margin-bottom:3px; }
+  .tooltip .tt-row{ display:flex; align-items:center; gap:6px; white-space:nowrap; }
+  .tooltip .tt-key{ width:10px; height:2px; border-radius:2px; flex:none; }
+  .tooltip .tt-val{ font-weight:700; color:var(--text-primary); margin-left:auto; padding-left:10px; }
+
+  .hbar-row{ display:flex; align-items:center; gap:10px; padding:5px 0; cursor:default; }
+  .hbar-name{ width:190px; flex:none; font-size:12.5px; color:var(--text-secondary); text-align:right; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .hbar-track{ flex:1; position:relative; height:20px; }
+  .hbar-fill{ position:absolute; top:2px; left:0; height:16px; border-radius:4px; transition:filter .1s; }
+  .hbar-row:hover .hbar-fill{ filter:brightness(1.08); }
+  .hbar-val{ position:absolute; top:0; height:20px; display:flex; align-items:center; font-size:11.5px; font-weight:700; color:var(--text-primary); padding-left:8px; white-space:nowrap; }
+  @media (max-width:600px){ .hbar-name{ width:110px; font-size:11.5px; } }
+
+  /* filters */
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px; }
+  .filters input[type=text], .filters select{
+    font: inherit; font-size:13px; background:var(--surface-raised); color:var(--text-primary);
+    border:1px solid var(--border); border-radius:9px; padding:8px 12px;
+  }
+  .filters input[type=text]{ min-width:220px; flex:1; }
+  .filters select{ cursor:pointer; }
+  .seg{ display:flex; background:var(--surface-raised); border:1px solid var(--border); border-radius:9px; padding:2px; }
+  .seg button{ appearance:none; border:none; background:none; font:inherit; font-size:12.5px; font-weight:600; color:var(--text-muted); padding:6px 12px; border-radius:7px; cursor:pointer; }
+  .seg button.active{ background:var(--blue); color:#fff; }
+
+  table.txn{ width:100%; border-collapse:collapse; font-size:13px; }
+  table.txn th{ text-align:left; font-size:11px; text-transform:uppercase; letter-spacing:.03em; color:var(--text-muted); font-weight:700; padding:8px 10px; border-bottom:1px solid var(--border); position:sticky; top:0; background:var(--surface); }
+  table.txn td{ padding:9px 10px; border-bottom:1px solid var(--border); color:var(--text-secondary); }
+  table.txn td.amt{ text-align:right; font-variant-numeric:tabular-nums; font-weight:600; color:var(--text-primary); white-space:nowrap; }
+  table.txn td.amt.neg{ color:var(--text-primary); }
+  table.txn td.amt.pos{ color:var(--good); }
+  table.txn tr:hover td{ background: var(--page); }
+  .table-scroll{ max-height:520px; overflow:auto; border:1px solid var(--border); border-radius:12px; }
+  .table-scroll table.txn th{ position:sticky; top:0; }
+  .src-tag{ font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:100px; white-space:nowrap; }
+  .src-tag.card{ background:var(--orange-soft); color:var(--orange); }
+  .src-tag.bank{ background:var(--blue-soft); color:var(--blue); }
+  .empty-row td{ text-align:center; color:var(--text-muted); padding:26px; }
+  .row-count{ font-size:12px; color:var(--text-muted); margin:10px 2px 0; }
+
+  .foot{ margin-top:26px; font-size:12px; color:var(--text-muted); text-align:center; }
+
+  /* update-data tab */
+  .upload-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  @media (max-width:760px){ .upload-grid{ grid-template-columns:1fr; } }
+  .upload-box{ border:1.5px dashed var(--border); border-radius:12px; padding:16px; text-align:left; background:var(--page); }
+  .upload-box.has-file{ border-style:solid; border-color:var(--blue); background:var(--blue-soft); }
+  .upload-box .ub-title{ font-weight:700; font-size:13.5px; margin-bottom:2px; }
+  .upload-box .ub-sub{ font-size:12px; color:var(--text-muted); margin-bottom:10px; }
+  .upload-box input[type=file]{ font-size:12.5px; color:var(--text-secondary); max-width:100%; }
+  .upload-box .ub-file{ margin-top:8px; font-size:12px; font-weight:600; color:var(--text-primary); word-break:break-all; }
+  .btn{ appearance:none; border:1px solid var(--border); background:var(--surface-raised); color:var(--text-primary); font:inherit; font-size:13px; font-weight:700; padding:9px 16px; border-radius:9px; cursor:pointer; }
+  .btn:hover{ filter:brightness(0.98); }
+  .btn.primary{ background:var(--blue); border-color:var(--blue); color:#fff; }
+  .btn.primary:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn.ghost{ background:transparent; }
+  .btn-row{ display:flex; gap:10px; flex-wrap:wrap; margin:6px 0 4px; }
+  .status-line{ display:flex; gap:8px; align-items:baseline; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .status-line:last-child{ border-bottom:none; }
+  .status-line .sl-label{ color:var(--text-muted); min-width:150px; flex:none; }
+  .status-line .sl-val{ font-weight:600; color:var(--text-primary); }
+  .msg{ font-size:13px; border-radius:10px; padding:10px 14px; margin:10px 0; }
+  .msg.ok{ background:var(--aqua-soft); color:var(--aqua); }
+  .msg.err{ background:var(--orange-soft); color:var(--orange); }
+  .log-item{ font-size:12.5px; color:var(--text-secondary); padding:7px 0; border-bottom:1px solid var(--border); }
+  .log-item:last-child{ border-bottom:none; }
+  .log-item .li-when{ color:var(--text-muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hdr">
+    <div>
+      <h1>IAGA Finance Ledger</h1>
+      <p class="sub">Chase business checking (…8097) and rewards card (…6943) · <b id="hdr-range"></b></p>
+    </div>
+    <div class="src-pill">
+      <span class="pill">Card txns: <b id="pill-card-n"></b></span>
+      <span class="pill">Bank txns: <b id="pill-bank-n"></b></span>
+    </div>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-view="overview">Overview</button>
+    <button class="tab" data-view="card">Card spending</button>
+    <button class="tab" data-view="bank">Bank account</button>
+    <button class="tab" data-view="drilldown">Category drill-down</button>
+    <button class="tab" data-view="txns">All transactions</button>
+    <button class="tab" data-view="update">Update data</button>
+  </div>
+
+  <!-- OVERVIEW -->
+  <section class="view active" id="view-overview">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Registration revenue</div>
+        <div class="value blue" id="kpi-revenue"></div>
+        <div class="delta">Stripe deposits, Dec–Sep</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Tournament card spend</div>
+        <div class="value orange" id="kpi-cardspend"></div>
+        <div class="delta">28 charges across 8 months</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Ending balance</div>
+        <div class="value" id="kpi-endbal"></div>
+        <div class="delta good" id="kpi-endbal-date"></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Net change in balance</div>
+        <div class="value good" id="kpi-netchange"></div>
+        <div class="delta" id="kpi-netchange-sub"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Checking balance over time</h3>
+      <p class="card-sub">Chase …8097 · end-of-day balance, Dec 18 2025 – Sep 21 2026</p>
+      <div id="chart-balance"></div>
+    </div>
+
+    <div class="card">
+      <h3>Monthly cash flow</h3>
+      <p class="card-sub">Registration revenue in, card payments &amp; other outflows out</p>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--blue)"></span>Revenue (Stripe)</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--orange)"></span>Card payments</span>
+        <span class="legend-item"><span class="legend-swatch" style="background:var(--aqua)"></span>Other outflows</span>
+      </div>
+      <div id="chart-cashflow"></div>
+    </div>
+  </section>
+
+  <!-- CARD -->
+  <section class="view" id="view-card">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Total spend</div>
+        <div class="value orange" id="c-kpi-total"></div>
+        <div class="delta" id="c-kpi-range"></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Avg / month</div>
+        <div class="value" id="c-kpi-avg"></div>
+        <div class="delta">across 8 active months</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Top category</div>
+        <div class="value" id="c-kpi-topcat" style="font-size:19px"></div>
+        <div class="delta" id="c-kpi-topcat-amt"></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Top merchant</div>
+        <div class="value" id="c-kpi-topmerch" style="font-size:17px"></div>
+        <div class="delta" id="c-kpi-topmerch-amt"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Monthly spend</h3>
+        <p class="card-sub">Sale transactions by transaction date</p>
+        <div id="chart-card-monthly"></div>
+      </div>
+      <div class="card">
+        <h3>Spend by category</h3>
+        <p class="card-sub" id="c-cat-sub"></p>
+        <div id="chart-card-category"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Top merchants</h3>
+      <p class="card-sub">By total charged, all courses &amp; vendors</p>
+      <div id="chart-card-merchant"></div>
+    </div>
+  </section>
+
+  <!-- BANK -->
+  <section class="view" id="view-bank">
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Revenue in</div>
+        <div class="value blue" id="b-kpi-rev"></div>
+        <div class="delta">129 Stripe deposits</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Card payments out</div>
+        <div class="value orange" id="b-kpi-cardpmt"></div>
+        <div class="delta">16 payments to …6943</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Other outflows</div>
+        <div class="value aqua" id="b-kpi-other"></div>
+        <div class="delta">PayPal, QuickBooks, dues platform, Zelle</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Balance, start → end</div>
+        <div class="value" id="b-kpi-bal" style="font-size:19px"></div>
+        <div class="delta" id="b-kpi-bal-dates"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Other outflows by vendor</h3>
+        <p class="card-sub">Non-card debits, Dec 2025 – Sep 2026</p>
+        <div id="chart-bank-vendor"></div>
+      </div>
+      <div class="card">
+        <h3>Zelle payouts by recipient</h3>
+        <p class="card-sub">Reimbursements &amp; direct payments</p>
+        <div id="chart-bank-zelle"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DRILLDOWN -->
+  <section class="view" id="view-drilldown">
+    <div class="filters">
+      <select id="dd-select" style="min-width:280px"></select>
+      <span class="pill" id="dd-share"></span>
+    </div>
+
+    <div class="kpi-row">
+      <div class="kpi">
+        <div class="label">Total spent</div>
+        <div class="value" id="dd-kpi-total" style="color:var(--dd-color)"></div>
+        <div class="delta" id="dd-kpi-group"></div>
+      </div>
+      <div class="kpi">
+        <div class="label">Transactions</div>
+        <div class="value" id="dd-kpi-count"></div>
+        <div class="delta">in this category</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Avg transaction</div>
+        <div class="value" id="dd-kpi-avg"></div>
+        <div class="delta">per charge</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Top merchant / vendor</div>
+        <div class="value" id="dd-kpi-top" style="font-size:17px"></div>
+        <div class="delta" id="dd-kpi-top-amt"></div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3 id="dd-trend-title">Monthly trend</h3>
+        <p class="card-sub" id="dd-trend-sub"></p>
+        <div id="chart-dd-trend"></div>
+      </div>
+      <div class="card">
+        <h3>Where it went</h3>
+        <p class="card-sub" id="dd-merchant-sub">By merchant / vendor within this category</p>
+        <div id="chart-dd-merchant"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Transactions in this category</h3>
+      <p class="card-sub" id="dd-txn-sub"></p>
+      <div class="table-scroll" style="max-height:360px">
+        <table class="txn">
+          <thead><tr><th>Date</th><th>Description</th><th style="text-align:right">Amount</th></tr></thead>
+          <tbody id="dd-txn-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TXNS -->
+  <section class="view" id="view-txns">
+    <div class="filters">
+      <div class="seg" id="src-seg">
+        <button class="active" data-src="all">All</button>
+        <button data-src="card">Card …6943</button>
+        <button data-src="bank">Bank …8097</button>
+      </div>
+      <input type="text" id="txn-search" placeholder="Search description or category…">
+      <select id="txn-sort">
+        <option value="date-desc">Newest first</option>
+        <option value="date-asc">Oldest first</option>
+        <option value="amt-desc">Amount: high → low</option>
+        <option value="amt-asc">Amount: low → high</option>
+      </select>
+    </div>
+    <div class="table-scroll">
+      <table class="txn">
+        <thead>
+          <tr><th>Date</th><th>Source</th><th>Description</th><th>Category / type</th><th style="text-align:right">Amount</th></tr>
+        </thead>
+        <tbody id="txn-body"></tbody>
+      </table>
+    </div>
+    <p class="row-count" id="txn-count"></p>
+  </section>
+
+  <!-- UPDATE DATA -->
+  <section class="view" id="view-update">
+    <div class="card">
+      <h3>Refresh with a new export</h3>
+      <p class="card-sub">Download "Account activity" as CSV from Chase for each account and drop it in below. Newer rows replace anything on or after their earliest date; older history is kept, so a fresh full export or just last month's activity both work.</p>
+      <div class="upload-grid">
+        <div class="upload-box" id="ub-card">
+          <div class="ub-title">Rewards card (…6943)</div>
+          <div class="ub-sub">Columns: Card, Transaction Date, Post Date, Description, Category, Type, Amount</div>
+          <input type="file" id="file-card" accept=".csv" multiple>
+          <div class="ub-file" id="ub-card-file"></div>
+        </div>
+        <div class="upload-box" id="ub-bank">
+          <div class="ub-title">Checking account (…8097)</div>
+          <div class="ub-sub">Columns: Details, Posting Date, Description, Amount, Type, Balance</div>
+          <input type="file" id="file-bank" accept=".csv" multiple>
+          <div class="ub-file" id="ub-bank-file"></div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn primary" id="btn-apply" disabled>Apply update</button>
+        <button class="btn ghost" id="btn-reset">Reset to original baseline</button>
+        <button class="btn ghost" id="btn-download">Download standalone snapshot (.html)</button>
+      </div>
+      <div id="update-msg"></div>
+    </div>
+
+    <div class="grid2">
+      <div class="card">
+        <h3>Current data</h3>
+        <p class="card-sub">What the dashboard is built from right now</p>
+        <div class="status-line"><span class="sl-label">Card transactions</span><span class="sl-val" id="st-card-n"></span></div>
+        <div class="status-line"><span class="sl-label">Card date range</span><span class="sl-val" id="st-card-range"></span></div>
+        <div class="status-line"><span class="sl-label">Bank transactions</span><span class="sl-val" id="st-bank-n"></span></div>
+        <div class="status-line"><span class="sl-label">Bank date range</span><span class="sl-val" id="st-bank-range"></span></div>
+        <div class="status-line"><span class="sl-label">Source</span><span class="sl-val" id="st-source"></span></div>
+        <div class="status-line"><span class="sl-label">Last updated</span><span class="sl-val" id="st-updated"></span></div>
+      </div>
+      <div class="card">
+        <h3>Update history</h3>
+        <p class="card-sub">Files applied in this browser</p>
+        <div id="update-log"><p class="card-sub" style="margin:0">No updates applied yet — this is the original baseline.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">Built from Chase-exported CSV activity for accounts ending …8097 and …6943 · figures reflect posted transactions only</p>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+/* ---------- baseline raw data (replaced wholesale on download-snapshot) ---------- */
+let RAW_CARD = /*RAW_CARD_START*/[{"date":"2026-09-19","postDate":"2026-09-20","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":13670.69},{"date":"2026-09-14","postDate":"2026-09-15","desc":"SAN JUAN OAKS GC","category":"Entertainment","type":"Sale","amount":-10506.0},{"date":"2026-09-09","postDate":"2026-09-10","desc":"TST*SAN JUAN OAKS GOLF C","category":"Food & Drink","type":"Sale","amount":-3164.69},{"date":"2026-09-08","postDate":"2026-09-08","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":15540.0},{"date":"2026-09-01","postDate":"2026-09-02","desc":"SILVERADO RESORT","category":"Office & Shipping","type":"Sale","amount":-15540.0},{"date":"2026-08-28","postDate":"2026-08-28","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":1068.75},{"date":"2026-08-26","postDate":"2026-08-27","desc":"GOLFGENIUS* GOLF GENIU","category":"Office & Shipping","type":"Sale","amount":-1068.75},{"date":"2026-07-28","postDate":"2026-07-28","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":10606.44},{"date":"2026-07-26","postDate":"2026-07-27","desc":"POPPY HOLDINGS GOLF","category":"Entertainment","type":"Sale","amount":-10496.0},{"date":"2026-07-18","postDate":"2026-07-19","desc":"TOTAL WINE AND MORE","category":"Food & Drink","type":"Sale","amount":-110.44},{"date":"2026-07-17","postDate":"2026-07-17","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":1780.0},{"date":"2026-07-13","postDate":"2026-07-14","desc":"GLF*BayonetGolf","category":"Entertainment","type":"Sale","amount":-780.0},{"date":"2026-07-03","postDate":"2026-07-03","desc":"COYOTECREEK GC","category":"Health & Wellness","type":"Sale","amount":-1000.0},{"date":"2026-06-29","postDate":"2026-06-29","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":7291.31},{"date":"2026-06-26","postDate":"2026-06-28","desc":"GLF*TheCourseAtWente","category":"Entertainment","type":"Sale","amount":-6900.0},{"date":"2026-06-26","postDate":"2026-06-28","desc":"PGA TOUR SUPERSTORE 1236","category":"Merchandise & Inventory","type":"Sale","amount":-391.31},{"date":"2026-06-22","postDate":"2026-06-23","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":1367.58},{"date":"2026-06-17","postDate":"2026-06-17","desc":"SP DTWOOO","category":"Merchandise & Inventory","type":"Sale","amount":-1367.58},{"date":"2026-06-09","postDate":"2026-06-10","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":500.0},{"date":"2026-06-07","postDate":"2026-06-08","desc":"COYOTECREEK GC","category":"Health & Wellness","type":"Sale","amount":-250.0},{"date":"2026-06-07","postDate":"2026-06-08","desc":"COYOTECREEK GC","category":"Health & Wellness","type":"Sale","amount":-250.0},{"date":"2026-05-31","postDate":"2026-05-31","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":9554.0},{"date":"2026-05-28","postDate":"2026-05-29","desc":"POPPY RIDGE GOLF COURS","category":"Gifts & Donations","type":"Sale","amount":-9554.0},{"date":"2026-05-21","postDate":"2026-05-22","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":11139.98},{"date":"2026-05-16","postDate":"2026-05-17","desc":"GLF*BaylandsGL","category":"Entertainment","type":"Sale","amount":-5000.0},{"date":"2026-05-16","postDate":"2026-05-17","desc":"GLF*BaylandsGL","category":"Entertainment","type":"Sale","amount":-4380.0},{"date":"2026-05-16","postDate":"2026-05-17","desc":"GLF*BaylandsGL","category":"Entertainment","type":"Sale","amount":-1759.98},{"date":"2026-05-12","postDate":"2026-05-12","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":383.0},{"date":"2026-05-02","postDate":"2026-05-04","desc":"GOLFGENIUS* GOLF GENIU","category":"Office & Shipping","type":"Sale","amount":-975.0},{"date":"2026-04-26","postDate":"2026-04-27","desc":"GLF*TheCourseAtWente","category":"Entertainment","type":"Sale","amount":-2300.0},{"date":"2026-04-24","postDate":"2026-04-26","desc":"GLF*BaylandsGL","category":"Entertainment","type":"Sale","amount":-500.0},{"date":"2026-04-23","postDate":"2026-04-26","desc":"LS HALF MOON BAY GOLF","category":"Merchandise & Inventory","type":"Return","amount":3392.0},{"date":"2026-04-24","postDate":"2026-04-24","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":10815.2},{"date":"2026-04-16","postDate":"2026-04-17","desc":"LS HALF MOON BAY GOLF","category":"Merchandise & Inventory","type":"Sale","amount":-815.2},{"date":"2026-04-15","postDate":"2026-04-16","desc":"LS HALF MOON BAY GOLF","category":"Merchandise & Inventory","type":"Sale","amount":-15000.0},{"date":"2026-04-15","postDate":"2026-04-15","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":5000.0},{"date":"2026-03-24","postDate":"2026-03-24","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":10000.0},{"date":"2026-03-21","postDate":"2026-03-22","desc":"COYOTECREEK GC","category":"Health & Wellness","type":"Sale","amount":-10000.0},{"date":"2026-03-09","postDate":"2026-03-09","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":8195.35},{"date":"2026-03-01","postDate":"2026-03-01","desc":"SP DTWOOO","category":"Merchandise & Inventory","type":"Sale","amount":-539.8},{"date":"2026-02-23","postDate":"2026-02-24","desc":"GLF*BayonetGolf","category":"Entertainment","type":"Sale","amount":-1415.27},{"date":"2026-02-19","postDate":"2026-02-20","desc":"SP DTWOOO","category":"Merchandise & Inventory","type":"Sale","amount":-6240.28},{"date":"2026-02-19","postDate":"2026-02-19","desc":"Payment Thank You - Web","category":"","type":"Payment","amount":11620.0},{"date":"2026-02-12","postDate":"2026-02-13","desc":"GLF*BayonetGolf","category":"Entertainment","type":"Sale","amount":-10020.0},{"date":"2026-02-07","postDate":"2026-02-08","desc":"GLF*TheCourseAtWente","category":"Entertainment","type":"Sale","amount":-1600.0}]/*RAW_CARD_END*/;
+let RAW_BANK = /*RAW_BANK_START*/[{"date":"2026-09-22","desc":"ORIG CO NAME:STRIPE           CO ENTRY DESCR:TRANSFER   SEC:CCD IND ID:ST-R9V2P0U2U6S7 ORIG ID:4270465600","type":"ACH_CREDIT","amount":294.65,"balance":null},{"date":"2026-09-21","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSI77 DESC DATE:260919 CO ENTRY DESCR:INST XFER SEC:WEB    TRACE#:021000022007926 EED:260921   IND ID:ONY6969                      IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260919PPZ717 TRN: 2642007926TC","type":"ACH_DEBIT","amount":-158.0,"balance":57710.64},{"date":"2026-09-21","desc":"Payment to Chase card ending in 6943 09/21","type":"LOAN_PMT","amount":-13670.69,"balance":57868.64},{"date":"2026-09-18","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000016481253 EED:260918   IND ID:ST-J2M9Q6O7F7B8              IND NAME:INDO AMERICAN GOLF ASS TRN: 2616481253TC","type":"ACH_CREDIT","amount":1377.6,"balance":71539.33},{"date":"2026-09-17","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023662168 EED:260917   IND ID:ST-R5Z3E8L4R6I7              IND NAME:INDO AMERICAN GOLF ASS TRN: 2603662168TC","type":"ACH_CREDIT","amount":2008.14,"balance":70161.73},{"date":"2026-09-16","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023537362 EED:260916   IND ID:ST-M8E9K5L6E9J0              IND NAME:INDO AMERICAN GOLF ASS TRN: 2593537362TC","type":"ACH_CREDIT","amount":1692.87,"balance":68153.59},{"date":"2026-09-15","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029097748 EED:260915   IND ID:ST-I6G8J0V9M9U6              IND NAME:INDO AMERICAN GOLF ASS TRN: 2589097748TC","type":"ACH_CREDIT","amount":354.11,"balance":66460.72},{"date":"2026-09-14","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260914 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000022641343 EED:260914   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260914PPZP3D TRN: 2572641343TC","type":"ACH_DEBIT","amount":-2500.0,"balance":66106.61},{"date":"2026-09-14","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260912 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000029679573 EED:260914   IND ID:6964454                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 2579679573TC","type":"ACH_DEBIT","amount":-85.0,"balance":68606.61},{"date":"2026-09-14","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012541317 EED:260914   IND ID:ST-F5C4D5S9W9A8              IND NAME:INDO AMERICAN GOLF ASS TRN: 2572541317TC","type":"ACH_CREDIT","amount":1720.82,"balance":68691.61},{"date":"2026-09-11","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000026348108 EED:260911   IND ID:ST-J8M2U8C2E1Y7              IND NAME:INDO AMERICAN GOLF ASS TRN: 2546348108TC","type":"ACH_CREDIT","amount":669.38,"balance":66970.79},{"date":"2026-09-10","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018708751 EED:260910   IND ID:ST-K7Y0R9H6X1K5              IND NAME:INDO AMERICAN GOLF ASS TRN: 2538708751TC","type":"ACH_CREDIT","amount":10246.64,"balance":66301.41},{"date":"2026-09-09","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013172338 EED:260909   IND ID:ST-G4X8I3H3F2S9              IND NAME:INDO AMERICAN GOLF ASS TRN: 2523172338TC","type":"ACH_CREDIT","amount":2471.36,"balance":56054.77},{"date":"2026-09-08","desc":"Payment to Chase card ending in 6943 09/08","type":"LOAN_PMT","amount":-15540.0,"balance":53583.41},{"date":"2026-09-08","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000011108655 EED:260908   IND ID:US004DOBB7                   IND NAME:Chase Bank                                                                                                   015202422 DEBIT TRN: 2511108655TC","type":"ACH_DEBIT","amount":-25.2,"balance":69123.41},{"date":"2026-09-08","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029228632 EED:260908   IND ID:ST-E0B4U9M9Q3R6              IND NAME:INDO AMERICAN GOLF ASS TRN: 2519228632TC","type":"ACH_CREDIT","amount":1023.49,"balance":69148.61},{"date":"2026-09-04","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSI77 DESC DATE:260904 CO ENTRY DESCR:INST XFER SEC:WEB    TRACE#:021000021409728 EED:260904   IND ID:SATISH_DALAL                 IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260904PPZ2NH TRN: 2471409728TC","type":"ACH_DEBIT","amount":-290.0,"balance":68125.12},{"date":"2026-09-04","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000020580081 EED:260904   IND ID:ST-B9Z0N0L8F5D1              IND NAME:INDO AMERICAN GOLF ASS TRN: 2470580081TC","type":"ACH_CREDIT","amount":1062.33,"balance":68415.12},{"date":"2026-09-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000016943002 EED:260903   IND ID:ST-C1Q1W0S8H5F1              IND NAME:INDO AMERICAN GOLF ASS TRN: 2466943002TC","type":"ACH_CREDIT","amount":1377.6,"balance":67352.79},{"date":"2026-09-02","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019655107 EED:260902   IND ID:ST-W6M0B4K2Q7G3              IND NAME:INDO AMERICAN GOLF ASS TRN: 2459655107TC","type":"ACH_CREDIT","amount":5635.39,"balance":65975.19},{"date":"2026-09-01","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000026605986 EED:260901   IND ID:ST-Z0P7Q5Z3B1K2              IND NAME:INDO AMERICAN GOLF ASS TRN: 2446605986TC","type":"ACH_CREDIT","amount":2229.17,"balance":60339.8},{"date":"2026-08-28","desc":"Payment to Chase card ending in 6943 08/28","type":"LOAN_PMT","amount":-1068.75,"balance":58110.63},{"date":"2026-08-27","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024987773 EED:260827   IND ID:ST-K4K1W1L2P9O9              IND NAME:INDO AMERICAN GOLF ASS TRN: 2394987773TC","type":"ACH_CREDIT","amount":712.77,"balance":59179.38},{"date":"2026-08-26","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260826 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000023546002 EED:260826   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260826PPZOZ8 TRN: 2383546002TC","type":"ACH_DEBIT","amount":-1000.0,"balance":58466.61},{"date":"2026-08-26","desc":"Zelle payment to Anirudh Joshi JPM99cuc7gix","type":"CHASE_TO_PARTNERFI","amount":-1403.8,"balance":59466.61},{"date":"2026-08-26","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015504513 EED:260826   IND ID:ST-R8C5H3P1L6X6              IND NAME:INDO AMERICAN GOLF ASS TRN: 2385504513TC","type":"ACH_CREDIT","amount":1793.76,"balance":60870.41},{"date":"2026-08-19","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012483288 EED:260819   IND ID:ST-A8K6F3I7Q9K1              IND NAME:INDO AMERICAN GOLF ASS TRN: 2312483288TC","type":"ACH_CREDIT","amount":1571.2,"balance":59076.65},{"date":"2026-08-18","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025894812 EED:260818   IND ID:ST-E5V7K1T5H5J0              IND NAME:INDO AMERICAN GOLF ASS TRN: 2305894812TC","type":"ACH_CREDIT","amount":186.6,"balance":57505.45},{"date":"2026-08-14","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019228550 EED:260814   IND ID:ST-O0G1U2F8U7D1              IND NAME:INDO AMERICAN GOLF ASS TRN: 2269228550TC","type":"ACH_CREDIT","amount":300.71,"balance":57318.85},{"date":"2026-08-13","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022378401 EED:260813   IND ID:ST-H9V8O6O3G1Y0              IND NAME:INDO AMERICAN GOLF ASS TRN: 2252378401TC","type":"ACH_CREDIT","amount":2759.89,"balance":57018.14},{"date":"2026-08-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260812 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000028468445 EED:260812   IND ID:8413745                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 2248468445TC","type":"ACH_DEBIT","amount":-85.0,"balance":54258.25},{"date":"2026-08-07","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000026207765 EED:260807   IND ID:ST-O7C8P6A8Y8W9              IND NAME:INDO AMERICAN GOLF ASS TRN: 2196207765TC","type":"ACH_DEBIT","amount":-225.0,"balance":54343.25},{"date":"2026-08-06","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000010759147 EED:260806   IND ID:ST-O0F5D7A7X0R9              IND NAME:INDO AMERICAN GOLF ASS TRN: 2180759147TC","type":"ACH_CREDIT","amount":436.34,"balance":54568.25},{"date":"2026-08-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000015816350 EED:260805   IND ID:US004DC015                   IND NAME:Chase Bank                                                                                                   015117250 DEBIT TRN: 2175816350TC","type":"ACH_DEBIT","amount":-25.2,"balance":54131.91},{"date":"2026-08-05","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000028192723 EED:260805   IND ID:ST-N9B8S0G9W1S5              IND NAME:INDO AMERICAN GOLF ASS TRN: 2178192723TC","type":"ACH_CREDIT","amount":4514.21,"balance":54157.11},{"date":"2026-08-04","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013502678 EED:260804   IND ID:ST-X8N5T4U6S5H2              IND NAME:INDO AMERICAN GOLF ASS TRN: 2163502678TC","type":"ACH_CREDIT","amount":712.77,"balance":49642.9},{"date":"2026-08-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017996043 EED:260803   IND ID:ST-Z5G7U9A6A5T6              IND NAME:INDO AMERICAN GOLF ASS TRN: 2157996043TC","type":"ACH_CREDIT","amount":2584.68,"balance":48930.13},{"date":"2026-07-31","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029225085 EED:260731   IND ID:ST-A2Z2E2U4E3F8              IND NAME:INDO AMERICAN GOLF ASS TRN: 2129225085TC","type":"ACH_CREDIT","amount":1697.44,"balance":46345.45},{"date":"2026-07-30","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022569614 EED:260730   IND ID:ST-C8Q9L6M5J1Z5              IND NAME:INDO AMERICAN GOLF ASS TRN: 2112569614TC","type":"ACH_CREDIT","amount":2085.55,"balance":44648.01},{"date":"2026-07-29","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025534135 EED:260729   IND ID:ST-O0U2N6X8U3I0              IND NAME:INDO AMERICAN GOLF ASS TRN: 2105534135TC","type":"ACH_CREDIT","amount":1114.97,"balance":42562.46},{"date":"2026-07-28","desc":"Payment to Chase card ending in 6943 07/28","type":"LOAN_PMT","amount":-10606.44,"balance":41447.49},{"date":"2026-07-28","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260728 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000027396260 EED:260728   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260728PPZ8KZ TRN: 2097396260TC","type":"ACH_DEBIT","amount":-2500.0,"balance":52053.93},{"date":"2026-07-24","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019213478 EED:260724   IND ID:ST-S0O8G2E7R8F1              IND NAME:INDO AMERICAN GOLF ASS TRN: 2059213478TC","type":"ACH_CREDIT","amount":101.29,"balance":54553.93},{"date":"2026-07-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023028688 EED:260722   IND ID:ST-C1R8O9E9Z7T3              IND NAME:INDO AMERICAN GOLF ASS TRN: 2033028688TC","type":"ACH_CREDIT","amount":2220.29,"balance":54452.64},{"date":"2026-07-21","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000028692619 EED:260721   IND ID:ST-W1J1H5K9N0P4              IND NAME:INDO AMERICAN GOLF ASS TRN: 2028692619TC","type":"ACH_CREDIT","amount":123.7,"balance":52232.35},{"date":"2026-07-17","desc":"Payment to Chase card ending in 6943 07/17","type":"LOAN_PMT","amount":-1780.0,"balance":52108.65},{"date":"2026-07-17","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260716 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000023685229 EED:260717   IND ID:                             IND NAME:o American Golf Associ                                                                                       2647684447424 TRN: 1983685229TC","type":"ACH_DEBIT","amount":-48.0,"balance":53888.65},{"date":"2026-07-16","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000027676246 EED:260716   IND ID:ST-G7S1F4D7V9I9              IND NAME:INDO AMERICAN GOLF ASS TRN: 1977676246TC","type":"ACH_CREDIT","amount":701.67,"balance":53936.65},{"date":"2026-07-13","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260712 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000029257798 EED:260713   IND ID:7375965                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 1949257798TC","type":"ACH_DEBIT","amount":-75.0,"balance":53234.98},{"date":"2026-07-10","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012223063 EED:260710   IND ID:ST-F5L7E4R4C4S6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1912223063TC","type":"ACH_DEBIT","amount":-200.0,"balance":53309.98},{"date":"2026-07-08","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017361070 EED:260708   IND ID:ST-S9K8M4S4Q3U1              IND NAME:INDO AMERICAN GOLF ASS TRN: 1897361070TC","type":"ACH_CREDIT","amount":288.51,"balance":53509.98},{"date":"2026-07-06","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000018784727 EED:260706   IND ID:US004COXDJ                   IND NAME:Chase Bank                                                                                                   015043671 DEBIT TRN: 1878784727TC","type":"ACH_DEBIT","amount":-25.2,"balance":53221.47},{"date":"2026-07-06","desc":"Zelle payment to Zoheb Mukhy JPM99cocm34w","type":"CHASE_TO_PARTNERFI","amount":-260.0,"balance":53246.67},{"date":"2026-07-03","desc":"Zelle payment to Zoheb Mukhy JPM99co9jryn","type":"CHASE_TO_PARTNERFI","amount":-1000.0,"balance":53506.67},{"date":"2026-07-03","desc":"Zelle payment to Zoheb Mukhy JPM99co73bav","type":"CHASE_TO_PARTNERFI","amount":-1000.0,"balance":54506.67},{"date":"2026-07-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000020607239 EED:260703   IND ID:ST-N1Z2X8L3M8V7              IND NAME:INDO AMERICAN GOLF ASS TRN: 1840607239TC","type":"ACH_CREDIT","amount":455.77,"balance":55506.67},{"date":"2026-07-02","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017991262 EED:260702   IND ID:ST-Y0I8A4S1S5A8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1837991262TC","type":"ACH_CREDIT","amount":193.9,"balance":55050.9},{"date":"2026-07-01","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014188046 EED:260701   IND ID:ST-J5J6R0W3P4L0              IND NAME:INDO AMERICAN GOLF ASS TRN: 1824188046TC","type":"ACH_CREDIT","amount":1056.89,"balance":54857.0},{"date":"2026-06-29","desc":"Payment to Chase card ending in 6943 06/29","type":"LOAN_PMT","amount":-7291.31,"balance":53800.11},{"date":"2026-06-29","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260629 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000029314209 EED:260629   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260629PPZYJ8 TRN: 1809314209TC","type":"ACH_DEBIT","amount":-2000.0,"balance":61091.42},{"date":"2026-06-25","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025803439 EED:260625   IND ID:ST-P6T7Y3X0V4F5              IND NAME:INDO AMERICAN GOLF ASS TRN: 1765803439TC","type":"ACH_CREDIT","amount":85.13,"balance":63091.42},{"date":"2026-06-24","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000028363325 EED:260624   IND ID:ST-L5K0R3T4W0O0              IND NAME:INDO AMERICAN GOLF ASS TRN: 1758363325TC","type":"ACH_CREDIT","amount":695.66,"balance":63006.29},{"date":"2026-06-23","desc":"Payment to Chase card ending in 6943 06/23","type":"LOAN_PMT","amount":-1367.58,"balance":62310.63},{"date":"2026-06-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014674525 EED:260623   IND ID:ST-F7I0G0J8I5K2              IND NAME:INDO AMERICAN GOLF ASS TRN: 1744674525TC","type":"ACH_CREDIT","amount":308.43,"balance":63678.21},{"date":"2026-06-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019137235 EED:260622   IND ID:ST-M6U3Q1Z8F7T7              IND NAME:INDO AMERICAN GOLF ASS TRN: 1739137235TC","type":"ACH_CREDIT","amount":903.63,"balance":63369.78},{"date":"2026-06-17","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260616 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000024377542 EED:260617   IND ID:                             IND NAME:o American Golf Associ                                                                                       2647150695316 TRN: 1684377542TC","type":"ACH_DEBIT","amount":-96.0,"balance":62466.15},{"date":"2026-06-16","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260616 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000027509417 EED:260616   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260616PPZIJZ TRN: 1677509417TC","type":"ACH_DEBIT","amount":-500.0,"balance":62562.15},{"date":"2026-06-15","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018633273 EED:260615   IND ID:ST-E7J9O8W0H0O1              IND NAME:INDO AMERICAN GOLF ASS TRN: 1668633273TC","type":"ACH_DEBIT","amount":-745.52,"balance":63062.15},{"date":"2026-06-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260612 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000024295149 EED:260612   IND ID:6681115                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 1634295149TC","type":"ACH_DEBIT","amount":-75.0,"balance":63807.67},{"date":"2026-06-10","desc":"Payment to Chase card ending in 6943 06/10","type":"LOAN_PMT","amount":-500.0,"balance":63882.67},{"date":"2026-06-10","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022544423 EED:260610   IND ID:ST-C0W7Q7K5D5G4              IND NAME:INDO AMERICAN GOLF ASS TRN: 1612544423TC","type":"ACH_CREDIT","amount":7898.52,"balance":64382.67},{"date":"2026-06-09","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013943987 EED:260609   IND ID:ST-S6N4U1O5T8R8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1603943987TC","type":"ACH_CREDIT","amount":383.7,"balance":56484.15},{"date":"2026-06-08","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260608 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000029944891 EED:260608   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260608PPZLFM TRN: 1599944891TC","type":"ACH_DEBIT","amount":-500.0,"balance":56100.45},{"date":"2026-06-08","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260607 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000022244802 EED:260608   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260607PPZF5A TRN: 1592244802TC","type":"ACH_DEBIT","amount":-1200.0,"balance":56600.45},{"date":"2026-06-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000011238763 EED:260605   IND ID:US004CCYQH                   IND NAME:Chase Bank                                                                                                   014972142 DEBIT TRN: 1561238763TC","type":"ACH_DEBIT","amount":-25.2,"balance":57800.45},{"date":"2026-06-05","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022535406 EED:260605   IND ID:ST-A1G9T7R2Z6Z8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1562535406TC","type":"ACH_CREDIT","amount":569.72,"balance":57825.65},{"date":"2026-06-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019202779 EED:260603   IND ID:ST-O6G8X3R7C0B6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1549202779TC","type":"ACH_CREDIT","amount":8102.43,"balance":57255.93},{"date":"2026-06-02","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025054719 EED:260602   IND ID:ST-U7J1V2M6Z2B4              IND NAME:INDO AMERICAN GOLF ASS TRN: 1535054719TC","type":"ACH_CREDIT","amount":2055.8,"balance":49153.5},{"date":"2026-06-01","desc":"Payment to Chase card ending in 6943 06/01","type":"LOAN_PMT","amount":-9554.0,"balance":47097.7},{"date":"2026-06-01","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024290213 EED:260601   IND ID:ST-J4M2Z8K1B3Q7              IND NAME:INDO AMERICAN GOLF ASS TRN: 1524290213TC","type":"ACH_CREDIT","amount":118.59,"balance":56651.7},{"date":"2026-05-29","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022125438 EED:260529   IND ID:ST-N1E7V4F9R3R7              IND NAME:INDO AMERICAN GOLF ASS TRN: 1492125438TC","type":"ACH_CREDIT","amount":1086.01,"balance":56533.11},{"date":"2026-05-28","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013041062 EED:260528   IND ID:ST-Z2L0V1V3R1Z8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1483041062TC","type":"ACH_CREDIT","amount":2385.11,"balance":55447.1},{"date":"2026-05-27","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023221297 EED:260527   IND ID:ST-F8R7U1E5E9J3              IND NAME:INDO AMERICAN GOLF ASS TRN: 1473221297TC","type":"ACH_CREDIT","amount":455.76,"balance":53061.99},{"date":"2026-05-26","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023269678 EED:260526   IND ID:ST-C7W5Z1X5O4B0              IND NAME:INDO AMERICAN GOLF ASS TRN: 1463269678TC","type":"ACH_CREDIT","amount":1118.88,"balance":52606.23},{"date":"2026-05-22","desc":"Payment to Chase card ending in 6943 05/22","type":"LOAN_PMT","amount":-11139.98,"balance":51487.35},{"date":"2026-05-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013772289 EED:260522   IND ID:ST-A1E1D5C4G9G9              IND NAME:INDO AMERICAN GOLF ASS TRN: 1423772289TC","type":"ACH_CREDIT","amount":8440.74,"balance":62627.33},{"date":"2026-05-21","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000028173517 EED:260521   IND ID:ST-H2P7M8W3F1V2              IND NAME:INDO AMERICAN GOLF ASS TRN: 1418173517TC","type":"ACH_CREDIT","amount":13.46,"balance":54186.59},{"date":"2026-05-20","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017747516 EED:260520   IND ID:ST-T7O4D7W0G9R0              IND NAME:INDO AMERICAN GOLF ASS TRN: 1407747516TC","type":"ACH_CREDIT","amount":4440.18,"balance":54173.13},{"date":"2026-05-19","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014583093 EED:260519   IND ID:ST-Y7I7E3H8X1O5              IND NAME:INDO AMERICAN GOLF ASS TRN: 1394583093TC","type":"ACH_CREDIT","amount":378.08,"balance":49732.95},{"date":"2026-05-18","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260518 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000021693750 EED:260518   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260518PPZ22U TRN: 1381693750TC","type":"ACH_DEBIT","amount":-3000.0,"balance":49354.87},{"date":"2026-05-18","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260517 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000021161034 EED:260518   IND ID:                             IND NAME:o American Golf Associ                                                                                       2646634506610 TRN: 1381161034TC","type":"ACH_DEBIT","amount":-96.0,"balance":52354.87},{"date":"2026-05-18","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013942348 EED:260518   IND ID:ST-P8C3Y1N2A1Z6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1383942348TC","type":"ACH_CREDIT","amount":925.78,"balance":52450.87},{"date":"2026-05-15","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000020085658 EED:260515   IND ID:ST-Y2A6O4F9K6A1              IND NAME:INDO AMERICAN GOLF ASS TRN: 1350085658TC","type":"ACH_CREDIT","amount":567.12,"balance":51525.09},{"date":"2026-05-14","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015528142 EED:260514   IND ID:ST-Y9S4M8B1R2L6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1345528142TC","type":"ACH_CREDIT","amount":814.42,"balance":50957.97},{"date":"2026-05-13","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014517821 EED:260513   IND ID:ST-V9D8G2S0A9K1              IND NAME:INDO AMERICAN GOLF ASS TRN: 1334517821TC","type":"ACH_CREDIT","amount":5788.03,"balance":50143.55},{"date":"2026-05-12","desc":"Payment to Chase card ending in 6943 05/12","type":"LOAN_PMT","amount":-383.0,"balance":44355.52},{"date":"2026-05-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260512 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000027358764 EED:260512   IND ID:5818075                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 1327358764TC","type":"ACH_DEBIT","amount":-75.0,"balance":44738.52},{"date":"2026-05-12","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023364170 EED:260512   IND ID:ST-O3B5Z3G3S8Z9              IND NAME:INDO AMERICAN GOLF ASS TRN: 1323364170TC","type":"ACH_CREDIT","amount":561.74,"balance":44813.52},{"date":"2026-05-11","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019209235 EED:260511   IND ID:ST-S4H0B9M3G3P3              IND NAME:INDO AMERICAN GOLF ASS TRN: 1319209235TC","type":"ACH_CREDIT","amount":208.46,"balance":44251.78},{"date":"2026-05-07","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012527965 EED:260507   IND ID:ST-O1W3D2V6O5X3              IND NAME:INDO AMERICAN GOLF ASS TRN: 1272527965TC","type":"ACH_CREDIT","amount":3977.34,"balance":44043.32},{"date":"2026-05-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000015662688 EED:260505   IND ID:US004BWGN8                   IND NAME:Chase Bank                                                                                                   014900229 DEBIT TRN: 1255662688TC","type":"ACH_DEBIT","amount":-25.2,"balance":40065.98},{"date":"2026-05-01","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017154112 EED:260501   IND ID:ST-T3X9N2T9K4D8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1217154112TC","type":"ACH_DEBIT","amount":-2682.88,"balance":40091.18},{"date":"2026-04-29","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000027743524 EED:260429   IND ID:ST-Q3Y5N4J6G3A1              IND NAME:INDO AMERICAN GOLF ASS TRN: 1197743524TC","type":"ACH_CREDIT","amount":516.48,"balance":42774.06},{"date":"2026-04-28","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000027380917 EED:260428   IND ID:ST-G6E0A6N3N4K2              IND NAME:INDO AMERICAN GOLF ASS TRN: 1187380917TC","type":"ACH_CREDIT","amount":244.9,"balance":42257.58},{"date":"2026-04-27","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260426 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000029169709 EED:260427   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260426PPZHS2 TRN: 1179169709TC","type":"ACH_DEBIT","amount":-3000.0,"balance":42012.68},{"date":"2026-04-24","desc":"Online Transfer to CHK ...3908 transaction#: 28954908313 04/24","type":"ACCT_XFER","amount":-13.4,"balance":45012.68},{"date":"2026-04-24","desc":"Payment to Chase card ending in 6943 04/24","type":"LOAN_PMT","amount":-10815.2,"balance":45026.08},{"date":"2026-04-24","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019784766 EED:260424   IND ID:ST-A1B7T4T0A5B6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1149784766TC","type":"ACH_CREDIT","amount":156.48,"balance":55841.28},{"date":"2026-04-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000011039060 EED:260423   IND ID:ST-E9S0O1K0B1P7              IND NAME:INDO AMERICAN GOLF ASS TRN: 1131039060TC","type":"ACH_CREDIT","amount":232.74,"balance":55684.8},{"date":"2026-04-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024464406 EED:260422   IND ID:ST-T7K6R4E1W1C8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1124464406TC","type":"ACH_CREDIT","amount":2212.76,"balance":55452.06},{"date":"2026-04-20","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022611132 EED:260420   IND ID:ST-X1U7M9O3T0Y4              IND NAME:INDO AMERICAN GOLF ASS TRN: 1102611132TC","type":"ACH_CREDIT","amount":759.4,"balance":53239.3},{"date":"2026-04-17","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017675059 EED:260417   IND ID:ST-E8S5Y7B7V0A8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1077675059TC","type":"ACH_CREDIT","amount":248.88,"balance":52479.9},{"date":"2026-04-16","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015876571 EED:260416   IND ID:ST-I4N5W6W7S6B3              IND NAME:INDO AMERICAN GOLF ASS TRN: 1065876571TC","type":"ACH_CREDIT","amount":252.16,"balance":52231.02},{"date":"2026-04-15","desc":"Payment to Chase card ending in 6943 04/15","type":"LOAN_PMT","amount":-5000.0,"balance":51978.86},{"date":"2026-04-15","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018028674 EED:260415   IND ID:ST-Y7K9O7N7Y8J6              IND NAME:INDO AMERICAN GOLF ASS TRN: 1058028674TC","type":"ACH_CREDIT","amount":2223.06,"balance":56978.86},{"date":"2026-04-14","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025013787 EED:260414   IND ID:ST-S5V8T6D2X8C8              IND NAME:INDO AMERICAN GOLF ASS TRN: 1045013787TC","type":"ACH_CREDIT","amount":293.16,"balance":54755.8},{"date":"2026-04-13","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260412 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000027643667 EED:260413   IND ID:5293385                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 1037643667TC","type":"ACH_DEBIT","amount":-75.0,"balance":54462.64},{"date":"2026-04-10","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000020379191 EED:260410   IND ID:ST-V5I9Q3O1I5V5              IND NAME:INDO AMERICAN GOLF ASS TRN: 1000379191TC","type":"ACH_CREDIT","amount":232.74,"balance":54537.64},{"date":"2026-04-09","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025672024 EED:260409   IND ID:ST-F1I8V4P7S6N7              IND NAME:INDO AMERICAN GOLF ASS TRN: 0995672024TC","type":"ACH_CREDIT","amount":3115.46,"balance":54304.9},{"date":"2026-04-06","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:PURCHASE  SEC:WEB    TRACE#:091000017539885 EED:260406   IND ID:US004B8TDG                   IND NAME:Chase Bank                                                                                                   014836684 DEBIT TRN: 0967539885TC","type":"ACH_DEBIT","amount":-25.2,"balance":51189.44},{"date":"2026-04-06","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260405 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000029328193 EED:260406   IND ID:                             IND NAME:o-American Golf Associ                                                                                       2645906560412 TRN: 0969328193TC","type":"ACH_DEBIT","amount":-336.0,"balance":51214.64},{"date":"2026-04-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017800629 EED:260403   IND ID:ST-J1X7Y5G4S6W7              IND NAME:INDO AMERICAN GOLF ASS TRN: 0937800629TC","type":"ACH_DEBIT","amount":-250.0,"balance":51550.64},{"date":"2026-04-01","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023952976 EED:260401   IND ID:ST-R7L8K2U3H9B7              IND NAME:INDO AMERICAN GOLF ASS TRN: 0913952976TC","type":"ACH_CREDIT","amount":1372.15,"balance":51800.64},{"date":"2026-03-31","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000027627648 EED:260331   IND ID:ST-X5Q9S4R0W5F5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0907627648TC","type":"ACH_CREDIT","amount":465.48,"balance":50428.49},{"date":"2026-03-30","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000016476572 EED:260330   IND ID:ST-D7Q7E2G3D9I8              IND NAME:INDO AMERICAN GOLF ASS TRN: 0896476572TC","type":"ACH_CREDIT","amount":474.88,"balance":49963.01},{"date":"2026-03-27","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000010717150 EED:260327   IND ID:ST-W2T0A9P7A2T5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0860717150TC","type":"ACH_CREDIT","amount":978.58,"balance":49488.13},{"date":"2026-03-26","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015202099 EED:260326   IND ID:ST-Y5N0A9G5P0K5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0855202099TC","type":"ACH_CREDIT","amount":1270.51,"balance":48509.55},{"date":"2026-03-25","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029661615 EED:260325   IND ID:ST-N6F7X3L2E2X7              IND NAME:INDO AMERICAN GOLF ASS TRN: 0849661615TC","type":"ACH_CREDIT","amount":2001.02,"balance":47239.04},{"date":"2026-03-24","desc":"Zelle payment to Bhavesh Desai JPM99cacq92h","type":"CHASE_TO_PARTNERFI","amount":-7333.18,"balance":45238.02},{"date":"2026-03-24","desc":"Payment to Chase card ending in 6943 03/24","type":"LOAN_PMT","amount":-10000.0,"balance":52571.2},{"date":"2026-03-24","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024723219 EED:260324   IND ID:ST-F7B0R6C9A6D6              IND NAME:INDO AMERICAN GOLF ASS TRN: 0834723219TC","type":"ACH_CREDIT","amount":1464.41,"balance":62571.2},{"date":"2026-03-23","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260322 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000023999181 EED:260323   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260322PPZ3HH TRN: 0823999181TC","type":"ACH_DEBIT","amount":-2500.0,"balance":61106.79},{"date":"2026-03-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014005622 EED:260323   IND ID:ST-H2M9K5V0U5R1              IND NAME:INDO AMERICAN GOLF ASS TRN: 0824005622TC","type":"ACH_CREDIT","amount":3148.86,"balance":63606.79},{"date":"2026-03-20","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000026630424 EED:260320   IND ID:ST-N9I9G7N7B3S3              IND NAME:INDO AMERICAN GOLF ASS TRN: 0796630424TC","type":"ACH_CREDIT","amount":56.72,"balance":60457.93},{"date":"2026-03-19","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023232188 EED:260319   IND ID:ST-S1P6R3R8Q0L5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0783232188TC","type":"ACH_CREDIT","amount":382.94,"balance":60401.21},{"date":"2026-03-18","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025570387 EED:260318   IND ID:ST-L1L8H4W8I3M0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0775570387TC","type":"ACH_CREDIT","amount":649.67,"balance":60018.27},{"date":"2026-03-17","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260316 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000025867215 EED:260317   IND ID:                             IND NAME:o American Golf Associ                                                                                       2645554131615 TRN: 0765867215TC","type":"ACH_DEBIT","amount":-240.0,"balance":59368.6},{"date":"2026-03-17","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000014644055 EED:260317   IND ID:ST-J1Z3Y8F3G6V6              IND NAME:INDO AMERICAN GOLF ASS TRN: 0764644055TC","type":"ACH_CREDIT","amount":618.05,"balance":59608.6},{"date":"2026-03-13","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000017209330 EED:260313   IND ID:ST-G4K8V0W6J8K3              IND NAME:INDO AMERICAN GOLF ASS TRN: 0727209330TC","type":"ACH_CREDIT","amount":470.33,"balance":58990.55},{"date":"2026-03-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260312 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000027012026 EED:260312   IND ID:4748849                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 0717012026TC","type":"ACH_DEBIT","amount":-75.0,"balance":58520.22},{"date":"2026-03-12","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019959234 EED:260312   IND ID:ST-U8M0A7W5D3C3              IND NAME:INDO AMERICAN GOLF ASS TRN: 0719959234TC","type":"ACH_CREDIT","amount":261.87,"balance":58595.22},{"date":"2026-03-11","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019258982 EED:260311   IND ID:ST-T8W7K5O7D6D0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0709258982TC","type":"ACH_CREDIT","amount":4439.23,"balance":58333.35},{"date":"2026-03-10","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019128532 EED:260310   IND ID:ST-F4P4H9T9S3Z7              IND NAME:INDO AMERICAN GOLF ASS TRN: 0699128532TC","type":"ACH_CREDIT","amount":637.8,"balance":53894.12},{"date":"2026-03-09","desc":"Payment to Chase card ending in 6943 03/09","type":"LOAN_PMT","amount":-8195.35,"balance":53256.32},{"date":"2026-03-09","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSI77 DESC DATE:260308 CO ENTRY DESCR:INST XFER SEC:WEB    TRACE#:021000020366078 EED:260309   IND ID:OMAR.SEHGAL                  IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260308PPZ4WM TRN: 0680366078TC","type":"ACH_DEBIT","amount":-541.6,"balance":61451.67},{"date":"2026-03-09","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000010639155 EED:260309   IND ID:ST-H9B9W0H5B6P8              IND NAME:INDO AMERICAN GOLF ASS TRN: 0680639155TC","type":"ACH_CREDIT","amount":238.59,"balance":61993.27},{"date":"2026-03-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:APPS_COMMESEC:WEB    TRACE#:091000011635762 EED:260305   IND ID:US004AS2R6                   IND NAME:Chase Bank                                                                                                   014774264 DEBIT TRN: 0641635762TC","type":"ACH_DEBIT","amount":-25.2,"balance":61754.68},{"date":"2026-03-05","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022694948 EED:260305   IND ID:ST-W2X5U5U6Q2Q5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0642694948TC","type":"ACH_CREDIT","amount":848.11,"balance":61779.88},{"date":"2026-03-04","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000022898877 EED:260304   IND ID:ST-J4L7K0P6F1J9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0632898877TC","type":"ACH_CREDIT","amount":2940.61,"balance":60931.77},{"date":"2026-03-02","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000025377098 EED:260302   IND ID:ST-E9E4W1N1Q9M5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0615377098TC","type":"ACH_CREDIT","amount":794.09,"balance":57991.16},{"date":"2026-02-27","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000016154596 EED:260227   IND ID:ST-E0N0J5W9P8M0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0586154596TC","type":"ACH_CREDIT","amount":5409.71,"balance":57197.07},{"date":"2026-02-26","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024753287 EED:260226   IND ID:ST-C8L9M8C1G4V0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0574753287TC","type":"ACH_CREDIT","amount":363.52,"balance":51787.36},{"date":"2026-02-25","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029311011 EED:260225   IND ID:ST-P3M6P5B4P3O9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0569311011TC","type":"ACH_CREDIT","amount":2695.78,"balance":51423.84},{"date":"2026-02-24","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024431227 EED:260224   IND ID:ST-F9F6Q9C7Z8P0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0554431227TC","type":"ACH_CREDIT","amount":294.32,"balance":48728.06},{"date":"2026-02-23","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD22 DESC DATE:260222 CO ENTRY DESCR:TRANSFER  SEC:WEB    TRACE#:021000024201811 EED:260223   IND ID:ADD TO BALANCE               IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260222PPZ54A TRN: 0544201811TC","type":"ACH_DEBIT","amount":-2800.0,"balance":48433.74},{"date":"2026-02-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024100104 EED:260223   IND ID:ST-V8R1M9C0S7E2              IND NAME:INDO AMERICAN GOLF ASS TRN: 0544100104TC","type":"ACH_CREDIT","amount":5913.54,"balance":51233.74},{"date":"2026-02-20","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSI77 DESC DATE:260220 CO ENTRY DESCR:INST XFER SEC:WEB    TRACE#:021000027877105 EED:260220   IND ID:AJOSHI84                     IND NAME:INDO-AMERICAN GOLF ASS                                                                                       260220PPZ12M TRN: 0517877105TC","type":"ACH_DEBIT","amount":-300.0,"balance":45320.2},{"date":"2026-02-20","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012082614 EED:260220   IND ID:ST-N6S0W7T2K9Y0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0512082614TC","type":"ACH_CREDIT","amount":5237.7,"balance":45620.2},{"date":"2026-02-19","desc":"Payment to Chase card ending in 6943 02/19","type":"LOAN_PMT","amount":-11620.0,"balance":40382.5},{"date":"2026-02-19","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000012614278 EED:260219   IND ID:ST-C3U8B4O9D3X9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0502614278TC","type":"ACH_CREDIT","amount":5056.26,"balance":52002.5},{"date":"2026-02-18","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023690319 EED:260218   IND ID:ST-Y5F1C7U8K2O9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0493690319TC","type":"ACH_CREDIT","amount":1428.6,"balance":46946.24},{"date":"2026-02-17","desc":"Online Transfer to CHK ...3908 transaction#: 28107782057 02/17","type":"ACCT_XFER","amount":-284.0,"balance":45517.64},{"date":"2026-02-17","desc":"Online Transfer to CHK ...3908 transaction#: 28107630695 02/17","type":"ACCT_XFER","amount":-6000.0,"balance":45801.64},{"date":"2026-02-17","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024426321 EED:260217   IND ID:ST-I8Q4J5G5A3I0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0484426321TC","type":"ACH_CREDIT","amount":3069.83,"balance":51801.64},{"date":"2026-02-13","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000026233896 EED:260213   IND ID:ST-E4N7N3M9Q4G4              IND NAME:INDO AMERICAN GOLF ASS TRN: 0446233896TC","type":"ACH_CREDIT","amount":649.67,"balance":48731.81},{"date":"2026-02-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260212 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000028528342 EED:260212   IND ID:4954460                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 0438528342TC","type":"ACH_DEBIT","amount":-75.0,"balance":48082.14},{"date":"2026-02-12","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018675560 EED:260212   IND ID:ST-O9U5I7W9T0Q6              IND NAME:INDO AMERICAN GOLF ASS TRN: 0438675560TC","type":"ACH_CREDIT","amount":450.91,"balance":48157.14},{"date":"2026-02-11","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000029582757 EED:260211   IND ID:ST-A6E1U0K6O9I1              IND NAME:INDO AMERICAN GOLF ASS TRN: 0429582757TC","type":"ACH_CREDIT","amount":3891.62,"balance":47706.23},{"date":"2026-02-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:APPS_COMMESEC:WEB    TRACE#:091000016067963 EED:260205   IND ID:US004A8H1P                   IND NAME:Chase Bank                                                                                                   014718860 DEBIT TRN: 0366067963TC","type":"ACH_DEBIT","amount":-25.2,"balance":43814.61},{"date":"2026-02-05","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015960878 EED:260205   IND ID:ST-S6O8I6Y3I3M4              IND NAME:INDO AMERICAN GOLF ASS TRN: 0365960878TC","type":"ACH_CREDIT","amount":480.04,"balance":43839.81},{"date":"2026-02-04","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019021300 EED:260204   IND ID:ST-T3A1U1H5Y0M6              IND NAME:INDO AMERICAN GOLF ASS TRN: 0359021300TC","type":"ACH_CREDIT","amount":1121.78,"balance":43359.77},{"date":"2026-02-03","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000021867669 EED:260203   IND ID:ST-Q7T9K7Z2B3N9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0341867669TC","type":"ACH_CREDIT","amount":426.64,"balance":42237.99},{"date":"2026-02-02","desc":"Zelle payment to Bhavesh Desai JPM99c451zv3","type":"CHASE_TO_PARTNERFI","amount":-975.0,"balance":41811.35},{"date":"2026-01-30","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019398116 EED:260130   IND ID:ST-R0G8L0E9E3K1              IND NAME:INDO AMERICAN GOLF ASS TRN: 0309398116TC","type":"ACH_CREDIT","amount":379.52,"balance":42786.35},{"date":"2026-01-28","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000011496811 EED:260128   IND ID:ST-L9D1S7B9U0D6              IND NAME:INDO AMERICAN GOLF ASS TRN: 0281496811TC","type":"ACH_CREDIT","amount":6293.66,"balance":42406.83},{"date":"2026-01-27","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013457053 EED:260127   IND ID:ST-D7B6P9F0R6R1              IND NAME:INDO AMERICAN GOLF ASS TRN: 0273457053TC","type":"ACH_CREDIT","amount":506.64,"balance":36113.17},{"date":"2026-01-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018233899 EED:260123   IND ID:ST-M0F6F2U4R5M5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0238233899TC","type":"ACH_CREDIT","amount":213.32,"balance":35606.53},{"date":"2026-01-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000019695934 EED:260122   IND ID:ST-N4T5G4S4X5L9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0229695934TC","type":"ACH_CREDIT","amount":9158.55,"balance":35393.21},{"date":"2026-01-15","desc":"ORIG CO NAME:SK ACCOUNTANCY C       ORIG ID:9215986202 DESC DATE:260115 CO ENTRY DESCR:SALE      SEC:CCD    TRACE#:021000023669541 EED:260115   IND ID:                             IND NAME:RAJESH GAUTAM TRN: 0153669541TC","type":"ACH_DEBIT","amount":-701.0,"balance":26234.66},{"date":"2026-01-15","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013809307 EED:260115   IND ID:ST-K1Z0Y1B9U6R2              IND NAME:INDO AMERICAN GOLF ASS TRN: 0153809307TC","type":"ACH_CREDIT","amount":480.04,"balance":26935.66},{"date":"2026-01-14","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018917445 EED:260114   IND ID:ST-R4Y9E6M0J5P0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0148917445TC","type":"ACH_CREDIT","amount":213.32,"balance":26455.62},{"date":"2026-01-12","desc":"ORIG CO NAME:INTUIT *               ORIG ID:0000756346 DESC DATE:260112 CO ENTRY DESCR:QBooks OnlSEC:CCD    TRACE#:021000028854553 EED:260112   IND ID:4820047                      IND NAME:INDO AMERICAN GOLF ASS                                                                                       800-446-8848 TRN: 0128854553TC","type":"ACH_DEBIT","amount":-75.0,"balance":26242.3},{"date":"2026-01-12","desc":"ORIG CO NAME:MEMBERPLANET           ORIG ID:0000101400 DESC DATE:260111 CO ENTRY DESCR:8882988845SEC:WEB    TRACE#:021000025877868 EED:260112   IND ID:                             IND NAME:o-American Golf Associ                                                                                       2644434665926 TRN: 0125877868TC","type":"ACH_DEBIT","amount":-1012.0,"balance":26317.3},{"date":"2026-01-12","desc":"Zelle payment to Bhavesh Desai JPM99c1o2edd","type":"CHASE_TO_PARTNERFI","amount":-1699.2,"balance":27329.3},{"date":"2026-01-12","desc":"Zelle payment to Bhavesh Desai JPM99c1mbqmf","type":"CHASE_TO_PARTNERFI","amount":-5000.0,"balance":29028.5},{"date":"2026-01-12","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000015153375 EED:260112   IND ID:ST-I4K0E7D8J2G0              IND NAME:INDO AMERICAN GOLF ASS TRN: 0125153375TC","type":"ACH_CREDIT","amount":266.72,"balance":34028.5},{"date":"2026-01-07","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024257942 EED:260107   IND ID:ST-S7Z6C4R6B6C5              IND NAME:INDO AMERICAN GOLF ASS TRN: 0074257942TC","type":"ACH_CREDIT","amount":266.72,"balance":33761.78},{"date":"2026-01-05","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:APPS_COMMESEC:WEB    TRACE#:091000011633639 EED:260105   IND ID:US0049SUV9                   IND NAME:Chase Bank                                                                                                   014660165 DEBIT TRN: 0051633639TC","type":"ACH_DEBIT","amount":-25.2,"balance":33495.06},{"date":"2026-01-05","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000013903274 EED:260105   IND ID:ST-P5B1P6M4G5M8              IND NAME:INDO AMERICAN GOLF ASS TRN: 0053903274TC","type":"ACH_CREDIT","amount":800.16,"balance":33520.26},{"date":"2026-01-02","desc":"ORIG CO NAME:STRIPE                 ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:091000018774446 EED:260102   IND ID:ST-E9T7W6R2B5N9              IND NAME:INDO AMERICAN GOLF ASS TRN: 0028774446TC","type":"ACH_CREDIT","amount":266.72,"balance":32720.1},{"date":"2025-12-31","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000027892463 EED:251231   IND ID:ST-M3U3O1Z3K9O9              IND NAME:INDO AMERICAN GOLF ASS TRN: 3657892463TC","type":"ACH_CREDIT","amount":391.88,"balance":32453.38},{"date":"2025-12-29","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024226617 EED:251229   IND ID:ST-B6E3Y2B3E5O9              IND NAME:INDO AMERICAN GOLF ASS TRN: 3634226617TC","type":"ACH_CREDIT","amount":525.16,"balance":32061.5},{"date":"2025-12-26","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALSD11 DESC DATE:251225 CO ENTRY DESCR:TRANSFER  SEC:PPD    TRACE#:021000027525085 EED:251226   IND ID:                             IND NAME:INDO-AMERICAN GOLF ASS TRN: 3607525085TC","type":"ACH_CREDIT","amount":1250.0,"balance":31536.34},{"date":"2025-12-23","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024115641 EED:251223   IND ID:ST-B7S1A5M8M4V5              IND NAME:INDO AMERICAN GOLF ASS TRN: 3574115641TC","type":"ACH_CREDIT","amount":266.72,"balance":30286.34},{"date":"2025-12-22","desc":"ORIG CO NAME:GOOGLE                 ORIG ID:F770493581 DESC DATE:       CO ENTRY DESCR:ACCTVERIFYSEC:PPD    TRACE#:091000013706623 EED:251222   IND ID:                             IND NAME:Chase Bank TRN: 3563706623TC","type":"ACH_CREDIT","amount":0.19,"balance":30019.62},{"date":"2025-12-22","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000023513449 EED:251222   IND ID:ST-P5Y6T5G7G1S3              IND NAME:INDO AMERICAN GOLF ASS TRN: 3563513449TC","type":"ACH_CREDIT","amount":533.44,"balance":30019.43},{"date":"2025-12-19","desc":"ORIG CO NAME:Chargebee              ORIG ID:1800948598 DESC DATE:       CO ENTRY DESCR:ACCTVERIFYSEC:CCD    TRACE#:091000011639386 EED:251219   IND ID:ST-J6A2G4E5D7A1              IND NAME:INDO AMERICAN GOLF ASS TRN: 3531639386TC","type":"ACH_DEBIT","amount":-0.5,"balance":29485.99},{"date":"2025-12-19","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALRD33 DESC DATE:251219 CO ENTRY DESCR:ACCTVERIFYSEC:PPD    TRACE#:021000026387814 EED:251219   IND ID:                             IND NAME:INDO-AMERICAN GOLF ASS TRN: 3536387814TC","type":"ACH_CREDIT","amount":0.12,"balance":29486.49},{"date":"2025-12-19","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALRD33 DESC DATE:251219 CO ENTRY DESCR:ACCTVERIFYSEC:PPD    TRACE#:021000026387813 EED:251219   IND ID:                             IND NAME:INDO-AMERICAN GOLF ASS TRN: 3536387813TC","type":"ACH_CREDIT","amount":0.19,"balance":29486.37},{"date":"2025-12-19","desc":"ORIG CO NAME:Chargebee              ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:ACCTVERIFYSEC:CCD    TRACE#:111000024323516 EED:251219   IND ID:ST-M0U2S4B1M9N1              IND NAME:INDO AMERICAN GOLF ASS TRN: 3534323516TC","type":"ACH_CREDIT","amount":0.2,"balance":29486.18},{"date":"2025-12-19","desc":"ORIG CO NAME:Chargebee              ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:ACCTVERIFYSEC:CCD    TRACE#:111000024323515 EED:251219   IND ID:ST-Q1B0R7D0N2F9              IND NAME:INDO AMERICAN GOLF ASS TRN: 3534323515TC","type":"ACH_CREDIT","amount":0.3,"balance":29485.98},{"date":"2025-12-19","desc":"ORIG CO NAME:STRIPE                 ORIG ID:4270465600 DESC DATE:       CO ENTRY DESCR:TRANSFER  SEC:CCD    TRACE#:111000024325005 EED:251219   IND ID:ST-F0S6F5V1I3T8              IND NAME:INDO AMERICAN GOLF ASS TRN: 3534325005TC","type":"ACH_CREDIT","amount":533.44,"balance":29485.68},{"date":"2025-12-18","desc":"ORIG CO NAME:PAYPAL                 ORIG ID:PAYPALRD33 DESC DATE:251218 CO ENTRY DESCR:ACCTVERIFYSEC:PPD    TRACE#:021000020274729 EED:251218   IND ID:                             IND NAME:INDO-AMERICAN GOLF ASS TRN: 3520274729TC","type":"ACH_DEBIT","amount":-0.31,"balance":28952.24},{"date":"2025-12-18","desc":"Online Transfer to CHK ...3908 transaction#: 27381612874 12/18","type":"ACCT_XFER","amount":-1875.0,"balance":28952.55},{"date":"2025-12-18","desc":"Online Transfer to CHK ...3908 transaction#: 27378782107 12/18","type":"ACCT_XFER","amount":-5000.0,"balance":30827.55},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378965648","type":"ACCT_XFER","amount":266.72,"balance":35827.55},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378809651","type":"ACCT_XFER","amount":266.72,"balance":35560.83},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378988464","type":"ACCT_XFER","amount":324.98,"balance":35294.11},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378935398","type":"ACCT_XFER","amount":533.44,"balance":34969.13},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378827069","type":"ACCT_XFER","amount":533.44,"balance":34435.69},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378832206","type":"ACCT_XFER","amount":1333.6,"balance":33902.25},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378661819","type":"ACCT_XFER","amount":5000.0,"balance":32568.65},{"date":"2025-12-18","desc":"Online Transfer from CHK ...3908 transaction#: 27378824254","type":"ACCT_XFER","amount":27568.65,"balance":27568.65}]/*RAW_BANK_END*/;
+let DATA_SOURCE = 'Original baked-in export';
+let DATA_UPDATED_AT = null;
+let UPDATE_LOG = [];
+
+/* ---------- tiny CSV parser (RFC4180-ish: quoted fields, embedded commas, "" escapes) ---------- */
+function parseCSV(text){
+  const rows = [];
+  let row = [], field = '', inQuotes = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i], next = text[i+1];
+    if (inQuotes){
+      if (c === '"' && next === '"'){ field += '"'; i++; }
+      else if (c === '"'){ inQuotes = false; }
+      else { field += c; }
+    } else {
+      if (c === '"'){ inQuotes = true; }
+      else if (c === ','){ row.push(field); field = ''; }
+      else if (c === '\r'){ /* skip */ }
+      else if (c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else { field += c; }
+    }
+  }
+  if (field.length || row.length){ row.push(field); rows.push(row); }
+  return rows.filter(r => !(r.length === 1 && r[0].trim() === ''));
+}
+function rowsToObjects(rows){
+  if (!rows.length) return [];
+  const headers = rows[0].map(h => h.trim());
+  return rows.slice(1).map(r => {
+    const o = {};
+    headers.forEach((h,i) => { o[h] = r[i] !== undefined ? r[i].trim() : ''; });
+    return o;
+  });
+}
+function mdyToIso(s){
+  const m = (s||'').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  return m[3] + '-' + m[1].padStart(2,'0') + '-' + m[2].padStart(2,'0');
+}
+function parseCardCSV(text){
+  const objs = rowsToObjects(parseCSV(text));
+  return objs.map(o => ({
+    date: mdyToIso(o['Transaction Date']),
+    postDate: mdyToIso(o['Post Date']) || mdyToIso(o['Transaction Date']),
+    desc: (o['Description']||'').trim(),
+    category: (o['Category']||'').trim(),
+    type: (o['Type']||'').trim(),
+    amount: parseFloat(o['Amount'])
+  })).filter(r => r.date && !isNaN(r.amount) && r.type);
+}
+function parseBankCSV(text){
+  const objs = rowsToObjects(parseCSV(text));
+  return objs.map(o => {
+    const balRaw = (o['Balance']||'').trim();
+    const bal = balRaw === '' ? null : parseFloat(balRaw);
+    return {
+      date: mdyToIso(o['Posting Date']),
+      desc: (o['Description']||'').trim(),
+      type: (o['Type']||'').trim(),
+      amount: parseFloat(o['Amount']),
+      balance: (bal === null || isNaN(bal)) ? null : bal
+    };
+  }).filter(r => r.date && !isNaN(r.amount) && r.type);
+}
+
+/* ---------- merge: a newly-uploaded file replaces existing rows on/after its own earliest date ---------- */
+function mergeRows(existing, incoming){
+  if (!incoming.length) return existing;
+  const minDate = incoming.reduce((m,r) => r.date < m ? r.date : m, incoming[0].date);
+  const kept = existing.filter(r => r.date < minDate);
+  return kept.concat(incoming);
+}
+
+/* ---------- recompute the whole dashboard dataset from raw rows ---------- */
+function round2(n){ return Math.round((n + Number.EPSILON) * 100) / 100; }
+function monthKey(iso){ return iso.slice(0,7); }
+function monthLabel(mk){
+  return new Date(mk+'-01T00:00:00Z').toLocaleDateString('en-US', {month:'short', year:'numeric', timeZone:'UTC'});
+}
+function fmtDateLong(iso){
+  return new Date(iso+'T00:00:00Z').toLocaleDateString('en-US', {month:'short', day:'2-digit', year:'numeric', timeZone:'UTC'});
+}
+function monthRange(minKey, maxKey){
+  const out = [];
+  let [y,m] = minKey.split('-').map(Number);
+  const [ey,em] = maxKey.split('-').map(Number);
+  while (y < ey || (y === ey && m <= em)){
+    out.push(y + '-' + String(m).padStart(2,'0'));
+    m++; if (m > 12){ m = 1; y++; }
+  }
+  return out;
+}
+function recategorizeCard(row){
+  if (row.category === 'Entertainment') return 'Golf';
+  const u = (row.desc||'').toUpperCase();
+  if (u.includes('SILVERADO')) return 'Golf';
+  if (u.includes('POPPY RIDGE')) return 'Golf';
+  return row.category || (row.type === 'Payment' ? 'Payment' : '');
+}
+function cleanBankDesc(desc){
+  if (desc.includes('Payment to Chase card')) return desc.trim();
+  if (desc.startsWith('Zelle payment to')){
+    const m = desc.match(/Zelle payment to ([A-Za-z ]+?)\s+JPM/);
+    return 'Zelle payment to ' + (m ? m[1].trim() : 'recipient');
+  }
+  if (desc.includes('Online Transfer to CHK')) return 'Online transfer to linked checking (…3908)';
+  if (desc.includes('Online Transfer from CHK')) return 'Online transfer from linked checking (…3908)';
+  if (desc.includes('ORIG CO NAME:STRIPE')) return 'Stripe registration deposit';
+  if (desc.includes('ORIG CO NAME:PAYPAL')) return desc.includes('ADD TO BALANCE') ? 'PayPal transfer — add to balance' : 'PayPal transfer';
+  if (desc.includes('ORIG CO NAME:INTUIT')) return 'Intuit / QuickBooks Online fee';
+  if (desc.includes('ORIG CO NAME:GOOGLE')) return 'Google Workspace charge';
+  if (desc.includes('ORIG CO NAME:MEMBERPLANET')) return 'MemberPlanet dues-platform fee';
+  return desc.slice(0,70).trim();
+}
+function vendorBucket(desc){
+  if (desc.includes('PAYPAL')) return 'PayPal transfers';
+  if (desc.includes('INTUIT')) return 'Intuit / QuickBooks fees';
+  if (desc.includes('GOOGLE')) return 'Google Workspace';
+  if (desc.includes('MEMBERPLANET')) return 'MemberPlanet (dues platform)';
+  if (desc.includes('STRIPE')) return 'Stripe adjustments';
+  return 'Other';
+}
+function zelleRecipient(desc){
+  const m = desc.match(/Zelle payment to ([A-Za-z ]+?)\s+JPM/);
+  return m ? m[1].trim() : 'Other recipient';
+}
+function sumBy(rows, keyFn, valFn){
+  const m = {};
+  rows.forEach(r => { const k = keyFn(r); m[k] = (m[k]||0) + valFn(r); });
+  return m;
+}
+function toSortedList(map, keyName){
+  return Object.entries(map).map(([k,v]) => ({[keyName]:k, amount: round2(v)})).sort((a,b)=>b.amount-a.amount);
+}
+
+function recompute(cardRows, bankRows){
+  // ---------- CARD ----------
+  const sales = cardRows.filter(r => r.type === 'Sale').map(r => ({...r, spend: -r.amount, cat: recategorizeCard(r)}));
+  const categoryTotals = toSortedList(sumBy(sales, r=>r.cat, r=>r.spend), 'category');
+  const merchantTotals = toSortedList(sumBy(sales, r=>r.desc, r=>r.spend), 'merchant');
+
+  const cardDatesSorted = cardRows.map(r=>r.date).sort();
+  const cardMonths = cardDatesSorted.length ? monthRange(monthKey(cardDatesSorted[0]), monthKey(cardDatesSorted[cardDatesSorted.length-1])) : [];
+  const spendByMonth = sumBy(sales, r=>monthKey(r.date), r=>r.spend);
+  const monthlySpend = cardMonths.map(mk => ({month: monthLabel(mk), amount: round2(spendByMonth[mk]||0)}));
+
+  const card = {
+    dateRange: cardDatesSorted.length ? [fmtDateLong(cardDatesSorted[0]), fmtDateLong(cardDatesSorted[cardDatesSorted.length-1])] : ['—','—'],
+    totalSpend: round2(sales.reduce((s,r)=>s+r.spend,0)),
+    totalPayments: round2(cardRows.filter(r=>r.type==='Payment').reduce((s,r)=>s+r.amount,0)),
+    totalReturns: round2(cardRows.filter(r=>r.type==='Return').reduce((s,r)=>s+r.amount,0)),
+    txnCount: sales.length,
+    categoryTotals, merchantTotals, monthlySpend,
+    transactions: [...cardRows].sort((a,b)=> b.date.localeCompare(a.date)).map(r => ({
+      date: r.date, desc: r.desc,
+      category: r.category ? recategorizeCard(r) : (r.type==='Payment' ? 'Payment' : ''),
+      type: r.type, amount: round2(r.amount)
+    }))
+  };
+
+  // ---------- BANK ----------
+  const credits = bankRows.filter(r=>r.type==='ACH_CREDIT');
+  const loan = bankRows.filter(r=>r.type==='LOAN_PMT');
+  const otherTypes = ['ACH_DEBIT','CHASE_TO_PARTNERFI','ACCT_XFER'];
+  const otherDebits = bankRows.filter(r=>otherTypes.includes(r.type));
+  const debitRows = bankRows.filter(r=>r.type==='ACH_DEBIT');
+  const zelleRows = bankRows.filter(r=>r.type==='CHASE_TO_PARTNERFI');
+  const xferRows = bankRows.filter(r=>r.type==='ACCT_XFER');
+
+  const bankDatesSorted = bankRows.map(r=>r.date).sort();
+  const bankMonths = bankDatesSorted.length ? monthRange(monthKey(bankDatesSorted[0]), monthKey(bankDatesSorted[bankDatesSorted.length-1])) : [];
+  function monthlySumAbs(rows, abs){
+    const m = sumBy(rows, r=>monthKey(r.date), r=> abs ? Math.abs(r.amount) : r.amount);
+    return bankMonths.map(mk => ({month: monthLabel(mk), amount: round2(m[mk]||0)}));
+  }
+
+  const vendorTotals = toSortedList(sumBy(debitRows, r=>vendorBucket(r.desc), r=>Math.abs(r.amount)), 'vendor');
+  const zelleTotals = toSortedList(sumBy(zelleRows, r=>zelleRecipient(r.desc), r=>Math.abs(r.amount)), 'recipient');
+
+  const balByDate = {};
+  const balOrder = [];
+  bankRows.forEach(r => { if (r.balance !== null && !isNaN(r.balance) && !(r.date in balByDate)){ balByDate[r.date] = r.balance; balOrder.push(r.date); } });
+  const balanceSeries = Object.keys(balByDate).sort().map(d => ({date:d, balance: round2(balByDate[d])}));
+
+  const bank = {
+    dateRange: bankDatesSorted.length ? [fmtDateLong(bankDatesSorted[0]), fmtDateLong(bankDatesSorted[bankDatesSorted.length-1])] : ['—','—'],
+    totalRevenue: round2(credits.reduce((s,r)=>s+r.amount,0)),
+    totalCardPayments: round2(loan.reduce((s,r)=>s+r.amount,0)),
+    totalOtherExpenses: round2(otherDebits.reduce((s,r)=>s+r.amount,0)),
+    startBalance: balanceSeries.length ? balanceSeries[0].balance : 0,
+    endBalance: balanceSeries.length ? balanceSeries[balanceSeries.length-1].balance : 0,
+    monthlyRevenue: monthlySumAbs(credits,false),
+    monthlyCardPmt: monthlySumAbs(loan,false),
+    monthlyOther: monthlySumAbs(otherDebits,false),
+    vendorTotals, zelleTotals, balanceSeries,
+    transactions: [...bankRows].sort((a,b)=> b.date.localeCompare(a.date)).map(r => ({
+      date: r.date, desc: cleanBankDesc(r.desc), type: r.type, amount: round2(r.amount)
+    }))
+  };
+
+  // ---------- category drill-down ----------
+  const categories = [];
+  const catGroups = {};
+  sales.forEach(r => { (catGroups[r.cat] = catGroups[r.cat]||[]).push(r); });
+  Object.entries(catGroups).forEach(([cat, rows]) => {
+    const byMonth = sumBy(rows, r=>monthKey(r.date), r=>r.spend);
+    categories.push({
+      id: 'card:'+cat, label: cat, group: 'Card spend (…6943)',
+      total: round2(rows.reduce((s,r)=>s+r.spend,0)), count: rows.length,
+      merchants: toSortedList(sumBy(rows, r=>r.desc, r=>r.spend), 'name'),
+      monthly: cardMonths.map(mk => ({month: monthLabel(mk), amount: round2(byMonth[mk]||0)})),
+      transactions: [...rows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc, amount: round2(-r.spend)}))
+    });
+  });
+  const vgroups = {};
+  debitRows.forEach(r => { const v = vendorBucket(r.desc); (vgroups[v]=vgroups[v]||[]).push(r); });
+  Object.entries(vgroups).forEach(([vend, rows]) => {
+    categories.push({
+      id: 'bank:'+vend, label: vend, group: 'Bank outflows (…8097)',
+      total: round2(rows.reduce((s,r)=>s+Math.abs(r.amount),0)), count: rows.length,
+      merchants: [{name: vend, amount: round2(rows.reduce((s,r)=>s+Math.abs(r.amount),0))}],
+      monthly: monthlySumAbs(rows, true),
+      transactions: [...rows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc.slice(0,70), amount: round2(r.amount)}))
+    });
+  });
+  {
+    const total = round2(loan.reduce((s,r)=>s+Math.abs(r.amount),0));
+    categories.push({
+      id: 'bank:Card payments', label: 'Card payments (to …6943)', group: 'Bank outflows (…8097)',
+      total, count: loan.length,
+      merchants: [{name:'Payment to Chase card …6943', amount: total}],
+      monthly: monthlySumAbs(loan, true),
+      transactions: [...loan].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc, amount: round2(r.amount)}))
+    });
+  }
+  {
+    const total = round2(zelleRows.reduce((s,r)=>s+Math.abs(r.amount),0));
+    categories.push({
+      id: 'bank:Zelle payouts', label: 'Zelle payouts', group: 'Bank outflows (…8097)',
+      total, count: zelleRows.length,
+      merchants: toSortedList(sumBy(zelleRows, r=>zelleRecipient(r.desc), r=>Math.abs(r.amount)), 'name'),
+      monthly: monthlySumAbs(zelleRows, true),
+      transactions: [...zelleRows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc, amount: round2(r.amount)}))
+    });
+  }
+  {
+    const total = round2(xferRows.reduce((s,r)=>s+Math.abs(r.amount),0));
+    categories.push({
+      id: 'bank:Internal transfers', label: 'Internal transfers (…3908)', group: 'Bank outflows (…8097)',
+      total, count: xferRows.length,
+      merchants: [{name:'Transfer to/from linked checking …3908', amount: total}],
+      monthly: monthlySumAbs(xferRows, true),
+      transactions: [...xferRows].sort((a,b)=>b.date.localeCompare(a.date)).map(r=>({date:r.date, desc:r.desc.slice(0,70), amount: round2(r.amount)}))
+    });
+  }
+  categories.sort((a,b)=>b.total-a.total);
+
+  return {card, bank, categories, meta:{org:'Indo American Golf Association (IAGA)'}};
+}
+
+/* ---------- persistence (this browser only) ---------- */
+const LS_KEY = 'iaga_ledger_v1';
+function persistRaw(){
+  try{
+    localStorage.setItem(LS_KEY, JSON.stringify({
+      card: RAW_CARD, bank: RAW_BANK, updatedAt: DATA_UPDATED_AT, log: UPDATE_LOG
+    }));
+  }catch(e){ /* storage unavailable — continue without persistence */ }
+}
+function loadPersisted(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.card) || !Array.isArray(parsed.bank)) return false;
+    RAW_CARD = parsed.card; RAW_BANK = parsed.bank;
+    DATA_UPDATED_AT = parsed.updatedAt || null;
+    UPDATE_LOG = Array.isArray(parsed.log) ? parsed.log : [];
+    if (UPDATE_LOG.length) DATA_SOURCE = 'Updated in this browser';
+    return true;
+  }catch(e){ return false; }
+}
+
+const BASELINE_CARD = JSON.parse(JSON.stringify(RAW_CARD));
+const BASELINE_BANK = JSON.parse(JSON.stringify(RAW_BANK));
+let DATA = null;
+loadPersisted();
+DATA = recompute(RAW_CARD, RAW_BANK);
+
+const fmtUSD = (n, opts={}) => {
+  const abs = Math.abs(n);
+  const sign = n < 0 ? '-' : (opts.plus && n>0 ? '+' : '');
+  return sign + '$' + abs.toLocaleString('en-US', {minimumFractionDigits: opts.cents?2:0, maximumFractionDigits: opts.cents?2:0});
+};
+const fmtCompact = (n) => {
+  const sign = n<0 ? '-' : '';
+  const a = Math.abs(n);
+  if (a >= 1000) return sign + '$' + (a/1000).toFixed(1).replace(/\.0$/,'') + 'K';
+  return sign + '$' + a.toFixed(0);
+};
+
+const tooltip = document.getElementById('tooltip');
+function showTip(x, y, html){
+  tooltip.innerHTML = '';
+  tooltip.appendChild(html);
+  tooltip.style.opacity = '1';
+  const pad = 14;
+  let left = x + pad, top = y + pad;
+  tooltip.style.left = left + 'px';
+  tooltip.style.top = top + 'px';
+  requestAnimationFrame(()=>{
+    const r = tooltip.getBoundingClientRect();
+    if (r.right > window.innerWidth - 8) tooltip.style.left = (x - r.width - pad) + 'px';
+    if (r.bottom > window.innerHeight - 8) tooltip.style.top = (y - r.height - pad) + 'px';
+  });
+}
+function hideTip(){ tooltip.style.opacity = '0'; }
+
+function ttRow(color, label, value, isLine){
+  const row = document.createElement('div');
+  row.className = 'tt-row';
+  const key = document.createElement('span');
+  key.className = isLine ? 'tt-key' : 'tt-key';
+  key.style.background = color;
+  key.style.borderRadius = isLine ? '2px' : '2px';
+  row.appendChild(key);
+  const lab = document.createElement('span');
+  lab.textContent = label;
+  row.appendChild(lab);
+  const val = document.createElement('span');
+  val.className = 'tt-val';
+  val.textContent = value;
+  row.appendChild(val);
+  return row;
+}
+function ttTitle(text){
+  const t = document.createElement('div');
+  t.className = 'tt-title';
+  t.textContent = text;
+  return t;
+}
+function ttBox(titleText, rows){
+  const box = document.createDocumentFragment();
+  const wrap = document.createElement('div');
+  wrap.appendChild(ttTitle(titleText));
+  rows.forEach(r => wrap.appendChild(r));
+  box.appendChild(wrap);
+  return box;
+}
+
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs){
+  const el = document.createElementNS(NS, tag);
+  for (const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+function cssVar(name){
+  return getComputedStyle(document.body).getPropertyValue(name).trim();
+}
+
+/* ---------- horizontal bar chart (sequential, single hue) ---------- */
+function horizontalBarChart(containerId, items, opts={}){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const color = opts.color || cssVar('--blue');
+  const max = Math.max(...items.map(d => Math.abs(d.value)), 1);
+  items.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'hbar-row';
+    const name = document.createElement('div');
+    name.className = 'hbar-name';
+    name.textContent = d.label;
+    row.appendChild(name);
+    const track = document.createElement('div');
+    track.className = 'hbar-track';
+    const fill = document.createElement('div');
+    fill.className = 'hbar-fill';
+    const pct = (Math.abs(d.value) / max) * 100;
+    fill.style.width = 'max(3px,' + pct + '%)';
+    fill.style.background = color;
+    track.appendChild(fill);
+    const val = document.createElement('div');
+    val.className = 'hbar-val';
+    val.style.left = 'calc(' + pct + '% + 8px)';
+    val.textContent = fmtUSD(d.value);
+    val.style.color = pct > 82 ? '#fff' : 'var(--text-primary)';
+    if (pct > 82){ val.style.left = 'calc(' + pct + '% - 4px)'; val.style.transform = 'translateX(-100%)'; }
+    track.appendChild(val);
+    row.appendChild(track);
+    row.addEventListener('pointermove', (e) => {
+      showTip(e.clientX, e.clientY, ttBox(d.label, [ttRow(color, opts.seriesName || 'Amount', fmtUSD(d.value))]));
+    });
+    row.addEventListener('pointerleave', hideTip);
+    container.appendChild(row);
+  });
+}
+
+/* ---------- vertical column chart (single series, trend over time) ---------- */
+function columnChart(containerId, points, opts={}){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const color = opts.color || cssVar('--blue');
+  const W = container.clientWidth || 560, H = opts.height || 220;
+  const padL = 46, padR = 12, padT = 16, padB = 28;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const max = Math.max(...points.map(p => p.value), 1) * 1.15;
+  const svg = svgEl('svg', {viewBox: `0 0 ${W} ${H}`, width:'100%', height:H, style:'display:block;overflow:visible'});
+
+  const steps = 4;
+  for (let i=0;i<=steps;i++){
+    const y = padT + plotH - (i/steps)*plotH;
+    svg.appendChild(svgEl('line', {x1:padL, x2:W-padR, y1:y, y2:y, class:'grid-line'}));
+    const t = svgEl('text', {x: padL-8, y: y+3, class:'axis-label', 'text-anchor':'end'});
+    t.textContent = fmtCompact(max*(i/steps));
+    svg.appendChild(t);
+  }
+  svg.appendChild(svgEl('line', {x1:padL, x2:W-padR, y1:padT+plotH, y2:padT+plotH, class:'base-line'}));
+
+  const n = points.length;
+  const bw = Math.min(28, plotW/n * 0.55);
+  const labelEvery = Math.max(1, Math.ceil(n / Math.max(3, Math.floor(plotW / 30))));
+  points.forEach((p, i) => {
+    const cx = padL + (plotW/n)*(i+0.5);
+    const h = (p.value/max) * plotH;
+    const y = padT + plotH - h;
+    const rect = svgEl('rect', {x: cx-bw/2, y: y, width:bw, height:Math.max(h,1), rx:4, ry:4, fill:color, style:'cursor:pointer'});
+    rect.addEventListener('pointermove', (e) => {
+      showTip(e.clientX, e.clientY, ttBox(p.label, [ttRow(color, opts.seriesName||'Spend', fmtUSD(p.value))]));
+      rect.style.filter='brightness(1.08)';
+    });
+    rect.addEventListener('pointerleave', ()=>{hideTip(); rect.style.filter='';});
+    svg.appendChild(rect);
+    if (i % labelEvery === 0 || i === n-1){
+      const lbl = svgEl('text', {x:cx, y: H-8, class:'axis-label', 'text-anchor':'middle'});
+      lbl.textContent = p.label.split(' ')[0];
+      svg.appendChild(lbl);
+    }
+  });
+  container.appendChild(svg);
+}
+
+/* ---------- diverging stacked bar (monthly cash flow: 3 series) ---------- */
+function cashflowChart(containerId, months, rev, cardpmt, other, opts={}){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const W = container.clientWidth || 700, H = opts.height || 260;
+  const padL = 54, padR = 12, padT = 14, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const blue = cssVar('--blue'), orange = cssVar('--orange'), aqua = cssVar('--aqua');
+
+  const maxPos = Math.max(...rev.map(v=>v), 1);
+  const maxNeg = Math.max(...cardpmt.map((v,i)=>Math.abs(v)+Math.abs(other[i])), 1);
+  const maxAbs = Math.max(maxPos, maxNeg) * 1.15;
+  const zeroY = padT + plotH * (maxAbs/(maxAbs*2));
+
+  const svg = svgEl('svg', {viewBox:`0 0 ${W} ${H}`, width:'100%', height:H, style:'display:block;overflow:visible'});
+  const scale = (plotH/2) / maxAbs;
+
+  [1,0.5,0,-0.5,-1].forEach(f => {
+    const y = zeroY - f*maxAbs*scale;
+    svg.appendChild(svgEl('line', {x1:padL, x2:W-padR, y1:y, y2:y, class: f===0 ? 'base-line':'grid-line'}));
+    const t = svgEl('text', {x:padL-8, y:y+3, class:'axis-label', 'text-anchor':'end'});
+    t.textContent = fmtCompact(f*maxAbs);
+    svg.appendChild(t);
+  });
+
+  const n = months.length;
+  const bw = Math.min(26, plotW/n*0.5);
+  const labelEvery = Math.max(1, Math.ceil(n / Math.max(3, Math.floor(plotW / 46))));
+  months.forEach((m, i) => {
+    const cx = padL + (plotW/n)*(i+0.5);
+    const rBar = svgEl('rect', {x:cx-bw/2, y: zeroY-rev[i]*scale, width:bw, height:Math.max(rev[i]*scale,0.6), rx:3, ry:3, fill:blue, style:'cursor:pointer'});
+    svg.appendChild(rBar);
+    const cpAbs = Math.abs(cardpmt[i]);
+    const otAbs = Math.abs(other[i]);
+    const rCard = svgEl('rect', {x:cx-bw/2, y: zeroY, width:bw, height: Math.max(cpAbs*scale,0.6), fill:orange, style:'cursor:pointer'});
+    svg.appendChild(rCard);
+    const rOther = svgEl('rect', {x:cx-bw/2, y: zeroY+cpAbs*scale+(cpAbs>0&&otAbs>0?2:0), width:bw, height: Math.max(otAbs*scale,0.6), rx:3, ry:3, fill:aqua, style:'cursor:pointer'});
+    svg.appendChild(rOther);
+
+    const hit = svgEl('rect', {x:cx-bw/2-4, y:padT, width:bw+8, height:plotH, fill:'transparent', style:'cursor:pointer'});
+    hit.addEventListener('pointermove', (e) => {
+      showTip(e.clientX, e.clientY, ttBox(m, [
+        ttRow(blue, 'Revenue', fmtUSD(rev[i])),
+        ttRow(orange, 'Card payments', fmtUSD(-cpAbs)),
+        ttRow(aqua, 'Other outflows', fmtUSD(-otAbs)),
+        ttRow('transparent', 'Net', fmtUSD(rev[i]-cpAbs-otAbs)),
+      ]));
+    });
+    hit.addEventListener('pointerleave', hideTip);
+    svg.appendChild(hit);
+
+    if (i % labelEvery === 0 || i === n-1){
+      const lbl = svgEl('text', {x:cx, y:H-8, class:'axis-label', 'text-anchor':'middle'});
+      lbl.textContent = m.split(' ')[0] + (m.endsWith('25')?" '25":'');
+      svg.appendChild(lbl);
+    }
+  });
+  container.appendChild(svg);
+}
+
+/* ---------- line chart w/ crosshair (balance over time) ---------- */
+function lineChart(containerId, points, opts={}){
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  const color = opts.color || cssVar('--blue');
+  const W = container.clientWidth || 900, H = opts.height || 240;
+  const padL = 58, padR = 16, padT = 16, padB = 26;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const vals = points.map(p=>p.value);
+  const min = Math.min(...vals, 0), max = Math.max(...vals) * 1.08;
+  const n = points.length;
+  const x = i => padL + (plotW/(n-1))*i;
+  const y = v => padT + plotH - ((v-min)/(max-min))*plotH;
+
+  const svg = svgEl('svg', {viewBox:`0 0 ${W} ${H}`, width:'100%', height:H, style:'display:block;overflow:visible'});
+  const steps = 4;
+  for (let i=0;i<=steps;i++){
+    const vy = padT + plotH - (i/steps)*plotH;
+    svg.appendChild(svgEl('line', {x1:padL, x2:W-padR, y1:vy, y2:vy, class:'grid-line'}));
+    const t = svgEl('text', {x:padL-8, y:vy+3, class:'axis-label', 'text-anchor':'end'});
+    t.textContent = fmtCompact(min + (max-min)*(i/steps));
+    svg.appendChild(t);
+  }
+
+  let d = '';
+  points.forEach((p,i) => { d += (i===0?'M':'L') + x(i) + ' ' + y(p.value) + ' '; });
+  const areaD = d + `L ${x(n-1)} ${padT+plotH} L ${x(0)} ${padT+plotH} Z`;
+  svg.appendChild(svgEl('path', {d:areaD, fill:color, opacity:'0.1'}));
+  svg.appendChild(svgEl('path', {d, fill:'none', stroke:color, 'stroke-width':2, 'stroke-linejoin':'round', 'stroke-linecap':'round'}));
+
+  const endDot = svgEl('circle', {cx:x(n-1), cy:y(points[n-1].value), r:4, fill:color, stroke:cssVar('--surface'), 'stroke-width':2});
+  svg.appendChild(endDot);
+  const endLbl = svgEl('text', {x:x(n-1)-6, y:y(points[n-1].value)-10, class:'bar-label', 'text-anchor':'end'});
+  endLbl.textContent = fmtUSD(points[n-1].value);
+  svg.appendChild(endLbl);
+
+  // month tick labels (sparse) - space ticks by available pixel width, not just count
+  const maxTicks = Math.max(3, Math.floor(plotW / 60));
+  const tickEvery = Math.ceil(n/maxTicks);
+  points.forEach((p,i) => {
+    if (i % tickEvery === 0 || i===n-1){
+      const t = svgEl('text', {x:x(i), y:H-8, class:'axis-label', 'text-anchor':'middle'});
+      t.textContent = p.date.slice(5);
+      svg.appendChild(t);
+    }
+  });
+
+  const crosshair = svgEl('line', {x1:0,x2:0,y1:padT,y2:padT+plotH, stroke:cssVar('--text-muted'), 'stroke-width':1, opacity:0});
+  svg.appendChild(crosshair);
+  const crossDot = svgEl('circle', {r:4, fill:color, stroke:cssVar('--surface'),'stroke-width':2, opacity:0});
+  svg.appendChild(crossDot);
+
+  const overlay = svgEl('rect', {x:padL, y:padT, width:plotW, height:plotH, fill:'transparent'});
+  overlay.addEventListener('pointermove', (e) => {
+    const rect = svg.getBoundingClientRect();
+    const px = (e.clientX - rect.left) * (W/rect.width);
+    let i = Math.round((px - padL) / (plotW/(n-1)));
+    i = Math.max(0, Math.min(n-1, i));
+    const p = points[i];
+    crosshair.setAttribute('x1', x(i)); crosshair.setAttribute('x2', x(i)); crosshair.setAttribute('opacity', 1);
+    crossDot.setAttribute('cx', x(i)); crossDot.setAttribute('cy', y(p.value)); crossDot.setAttribute('opacity', 1);
+    showTip(e.clientX, e.clientY, ttBox(p.date, [ttRow(color, 'Balance', fmtUSD(p.value))]));
+  });
+  overlay.addEventListener('pointerleave', () => { crosshair.setAttribute('opacity',0); crossDot.setAttribute('opacity',0); hideTip(); });
+  svg.appendChild(overlay);
+
+  container.appendChild(svg);
+}
+
+/* ---------- render everything ---------- */
+function renderOverview(){
+  document.getElementById('kpi-revenue').textContent = fmtUSD(DATA.bank.totalRevenue);
+  document.getElementById('kpi-cardspend').textContent = fmtUSD(DATA.card.totalSpend);
+  document.getElementById('kpi-endbal').textContent = fmtUSD(DATA.bank.endBalance);
+  document.getElementById('kpi-endbal-date').textContent = 'as of ' + DATA.bank.dateRange[1];
+  const net = DATA.bank.endBalance - DATA.bank.startBalance;
+  document.getElementById('kpi-netchange').textContent = fmtUSD(net, {plus:true});
+  document.getElementById('kpi-netchange-sub').textContent = fmtUSD(DATA.bank.startBalance) + ' → ' + fmtUSD(DATA.bank.endBalance);
+
+  lineChart('chart-balance', DATA.bank.balanceSeries.map(d=>({date:d.date, value:d.balance})));
+
+  const months = DATA.bank.monthlyRevenue.map(d=>d.month);
+  const rev = DATA.bank.monthlyRevenue.map(d=>d.amount);
+  const cardpmt = DATA.bank.monthlyCardPmt.map(d=>d.amount);
+  const other = DATA.bank.monthlyOther.map(d=>d.amount);
+  cashflowChart('chart-cashflow', months, rev, cardpmt, other);
+}
+
+function renderCard(){
+  const c = DATA.card;
+  document.getElementById('c-kpi-total').textContent = fmtUSD(c.totalSpend);
+  document.getElementById('c-kpi-range').textContent = c.dateRange[0] + ' – ' + c.dateRange[1];
+  document.getElementById('c-kpi-avg').textContent = fmtUSD(c.totalSpend/8);
+  document.getElementById('c-kpi-topcat').textContent = c.categoryTotals[0].category;
+  document.getElementById('c-kpi-topcat-amt').textContent = fmtUSD(c.categoryTotals[0].amount);
+  document.getElementById('c-kpi-topmerch').textContent = c.merchantTotals[0].merchant;
+  document.getElementById('c-kpi-topmerch-amt').textContent = fmtUSD(c.merchantTotals[0].amount);
+
+  const startMon = c.dateRange[0].split(' ')[0], endMon = c.dateRange[1].split(' ')[0];
+  document.getElementById('c-cat-sub').textContent = c.categoryTotals.length + ' categories, ' + startMon + '–' + endMon + ' ' + c.dateRange[1].split(', ')[1];
+  columnChart('chart-card-monthly', c.monthlySpend.map(d=>({label:d.month, value:d.amount})), {color:cssVar('--orange'), seriesName:'Spend'});
+  horizontalBarChart('chart-card-category', c.categoryTotals.map(d=>({label:d.category, value:d.amount})), {color:cssVar('--orange'), seriesName:'Spend'});
+  horizontalBarChart('chart-card-merchant', c.merchantTotals.map(d=>({label:d.merchant, value:d.amount})), {color:cssVar('--orange'), seriesName:'Charged'});
+}
+
+function renderBank(){
+  const b = DATA.bank;
+  document.getElementById('b-kpi-rev').textContent = fmtUSD(b.totalRevenue);
+  document.getElementById('b-kpi-cardpmt').textContent = fmtUSD(Math.abs(b.totalCardPayments));
+  document.getElementById('b-kpi-other').textContent = fmtUSD(Math.abs(b.totalOtherExpenses));
+  document.getElementById('b-kpi-bal').textContent = fmtUSD(b.startBalance) + ' → ' + fmtUSD(b.endBalance);
+  document.getElementById('b-kpi-bal-dates').textContent = b.dateRange[0] + ' – ' + b.dateRange[1];
+
+  horizontalBarChart('chart-bank-vendor', b.vendorTotals.map(d=>({label:d.vendor, value:-Math.abs(d.amount)})), {color:cssVar('--aqua'), seriesName:'Paid out'});
+  horizontalBarChart('chart-bank-zelle', b.zelleTotals.map(d=>({label:d.recipient, value:-Math.abs(d.amount)})), {color:cssVar('--aqua'), seriesName:'Sent'});
+}
+
+/* ---------- category drill-down ---------- */
+function initDrilldown(){
+  const sel = document.getElementById('dd-select');
+  const prev = sel.value;
+  sel.innerHTML = '';
+  const groups = {};
+  DATA.categories.forEach(c => { (groups[c.group] = groups[c.group]||[]).push(c); });
+  Object.keys(groups).forEach(g => {
+    const og = document.createElement('optgroup');
+    og.label = g;
+    groups[g].forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c.id;
+      opt.textContent = c.label + '  ·  ' + fmtUSD(c.total);
+      og.appendChild(opt);
+    });
+    sel.appendChild(og);
+  });
+  const stillExists = DATA.categories.some(c => c.id === prev);
+  sel.value = stillExists ? prev : DATA.categories[0].id;
+}
+
+function renderDrilldown(){
+  const id = document.getElementById('dd-select').value;
+  const cat = DATA.categories.find(c => c.id === id);
+  if (!cat) return;
+  const isCard = cat.group.startsWith('Card');
+  const color = isCard ? cssVar('--orange') : cssVar('--aqua');
+
+  const groupTotal = DATA.categories.filter(c => c.group === cat.group).reduce((s,c)=>s+c.total, 0);
+  const share = groupTotal ? (cat.total/groupTotal*100) : 0;
+  document.getElementById('dd-share').textContent = share.toFixed(0) + '% of ' + cat.group.replace(/\s*\(.*\)/,'').toLowerCase();
+
+  const totalEl = document.getElementById('dd-kpi-total');
+  totalEl.textContent = fmtUSD(cat.total);
+  totalEl.style.color = color;
+  document.getElementById('dd-kpi-group').textContent = cat.group;
+  document.getElementById('dd-kpi-count').textContent = cat.count;
+  document.getElementById('dd-kpi-avg').textContent = fmtUSD(cat.count ? cat.total/cat.count : 0);
+  const topMerch = cat.merchants[0] || {name:'—', amount:0};
+  document.getElementById('dd-kpi-top').textContent = topMerch.name;
+  document.getElementById('dd-kpi-top-amt').textContent = fmtUSD(topMerch.amount);
+
+  document.getElementById('dd-trend-title').textContent = cat.label + ' — monthly trend';
+  document.getElementById('dd-trend-sub').textContent = cat.monthly[0].month + ' – ' + cat.monthly[cat.monthly.length-1].month;
+  columnChart('chart-dd-trend', cat.monthly.map(d=>({label:d.month, value:d.amount})), {color, seriesName:'Spend'});
+
+  document.getElementById('dd-merchant-sub').textContent = cat.merchants.length + (cat.merchants.length===1?' vendor':' merchants / vendors') + ' in ' + cat.label;
+  horizontalBarChart('chart-dd-merchant', cat.merchants.map(d=>({label:d.name, value:d.amount})), {color, seriesName:'Amount'});
+
+  document.getElementById('dd-txn-sub').textContent = cat.count + ' transaction' + (cat.count===1?'':'s');
+  const body = document.getElementById('dd-txn-body');
+  body.innerHTML = '';
+  cat.transactions.forEach(t => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td'); tdDate.textContent = t.date; tr.appendChild(tdDate);
+    const tdDesc = document.createElement('td'); tdDesc.textContent = t.desc; tr.appendChild(tdDesc);
+    const tdAmt = document.createElement('td'); tdAmt.className = 'amt ' + (t.amount<0?'neg':'pos');
+    tdAmt.textContent = fmtUSD(t.amount, {cents:true}); tr.appendChild(tdAmt);
+    body.appendChild(tr);
+  });
+}
+
+/* ---------- transactions table ---------- */
+let allTxns = [];
+function buildTxns(){
+  allTxns = [];
+  DATA.card.transactions.forEach(t => allTxns.push({
+    date: t.date, source:'card', desc:t.desc, cat: t.category || t.type, amount: t.amount
+  }));
+  DATA.bank.transactions.forEach(t => allTxns.push({
+    date: t.date, source:'bank', desc:t.desc, cat: t.type, amount: t.amount
+  }));
+}
+let curSrc = 'all';
+function renderTxns(){
+  const q = document.getElementById('txn-search').value.trim().toLowerCase();
+  const sort = document.getElementById('txn-sort').value;
+  let rows = allTxns.filter(t => (curSrc==='all' || t.source===curSrc));
+  if (q) rows = rows.filter(t => t.desc.toLowerCase().includes(q) || (t.cat||'').toLowerCase().includes(q));
+  rows = rows.slice().sort((a,b) => {
+    if (sort==='date-desc') return a.date < b.date ? 1 : -1;
+    if (sort==='date-asc') return a.date > b.date ? 1 : -1;
+    if (sort==='amt-desc') return b.amount - a.amount;
+    if (sort==='amt-asc') return a.amount - b.amount;
+  });
+  const body = document.getElementById('txn-body');
+  body.innerHTML = '';
+  if (rows.length === 0){
+    const tr = document.createElement('tr');
+    tr.className = 'empty-row';
+    const td = document.createElement('td');
+    td.colSpan = 5; td.textContent = 'No transactions match.';
+    tr.appendChild(td); body.appendChild(tr);
+  }
+  rows.forEach(t => {
+    const tr = document.createElement('tr');
+    const tdDate = document.createElement('td'); tdDate.textContent = t.date; tr.appendChild(tdDate);
+    const tdSrc = document.createElement('td');
+    const tag = document.createElement('span'); tag.className = 'src-tag ' + t.source;
+    tag.textContent = t.source === 'card' ? '…6943' : '…8097';
+    tdSrc.appendChild(tag); tr.appendChild(tdSrc);
+    const tdDesc = document.createElement('td'); tdDesc.textContent = t.desc; tr.appendChild(tdDesc);
+    const tdCat = document.createElement('td'); tdCat.textContent = t.cat || ''; tr.appendChild(tdCat);
+    const tdAmt = document.createElement('td'); tdAmt.className = 'amt ' + (t.amount<0?'neg':'pos');
+    tdAmt.textContent = fmtUSD(t.amount, {cents:true}); tr.appendChild(tdAmt);
+    body.appendChild(tr);
+  });
+  document.getElementById('txn-count').textContent = rows.length + ' of ' + allTxns.length + ' transactions';
+}
+
+/* ---------- tabs ---------- */
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.view===name));
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id==='view-'+name));
+  if (name==='overview') renderOverview();
+  if (name==='card') renderCard();
+  if (name==='bank') renderBank();
+  if (name==='drilldown') renderDrilldown();
+  if (name==='txns') renderTxns();
+  if (name==='update') renderUpdateStatus();
+}
+
+document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => switchTab(b.dataset.view)));
+document.getElementById('src-seg').addEventListener('click', (e) => {
+  const btn = e.target.closest('button'); if (!btn) return;
+  document.querySelectorAll('#src-seg button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); curSrc = btn.dataset.src; renderTxns();
+});
+document.getElementById('txn-search').addEventListener('input', renderTxns);
+document.getElementById('txn-sort').addEventListener('change', renderTxns);
+document.getElementById('dd-select').addEventListener('change', renderDrilldown);
+
+function updateHeader(){
+  document.getElementById('hdr-range').textContent = DATA.bank.dateRange[0] + ' – ' + DATA.bank.dateRange[1];
+  document.getElementById('pill-card-n').textContent = DATA.card.transactions.length;
+  document.getElementById('pill-bank-n').textContent = DATA.bank.transactions.length;
+}
+
+function refreshAll(){
+  DATA = recompute(RAW_CARD, RAW_BANK);
+  updateHeader();
+  buildTxns();
+  initDrilldown();
+  const active = document.querySelector('.tab.active').dataset.view;
+  switchTab(active);
+}
+
+/* ---------- update-data tab ---------- */
+let pendingCardFiles = null, pendingBankFiles = null;
+
+function readFilesAsText(fileList){
+  return Promise.all(Array.from(fileList).map(f => f.text().then(text => ({name:f.name, text}))));
+}
+
+function refreshApplyButton(){
+  document.getElementById('btn-apply').disabled = !(pendingCardFiles && pendingCardFiles.length) && !(pendingBankFiles && pendingBankFiles.length);
+}
+
+document.getElementById('file-card').addEventListener('change', (e) => {
+  pendingCardFiles = e.target.files;
+  const box = document.getElementById('ub-card');
+  const label = document.getElementById('ub-card-file');
+  if (pendingCardFiles && pendingCardFiles.length){
+    box.classList.add('has-file');
+    label.textContent = Array.from(pendingCardFiles).map(f=>f.name).join(', ');
+  } else { box.classList.remove('has-file'); label.textContent = ''; }
+  refreshApplyButton();
+});
+document.getElementById('file-bank').addEventListener('change', (e) => {
+  pendingBankFiles = e.target.files;
+  const box = document.getElementById('ub-bank');
+  const label = document.getElementById('ub-bank-file');
+  if (pendingBankFiles && pendingBankFiles.length){
+    box.classList.add('has-file');
+    label.textContent = Array.from(pendingBankFiles).map(f=>f.name).join(', ');
+  } else { box.classList.remove('has-file'); label.textContent = ''; }
+  refreshApplyButton();
+});
+
+function showUpdateMsg(kind, text){
+  const el = document.getElementById('update-msg');
+  el.innerHTML = '';
+  const div = document.createElement('div');
+  div.className = 'msg ' + kind;
+  div.textContent = text;
+  el.appendChild(div);
+}
+
+document.getElementById('btn-apply').addEventListener('click', async () => {
+  const btn = document.getElementById('btn-apply');
+  btn.disabled = true; btn.textContent = 'Applying…';
+  try {
+    const notes = [];
+    if (pendingCardFiles && pendingCardFiles.length){
+      const files = await readFilesAsText(pendingCardFiles);
+      let incoming = [];
+      files.forEach(f => { const rows = parseCardCSV(f.text); incoming = incoming.concat(rows); notes.push(f.name + ': ' + rows.length + ' card rows'); });
+      if (incoming.length === 0){
+        showUpdateMsg('err', 'No recognizable rows found in the card file(s) — check it\'s the Chase "Account Activity" CSV export for …6943.');
+        btn.textContent = 'Apply update'; btn.disabled = false;
+        return;
+      }
+      RAW_CARD = mergeRows(RAW_CARD, incoming);
+    }
+    if (pendingBankFiles && pendingBankFiles.length){
+      const files = await readFilesAsText(pendingBankFiles);
+      let incoming = [];
+      files.forEach(f => { const rows = parseBankCSV(f.text); incoming = incoming.concat(rows); notes.push(f.name + ': ' + rows.length + ' bank rows'); });
+      if (incoming.length === 0){
+        showUpdateMsg('err', 'No recognizable rows found in the bank file(s) — check it\'s the Chase "Account Activity" CSV export for …8097.');
+        btn.textContent = 'Apply update'; btn.disabled = false;
+        return;
+      }
+      RAW_BANK = mergeRows(RAW_BANK, incoming);
+    }
+    DATA_UPDATED_AT = new Date().toISOString();
+    DATA_SOURCE = 'Updated in this browser';
+    UPDATE_LOG.unshift({ when: DATA_UPDATED_AT, notes: notes.join(' · ') });
+    UPDATE_LOG = UPDATE_LOG.slice(0, 12);
+    persistRaw();
+    refreshAll();
+    showUpdateMsg('ok', 'Updated — ' + notes.join(' · ') + '. Card now spans ' + DATA.card.dateRange[0] + ' – ' + DATA.card.dateRange[1] + '; bank spans ' + DATA.bank.dateRange[0] + ' – ' + DATA.bank.dateRange[1] + '.');
+    pendingCardFiles = null; pendingBankFiles = null;
+    document.getElementById('file-card').value = ''; document.getElementById('file-bank').value = '';
+    document.getElementById('ub-card').classList.remove('has-file'); document.getElementById('ub-card-file').textContent = '';
+    document.getElementById('ub-bank').classList.remove('has-file'); document.getElementById('ub-bank-file').textContent = '';
+  } catch(err){
+    showUpdateMsg('err', 'Could not parse that file: ' + err.message);
+  }
+  btn.textContent = 'Apply update';
+  refreshApplyButton();
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  if (!confirm('Reset to the original baseline export? This clears any files you\'ve applied in this browser.')) return;
+  try{ localStorage.removeItem(LS_KEY); }catch(e){}
+  RAW_CARD = JSON.parse(JSON.stringify(BASELINE_CARD));
+  RAW_BANK = JSON.parse(JSON.stringify(BASELINE_BANK));
+  DATA_UPDATED_AT = null; DATA_SOURCE = 'Original baked-in export'; UPDATE_LOG = [];
+  refreshAll();
+  showUpdateMsg('ok', 'Reset to the original baseline.');
+});
+
+let cachedOriginalHtml = null;
+function buildSnapshotBlob(){
+  if (!cachedOriginalHtml) cachedOriginalHtml = document.documentElement.outerHTML;
+  let html = cachedOriginalHtml;
+  html = html.replace(/\/\*RAW_CARD_START\*\/[\s\S]*?\/\*RAW_CARD_END\*\//, '/*RAW_CARD_START*/'+JSON.stringify(RAW_CARD)+'/*RAW_CARD_END*/');
+  html = html.replace(/\/\*RAW_BANK_START\*\/[\s\S]*?\/\*RAW_BANK_END\*\//, '/*RAW_BANK_START*/'+JSON.stringify(RAW_BANK)+'/*RAW_BANK_END*/');
+  return new Blob(['<!DOCTYPE html>\n'+html], {type:'text/html'});
+}
+document.getElementById('btn-download').addEventListener('click', async () => {
+  const blob = buildSnapshotBlob();
+  // Inside a published Artifact, the page runs in a sandboxed frame where a plain
+  // <a download> link is inert; window.claude.use('downloads') is the sanctioned path there.
+  // A standalone deployment (opened as a normal page, e.g. after being downloaded and
+  // re-hosted) has no window.claude, so it falls through to the ordinary browser download.
+  if (window.claude && typeof window.claude.use === 'function'){
+    try {
+      const downloads = await window.claude.use('downloads');
+      if (downloads){
+        const result = await downloads.save({filename: 'iaga-finance-ledger.html', data: blob});
+        showUpdateMsg('ok', 'Snapshot ' + result.status + ' with the current data baked in as the new baseline.');
+        return;
+      }
+    } catch(err){
+      const code = err && err.code;
+      if (code === 'declined'){ showUpdateMsg('err', 'Download was declined.'); return; }
+      if (code && code !== 'unavailable'){ showUpdateMsg('err', 'Could not save the file (' + code + ').'); return; }
+      // 'unavailable' or no code at all: fall through to the plain-browser path below
+    }
+  }
+  try {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'iaga-finance-ledger.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(()=>URL.revokeObjectURL(url), 4000);
+    showUpdateMsg('ok', 'Snapshot downloaded with the current data baked in as the new baseline.');
+  } catch(err){
+    showUpdateMsg('err', 'Download didn\'t start in this preview. Open the page in its own browser tab and try again.');
+  }
+});
+
+function renderUpdateStatus(){
+  document.getElementById('st-card-n').textContent = DATA.card.transactions.length + ' transactions';
+  document.getElementById('st-card-range').textContent = DATA.card.dateRange[0] + ' – ' + DATA.card.dateRange[1];
+  document.getElementById('st-bank-n').textContent = DATA.bank.transactions.length + ' transactions';
+  document.getElementById('st-bank-range').textContent = DATA.bank.dateRange[0] + ' – ' + DATA.bank.dateRange[1];
+  document.getElementById('st-source').textContent = DATA_SOURCE;
+  document.getElementById('st-updated').textContent = DATA_UPDATED_AT ? new Date(DATA_UPDATED_AT).toLocaleString() : '—';
+  const log = document.getElementById('update-log');
+  if (!UPDATE_LOG.length){
+    log.innerHTML = '<p class="card-sub" style="margin:0">No updates applied yet — this is the original baseline.</p>';
+  } else {
+    log.innerHTML = '';
+    UPDATE_LOG.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'log-item';
+      const when = document.createElement('span'); when.className = 'li-when'; when.textContent = new Date(item.when).toLocaleString() + ' — ';
+      div.appendChild(when);
+      div.appendChild(document.createTextNode(item.notes));
+      log.appendChild(div);
+    });
+  }
+}
+
+updateHeader();
+buildTxns();
+initDrilldown();
+renderOverview();
+
+let resizeT;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeT);
+  resizeT = setTimeout(() => {
+    const active = document.querySelector('.tab.active').dataset.view;
+    switchTab(active);
+  }, 150);
+});
+</script>
+</body>
+</html>
