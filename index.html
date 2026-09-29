@@ -426,6 +426,11 @@
   .player-round-table td { padding: 10px 12px; border-bottom: 1px solid rgba(42,64,48,.4); }
   .player-round-table tr:last-child td { border-bottom: none; }
   .player-round-table tr.used-row td { background: rgba(92,190,120,.06); }
+  .prog-chart-wrap { margin: 4px 0 18px; padding: 14px 14px 10px; border: 1px solid rgba(42,64,48,.5); border-radius: 12px; background: rgba(0,0,0,.18); }
+  .prog-chart-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--text2); margin-bottom: 8px; }
+  .prog-legend { display: flex; gap: 16px; font-size: 12px; color: var(--text2); margin-top: 6px; flex-wrap: wrap; }
+  .prog-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .prog-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
   .used-pill {
     display: inline-block; padding: 2px 8px; border-radius: 12px;
     font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
@@ -636,6 +641,7 @@
       <button class="tab-btn active" onclick="showTab('history')">🏆 Tournaments</button>
       <button class="tab-btn" onclick="showTab('handicap')">📊 Handicap Index</button>
       <button class="tab-btn" onclick="showTab('ncga')">🪪 NCGA Handicap</button>
+      <button class="tab-btn" onclick="showTab('reports')">📈 Reports</button>
     </nav>
   </header>
 
@@ -954,6 +960,22 @@
       </div>
     </div>
   </section>
+
+  <!-- ══════════ REPORTS TAB ══════════ -->
+  <section class="section fade-in" id="tab-reports">
+    <div class="card">
+      <div class="card-title">Season Reports</div>
+      <div class="card-sub">Analytics computed from the rebuilt tournament data — no manual bookkeeping.</div>
+      <div class="sub-tabs" style="margin-top:12px;">
+        <button class="sub-tab active" onclick="switchReportTab('calculator', this)">🧮 Playing Handicap Calculator</button>
+        <button class="sub-tab" onclick="switchReportTab('movers', this)">📈 Biggest Movers</button>
+        <button class="sub-tab" onclick="switchReportTab('participation', this)">✅ Participation</button>
+        <button class="sub-tab" onclick="switchReportTab('recaps', this)">🏆 Tournament Recaps</button>
+        <button class="sub-tab" onclick="switchReportTab('about', this)">ℹ️ How This Was Built</button>
+      </div>
+      <div id="report-content" style="margin-top:16px;"></div>
+    </div>
+  </section>
 </div>
 
 <!-- Delete confirm modal -->
@@ -1196,6 +1218,7 @@ function showTab(name) {
   if (name === 'handicap') renderHandicap();
   if (name === 'scores') populateTournamentSelect();
   if (name === 'ncga') renderNcgaTab();
+  if (name === 'reports') renderReports();
 }
 
 // ─── Setup Tab ────────────────────────────────────────────────────────────────
@@ -1792,16 +1815,36 @@ function showPlayerDetail(key) {
   const hasNcga = player.ncgaValue !== null && !isNaN(player.ncgaValue);
   const usingNcga = hasNcga && player.ncgaValue < player.index;
 
-  const rowsHtml = rounds.map(r => `
+  // Per-tournament handicap history (movement of TI / NCGA after each event)
+  const histEntries = (db.playerHistory && db.playerHistory[key]) ? db.playerHistory[key].entries : [];
+  const histByRound = {};
+  histEntries.forEach(e => { histByRound[e.date + '|' + e.tournament] = e; });
+  const histPrev = {};
+  histEntries.forEach((e, i) => { histPrev[e.date + '|' + e.tournament] = i > 0 ? histEntries[i - 1] : null; });
+
+  const rowsHtml = rounds.map(r => {
+    const he = histByRound[r.date + '|' + r.tournamentName];
+    const hp = he ? histPrev[r.date + '|' + r.tournamentName] : null;
+    const tiCell = he && he.ti !== null && he.ti !== undefined
+      ? `<span style="font-family:'DM Mono',monospace;">${he.ti.toFixed(1)}</span>${deltaHtml(he.ti, hp ? hp.ti : null)}`
+      : '<span style="color:var(--text2);">—</span>';
+    const ncgaCell = he && he.ncga !== null && he.ncga !== undefined
+      ? `<span style="font-family:'DM Mono',monospace;">${he.ncga.toFixed(1)}</span>${deltaHtml(he.ncga, hp ? hp.ncga : null)}`
+      : '<span style="color:var(--text2);">—</span>';
+    return `
     <tr class="${r.usedInIndex ? 'used-row' : ''}">
       <td>${formatDate(r.date)}</td>
       <td style="font-weight:500;">${r.tournamentName}</td>
       <td style="color:var(--text2);">${r.course}</td>
       <td style="font-family:'DM Mono',monospace;">${r.gross}</td>
       <td style="font-family:'DM Mono',monospace;">${r.diff.toFixed(1)}</td>
+      <td>${tiCell}</td>
+      <td>${ncgaCell}</td>
       <td>${r.usedInIndex ? '<span class="used-pill">✓ Used</span>' : '<span class="notused-pill">Not used</span>'}</td>
-    </tr>
-  `).join('');
+    </tr>`;
+  }).join('');
+
+  const progChart = renderProgressChart(histEntries);
 
   const content = document.getElementById('player-modal-content');
   content.innerHTML = `
@@ -1834,6 +1877,15 @@ function showPlayerDetail(key) {
     <div style="font-size:12px; color:var(--text2); margin-bottom:16px;">
       ${player.rounds} round(s) played &nbsp;·&nbsp; best ${player.usedDiffs.length} differential(s) used (${player.usedDiffs.map(d => d.toFixed(1)).join(', ')}) &nbsp;·&nbsp; avg gross ${player.avgGross}
     </div>
+    ${progChart ? `
+    <div class="prog-chart-wrap">
+      <div class="prog-chart-title">Handicap progression</div>
+      ${progChart}
+      <div class="prog-legend">
+        <span><span class="prog-dot" style="background:#5cbe78;"></span> Tournament Index</span>
+        <span><span class="prog-dot" style="background:#5c9de0;"></span> NCGA Handicap</span>
+      </div>
+    </div>` : ''}
     <div class="scroll-x">
       <table class="player-round-table">
         <thead>
@@ -1843,6 +1895,8 @@ function showPlayerDetail(key) {
             <th>Course</th>
             <th>Gross</th>
             <th>Differential</th>
+            <th>TI after</th>
+            <th>NCGA</th>
             <th>In Index?</th>
           </tr>
         </thead>
@@ -1859,6 +1913,69 @@ function closePlayerModal() {
 }
 
 // ─── Utilities ─────────────────────────────────────────────────────────────────
+function shortDate(d) {
+  if (!d) return '';
+  const [, m, day] = d.split('-');
+  return `${parseInt(m, 10)}/${parseInt(day, 10)}`;
+}
+
+// Movement delta vs the previous tournament: green when the handicap went down.
+function deltaHtml(cur, prev) {
+  if (cur === null || cur === undefined || prev === null || prev === undefined) return '';
+  const d = Math.round((cur - prev) * 10) / 10;
+  if (Math.abs(d) < 0.05) return ' <span style="color:var(--text2); font-size:11px;">±0</span>';
+  const color = d < 0 ? '#5cbe78' : '#e05c5c';
+  return ` <span style="color:${color}; font-size:11px;">${d > 0 ? '+' : ''}${d.toFixed(1)}</span>`;
+}
+
+// SVG line chart: Tournament Index vs NCGA Handicap across the player's tournaments.
+// entries: chronological [{date, tournament, ti, ncga, ...}]. Null points break the line.
+function renderProgressChart(entries) {
+  const pts = (entries || []).filter(e => (e.ti !== null && e.ti !== undefined) || (e.ncga !== null && e.ncga !== undefined));
+  if (pts.length < 2) return '';
+  const W = 680, H = 250, PL = 38, PR = 14, PT = 16, PB = 32;
+  const vals = [];
+  pts.forEach(e => {
+    if (e.ti !== null && e.ti !== undefined) vals.push(e.ti);
+    if (e.ncga !== null && e.ncga !== undefined) vals.push(e.ncga);
+  });
+  let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 2) { lo -= 1; hi += 1; }
+  const pad = (hi - lo) * 0.15; lo -= pad; hi += pad;
+  const X = i => PL + (pts.length === 1 ? (W - PL - PR) / 2 : i * (W - PL - PR) / (pts.length - 1));
+  const Y = v => PT + (1 - (v - lo) / (hi - lo)) * (H - PT - PB);
+
+  let grid = '';
+  for (let g = 0; g <= 4; g++) {
+    const v = lo + (hi - lo) * g / 4;
+    const y = Y(v).toFixed(1);
+    grid += `<line x1="${PL}" y1="${y}" x2="${W - PR}" y2="${y}" stroke="rgba(255,255,255,.08)" stroke-width="1"/>` +
+            `<text x="${PL - 7}" y="${(+y + 3.5).toFixed(1)}" text-anchor="end" font-size="10" fill="#8a9a90">${v.toFixed(1)}</text>`;
+  }
+
+  function series(key, color, label) {
+    let d = '', dots = '', started = false;
+    pts.forEach((e, i) => {
+      const v = e[key];
+      if (v === null || v === undefined) { started = false; return; }
+      const x = X(i).toFixed(1), y = Y(v).toFixed(1);
+      d += (started ? 'L' : 'M') + x + ',' + y;
+      dots += `<circle cx="${x}" cy="${y}" r="4.5" fill="${color}" stroke="#101a14" stroke-width="1.5">` +
+              `<title>${e.tournament} (${formatDate(e.date)}) — ${label}: ${v.toFixed(1)}</title></circle>`;
+      started = true;
+    });
+    return `<path d="${d}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` + dots;
+  }
+
+  const labels = pts.map((e, i) => {
+    const x = X(i).toFixed(1);
+    return `<text x="${x}" y="${H - 10}" text-anchor="middle" font-size="10" fill="#8a9a90"><title>${e.tournament} — ${formatDate(e.date)}</title>${shortDate(e.date)}</text>`;
+  }).join('');
+
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%; height:auto; display:block;" role="img" aria-label="Handicap progression chart">` +
+    grid + series('ti', '#5cbe78', 'Tournament Index') + series('ncga', '#5c9de0', 'NCGA Handicap') + labels + `</svg>`;
+}
+
 function formatDate(d) {
   if (!d) return '—';
   const [y, m, day] = d.split('-');
@@ -1880,6 +1997,314 @@ function showToast(msg) {
   toastTimer = setTimeout(() => { el.style.opacity = '0'; }, 2800);
 }
 
+
+// ─── Reports ────────────────────────────────────────────────────────────────
+let reportTab = 'calculator';
+let recapTournamentId = null;
+
+function switchReportTab(name, el) {
+  reportTab = name;
+  document.querySelectorAll('#tab-reports .sub-tab').forEach(b => b.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderReports();
+}
+
+function renderReports() {
+  const c = document.getElementById('report-content');
+  if (!c) return;
+  // Warm the player-detail cache so report rows can open player modals
+  // even if the Handicap tab was never visited.
+  if (!lastHcpResults.length && typeof computeHandicaps === 'function') {
+    try {
+      const res = computeHandicaps('all');
+      res.forEach(r => {
+        const key = r.name.toLowerCase().trim();
+        const ncga = db.ncgaIndex[key] || {};
+        r.ncgaValue = (ncga.value !== undefined && ncga.value !== null && ncga.value !== '') ? parseFloat(ncga.value) : null;
+        r.lowest = (r.ncgaValue !== null && !isNaN(r.ncgaValue)) ? Math.min(r.index, r.ncgaValue) : r.index;
+      });
+      lastHcpResults = res;
+    } catch (e) { /* reports still render; player modals just won't open */ }
+  }
+  if (reportTab === 'calculator') renderCalculator(c);
+  else if (reportTab === 'movers') renderMovers(c);
+  else if (reportTab === 'participation') renderParticipation(c);
+  else if (reportTab === 'recaps') renderRecaps(c);
+  else if (reportTab === 'about') renderAbout(c);
+}
+
+function escKey(s) { return String(s).replace(/'/g, "\\'"); }
+
+// Usable handicap at the end of a player's history (Tournament Index vs NCGA, lower wins)
+function playerUsable(key) {
+  const ph = db.playerHistory && db.playerHistory[key];
+  if (ph && ph.entries && ph.entries.length) {
+    const last = ph.entries[ph.entries.length - 1];
+    if (last.usable !== null && last.usable !== undefined) return last.usable;
+  }
+  const n = db.ncgaIndex && db.ncgaIndex[key];
+  if (n && n.value !== undefined && n.value !== null && n.value !== '') return parseFloat(n.value);
+  return null;
+}
+
+function sortedTournaments() {
+  return [...(db.tournaments || [])].sort((a, b) => a.date < b.date ? -1 : 1);
+}
+
+// ─── Playing Handicap Calculator ────────────────────────────────────────────
+function renderCalculator(c) {
+  const players = Object.entries(db.roster || {})
+    .map(([k, v]) => ({ key: k, name: v.name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  const venues = [];
+  sortedTournaments().forEach(t => {
+    Object.entries(t.flights || {}).forEach(([f, cfg]) => {
+      venues.push({
+        key: t.id + '|' + f,
+        label: `${t.name} — ${f} (${cfg.tee}, ${cfg.slope}/${cfg.courseRating})`,
+        rating: cfg.courseRating, slope: cfg.slope, par: t.par || 72
+      });
+    });
+  });
+  c.innerHTML = `
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; max-width:900px;" class="calc-grid">
+      <div>
+        <label style="font-size:12px;color:var(--text2);font-weight:600;">PLAYER (optional — fills in their usable handicap)</label>
+        <select id="calc-player" class="input" style="width:100%;margin:6px 0 12px;" onchange="calcPlayerPicked()">
+          <option value="">— Manual entry —</option>
+          ${players.map(p => `<option value="${p.key}">${p.name}</option>`).join('')}
+        </select>
+        <label style="font-size:12px;color:var(--text2);font-weight:600;">HANDICAP INDEX</label>
+        <input id="calc-index" type="number" step="0.1" class="input" style="width:100%;margin:6px 0 12px;" placeholder="e.g. 12.4" oninput="calcUpdate()">
+        <label style="font-size:12px;color:var(--text2);font-weight:600;">COURSE / TEES</label>
+        <select id="calc-venue" class="input" style="width:100%;margin:6px 0 12px;" onchange="calcVenuePicked()">
+          ${venues.map(v => `<option value="${v.key}">${v.label}</option>`).join('')}
+        </select>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+          <div><label style="font-size:12px;color:var(--text2);font-weight:600;">RATING</label>
+            <input id="calc-rating" type="number" step="0.1" class="input" style="width:100%;margin-top:6px;" oninput="calcUpdate()"></div>
+          <div><label style="font-size:12px;color:var(--text2);font-weight:600;">SLOPE</label>
+            <input id="calc-slope" type="number" step="1" class="input" style="width:100%;margin-top:6px;" oninput="calcUpdate()"></div>
+          <div><label style="font-size:12px;color:var(--text2);font-weight:600;">PAR</label>
+            <input id="calc-par" type="number" step="1" class="input" style="width:100%;margin-top:6px;" oninput="calcUpdate()"></div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);margin-top:8px;">Tee boxes are editable — pick a venue to prefill, then tweak for any course.</div>
+      </div>
+      <div class="card" style="margin:0;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+        <div style="font-size:12px;color:var(--text2);font-weight:600;letter-spacing:1px;">PLAYING HANDICAP</div>
+        <div id="calc-result" style="font-size:64px;font-weight:800;color:var(--accent);line-height:1.1;">—</div>
+        <div id="calc-detail" style="font-size:13px;color:var(--text2);margin-top:8px;max-width:280px;"></div>
+      </div>
+    </div>`;
+  calcVenuePicked();
+}
+
+function calcPlayerPicked() {
+  const key = document.getElementById('calc-player').value;
+  const idx = document.getElementById('calc-index');
+  if (!key) { idx.value = ''; }
+  else {
+    const u = playerUsable(key);
+    idx.value = (u !== null && u !== undefined) ? u.toFixed(1) : '';
+  }
+  calcUpdate();
+}
+
+function calcVenuePicked() {
+  const key = document.getElementById('calc-venue').value;
+  const [tid, flight] = key.split('|');
+  const t = (db.tournaments || []).find(x => x.id === tid);
+  const cfg = t && t.flights && t.flights[flight];
+  if (cfg) {
+    document.getElementById('calc-rating').value = cfg.courseRating;
+    document.getElementById('calc-slope').value = cfg.slope;
+    document.getElementById('calc-par').value = t.par || 72;
+  }
+  calcUpdate();
+}
+
+function calcUpdate() {
+  const idx = parseFloat(document.getElementById('calc-index').value);
+  const rating = parseFloat(document.getElementById('calc-rating').value);
+  const slope = parseFloat(document.getElementById('calc-slope').value);
+  const par = parseFloat(document.getElementById('calc-par').value);
+  const res = document.getElementById('calc-result');
+  const det = document.getElementById('calc-detail');
+  if ([idx, rating, slope, par].some(v => isNaN(v)) || slope <= 0) {
+    res.textContent = '—'; det.textContent = 'Enter a handicap index and tee ratings to compute.'; return;
+  }
+  const raw = idx * slope / 113 + (rating - par);
+  const ph = Math.round(raw);
+  res.textContent = ph;
+  det.innerHTML = `WHS formula: (${idx.toFixed(1)} × ${slope} ÷ 113) + (${rating.toFixed(1)} − ${par}) = ${raw.toFixed(2)} → <strong>${ph}</strong>`;
+}
+
+// ─── Biggest Movers ─────────────────────────────────────────────────────────
+function renderMovers(c) {
+  const rows = [];
+  Object.entries(db.playerHistory || {}).forEach(([key, ph]) => {
+    const ts = (ph.entries || []).filter(e => e.ti !== null && e.ti !== undefined);
+    if (ts.length >= 2) {
+      const first = ts[0], last = ts[ts.length - 1];
+      rows.push({
+        key, name: ph.name, flight: ph.flight,
+        firstTi: first.ti, firstDate: first.date, firstT: first.tournament,
+        lastTi: last.ti, lastDate: last.date, lastT: last.tournament,
+        change: first.ti - last.ti,
+        events: ph.entries.filter(e => e.score !== null && e.score !== undefined).length
+      });
+    }
+  });
+  rows.sort((a, b) => b.change - a.change);
+  const improved = rows.filter(r => r.change >= 0.05).slice(0, 15);
+  const declined = rows.filter(r => r.change <= -0.05).slice(-5).reverse();
+
+  const rowHtml = r => `
+    <tr onclick="showPlayerDetail('${escKey(r.key)}')" style="cursor:pointer;">
+      <td style="font-weight:600;">${r.name}</td>
+      <td><span class="flight-badge badge-${FLIGHT_COLORS[r.flight] || 'hawk'}">${r.flight}</span></td>
+      <td style="font-family:'DM Mono',monospace;">${r.firstTi.toFixed(1)} <span style="color:var(--text2);font-size:11px;">(${formatDate(r.firstDate)})</span></td>
+      <td style="font-family:'DM Mono',monospace;">${r.lastTi.toFixed(1)} <span style="color:var(--text2);font-size:11px;">(${formatDate(r.lastDate)})</span></td>
+      <td style="font-family:'DM Mono',monospace;font-weight:700;color:${r.change >= 0 ? '#5cbe78' : '#e05c5c'};">${r.change >= 0 ? '−' : '+'}${Math.abs(r.change).toFixed(1)}</td>
+      <td style="font-family:'DM Mono',monospace;color:var(--text2);">${r.events}</td>
+    </tr>`;
+  const tableHead = `<thead><tr><th>Player</th><th>Flight</th><th>First TI</th><th>Latest TI</th><th>Change</th><th>Events</th></tr></thead>`;
+
+  c.innerHTML = `
+    <div class="card-sub" style="margin-bottom:12px;">Tournament Index movement from each player's first indexed event to their latest. Click a player for their full history chart. (Minimum 2 indexed events.)</div>
+    <div style="font-weight:700;margin:8px 0;">📈 Most Improved</div>
+    <div class="scroll-x"><table class="hcp-table">${tableHead}<tbody>
+      ${improved.length ? improved.map(rowHtml).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text2);">Not enough history yet.</td></tr>'}
+    </tbody></table></div>
+    <div style="font-weight:700;margin:20px 0 8px;">📉 Trending Up (handicap rising)</div>
+    <div class="scroll-x"><table class="hcp-table">${tableHead}<tbody>
+      ${declined.length ? declined.map(rowHtml).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text2);">Nobody trending up.</td></tr>'}
+    </tbody></table></div>`;
+}
+
+// ─── Participation ──────────────────────────────────────────────────────────
+function renderParticipation(c) {
+  const ts = sortedTournaments().slice().reverse(); // chronological
+  const players = {};
+  ts.forEach(t => (t.scores || []).forEach(s => {
+    const key = s.player.toLowerCase().trim();
+    if (!players[key]) players[key] = { name: s.player, flights: {}, count: 0 };
+    players[key].flights[t.id] = s.flight;
+    players[key].count++;
+  }));
+  const arr = Object.entries(players).map(([key, v]) => ({ key, ...v }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+  const totalRounds = ts.reduce((n, t) => n + (t.scores || []).length, 0);
+
+  c.innerHTML = `
+    <div class="stats-bar" style="margin-bottom:16px;">
+      <div class="stat"><div class="stat-num">${arr.length}</div><div class="stat-label">Unique players</div></div>
+      <div class="stat"><div class="stat-num">${ts.length}</div><div class="stat-label">Tournaments</div></div>
+      <div class="stat"><div class="stat-num">${totalRounds}</div><div class="stat-label">Rounds played</div></div>
+      <div class="stat"><div class="stat-num">${ts.length ? (totalRounds / ts.length).toFixed(1) : '—'}</div><div class="stat-label">Avg field size</div></div>
+    </div>
+    <div class="scroll-x"><table class="hcp-table">
+      <thead><tr><th>Player</th>${ts.map(t => `<th title="${formatDate(t.date)}">${t.name}<br><span style="font-weight:400;font-size:10px;color:var(--text2);">${(t.scores || []).length} players</span></th>`).join('')}<th>Events</th></tr></thead>
+      <tbody>
+        ${arr.map(p => `<tr onclick="showPlayerDetail('${escKey(p.key)}')" style="cursor:pointer;">
+          <td style="font-weight:600;white-space:nowrap;">${p.name}</td>
+          ${ts.map(t => `<td style="text-align:center;">${p.flights[t.id] ? `<span class="flight-badge badge-${FLIGHT_COLORS[p.flights[t.id]] || 'hawk'}" title="${p.flights[t.id]}">✓</span>` : '<span style="color:var(--border);">—</span>'}</td>`).join('')}
+          <td style="font-family:'DM Mono',monospace;font-weight:700;">${p.count}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table></div>`;
+}
+
+// ─── Tournament Recaps ──────────────────────────────────────────────────────
+function renderRecaps(c) {
+  const ts = sortedTournaments();
+  if (!ts.length) { c.innerHTML = '<div class="empty-state">No tournaments yet.</div>'; return; }
+  if (!recapTournamentId || !ts.find(t => t.id === recapTournamentId)) recapTournamentId = ts[0].id;
+  const t = ts.find(x => x.id === recapTournamentId);
+
+  const flightOrder = ['Maharaj', 'Hawk', 'Tiger', 'Cobra'];
+  const flights = flightOrder.filter(f => t.flights && t.flights[f]);
+
+  const flightHtml = flights.map(f => {
+    const cfg = t.flights[f];
+    const rows = (t.scores || []).filter(s => s.flight === f).map(s => {
+      const key = s.player.toLowerCase().trim();
+      const ph = db.playerHistory && db.playerHistory[key];
+      let preHcp = null;
+      if (ph && ph.entries) {
+        const i = ph.entries.findIndex(e => e.date === t.date);
+        if (i >= 0) preHcp = i > 0 ? ph.entries[i - 1].usable : ph.entries[0].ncga;
+      }
+      const playing = (preHcp !== null && preHcp !== undefined)
+        ? Math.round(preHcp * cfg.slope / 113 + (cfg.courseRating - (t.par || 72))) : null;
+      return { ...s, playing, net: playing !== null ? +(s.gross - playing).toFixed(1) : null };
+    }).sort((a, b) => (a.net === null ? 1e9 : a.net) - (b.net === null ? 1e9 : b.net));
+    const winNet = rows.length && rows[0].net !== null ? rows[0].net : null;
+    const winGross = rows.length ? Math.min(...rows.map(r => r.gross)) : null;
+    return `
+      <div style="margin-top:20px;">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+          <span class="flight-badge badge-${FLIGHT_COLORS[f] || 'hawk'}" style="font-size:14px;">${f}</span>
+          <span style="font-size:12px;color:var(--text2);">${cfg.tee} · Rating ${cfg.courseRating} · Slope ${cfg.slope} · ${rows.length} players</span>
+        </div>
+        <div class="scroll-x"><table class="hcp-table">
+          <thead><tr><th>#</th><th>Player</th><th>Gross</th><th>Playing Hcp</th><th>Net</th><th>Differential</th></tr></thead>
+          <tbody>
+            ${rows.map((r, i) => `
+              <tr ${r.net !== null && r.net === winNet ? 'style="background:rgba(212,175,55,.08);"' : ''} onclick="showPlayerDetail('${escKey(r.player.toLowerCase().trim())}')" style="cursor:pointer;">
+                <td>${r.net !== null && r.net === winNet ? '🏆' : i + 1}</td>
+                <td style="font-weight:600;">${r.player}${r.gross === winGross ? ' <span title="Low gross" style="font-size:12px;">⭐</span>' : ''}</td>
+                <td style="font-family:'DM Mono',monospace;">${r.gross}</td>
+                <td style="font-family:'DM Mono',monospace;">${r.playing !== null ? r.playing : '—'}</td>
+                <td style="font-family:'DM Mono',monospace;font-weight:700;">${r.net !== null ? r.net.toFixed(0) : '—'}</td>
+                <td style="font-family:'DM Mono',monospace;color:var(--text2);">${r.diff.toFixed(1)}</td>
+              </tr>`).join('')}
+          </tbody>
+        </table></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px;">Net = adjusted gross − playing handicap (WHS, using the handicap in effect at tee time). 🏆 low net · ⭐ low gross.</div>
+      </div>`;
+  }).join('');
+
+  c.innerHTML = `
+    <label style="font-size:12px;color:var(--text2);font-weight:600;">TOURNAMENT</label>
+    <select class="input" style="width:100%;max-width:420px;margin:6px 0 4px;" onchange="recapTournamentId=this.value;renderReports();">
+      ${ts.map(x => `<option value="${x.id}" ${x.id === recapTournamentId ? 'selected' : ''}>${x.name} — ${formatDate(x.date)} (${(x.scores || []).length} players)</option>`).join('')}
+    </select>
+    ${flightHtml}`;
+}
+
+// ─── How This Was Built ─────────────────────────────────────────────────────
+function renderAbout(c) {
+  const n = (db.tournaments || []).length;
+  const players = Object.keys(db.playerHistory || {}).length;
+  c.innerHTML = `
+  <div style="max-width:760px; font-size:14px; line-height:1.65;">
+    <h3 style="margin:0 0 8px;">How this tracker was built</h3>
+    <p>The IAGA handicap tracker was rebuilt from primary sources in September 2026 so every number on this site can be traced back to an authoritative record. No scores were typed by hand.</p>
+    <h4 style="margin:16px 0 6px;">Data sources</h4>
+    <ul style="margin:0 0 0 18px; padding:0;">
+      <li><strong>Scores:</strong> Bayonet (Feb 21) from the built-in <em>Season Scores</em> report's <em>Adjusted Gross Score</em> tab in Golf Genius; the other ${n - 1} tournaments from Golf Genius's official <em>Score Post Report</em> (GHIN "Adj. Gross Score Post") — the per-player adjusted gross as actually posted, with the exact tee, course rating, slope, and par each player used. Every score already capped at net double bogey, the way handicaps require.</li>
+      <li><strong>Flights &amp; tees:</strong> each tournament's Net flight tables — the four Net flights (Maharaj, Hawk, Tiger, Cobra) with the tee, course rating, and slope each flight played; the GHIN post reports confirm the actual tees played, including individual tees (e.g. Ketki Mathuria from the forward tees).</li>
+      <li><strong>Handicap indexes:</strong> the NCGA/USGA club roster export of Sep 29, 2026 for current indexes (${Object.keys(db.ncgaIndex || {}).length} members); each tournament's own <em>Handicap Index History</em> tab for the historical index behind the per-event chart.</li>
+    </ul>
+    <h4 style="margin:16px 0 6px;">The math</h4>
+    <ul style="margin:0 0 0 18px; padding:0;">
+      <li><strong>Differential</strong> = (adjusted gross − course rating) × 113 ÷ slope, using the rating/slope of the tees the player actually played (a few players teed off from different tees than their flight — e.g. Ketki Mathuria from the Red/forward tees — and their differentials use those individual tees, not the flight tee).</li>
+      <li><strong>Tournament Index</strong> = average of the player's two lowest differentials × 0.96 (minimum 2 rounds).</li>
+      <li><strong>Usable handicap</strong> = the lower of the Tournament Index and the NCGA index — the anti-sandbagging rule the club has always used.</li>
+      <li><strong>Playing handicap</strong> (calculator &amp; recaps) = round(index × slope ÷ 113 + (rating − par)), the WHS formula.</li>
+    </ul>
+    <h4 style="margin:16px 0 6px;">What the rebuild added</h4>
+    <ul style="margin:0 0 0 18px; padding:0;">
+      <li>Per-player history: every tournament score, differential, and the Tournament Index / NCGA index after each event.</li>
+      <li>A Tournament Index vs NCGA progression chart on every player's detail view.</li>
+      <li>Reports: playing-handicap calculator, biggest movers, participation matrix, and per-flight tournament recaps.</li>
+    </ul>
+    <h4 style="margin:16px 0 6px;">Validation</h4>
+    <p style="margin:0;">The rebuilt data was machine-compared against the tracker's previous published data: all ${n} tournaments, every adjusted score, flight assignment, tee/rating/slope, and differential. Any mismatch is flagged before publishing — nothing goes live on approval alone.</p>
+    <p style="color:var(--text2); font-size:12px; margin-top:12px;">Half Moon Bay events are excluded from the index by committee decision.</p>
+  </div>`;
+}
 
 // ─── Excel Upload ─────────────────────────────────────────────────────────────
 let parsedSheetData = []; // raw rows from xlsx
