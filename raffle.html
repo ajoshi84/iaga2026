@@ -1275,6 +1275,16 @@ function loadCoyotePlayers() {
 
 // Fallback pako inflate stub (real pako not loaded; docx text extraction uses our zip reader)
 function pako_inflate(data) { return data; }
+
+/* ── AUTO-LOAD PRE-LOADED ROSTER ── */
+// Loads the tournament roster automatically on first visit (no saved player
+// pool yet). Goes through loadCoyotePlayers() so Tournament Setup (name/date)
+// is applied and winners are recorded under the right tournament in history.
+(function() {
+  if (APP.players.length === 0) {
+    loadCoyotePlayers();
+  }
+})();
 </script>
 </body>
 </html>
