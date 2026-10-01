@@ -428,9 +428,9 @@
 
       <div style="background:var(--amber-50);border:1.5px solid var(--amber-200);border-radius:var(--radius);padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
         <div style="font-size:13px;color:var(--amber-800);">
-          <strong>⛳ Wente (June 27, 2025)</strong> — 72 players pre-loaded from today's tee sheet
+          <strong>⛳ Coyote Creek Club Championship (Oct 3–4, 2026)</strong> — 99 players pre-loaded from the event roster
         </div>
-        <button class="btn btn-amber" style="padding:7px 16px;font-size:13px;white-space:nowrap;" onclick="loadWentePlayers()">Load Players →</button>
+        <button class="btn btn-amber" style="padding:7px 16px;font-size:13px;white-space:nowrap;" onclick="loadCoyotePlayers()">Load Players →</button>
       </div>
 
       <p style="font-size:13px; color:var(--gray-400); margin-bottom:1rem;">
@@ -1260,16 +1260,16 @@ function confetti() {
   }
 }
 
-/* ── WENTE JUNE 27 PRE-LOADED PLAYERS ── */
-const WENTE_PLAYERS = ["Ony Velez", "Irfan Mehdi", "Aman Sandhu", "Vir Brar", "Zoheb Mukhi", "Madhav Halbe", "Anirudh Joshi", "Harsha Sastry", "Paramdeep Sodhi", "Shekhar Halakatti", "Sunny Bajwa", "Ravi Krishnaiah", "Sunil Mayur", "Aamir Akram", "Ashish Ahluwalia", "Naresh Nagarajan", "Raj Gautam", "Shant Singh", "Omar Sehgal", "Jimmy Singh", "Felix Manickam", "Tarun Goyal", "Kunal Verma", "Aanika Verma", "Shan Swaminathan", "Jitender Gehlaut", "Pankaj Thapar", "Subhasish Saha", "Felix Solomon", "Abhi Desai", "Murali Dharan", "Abhijit Pandit", "Vishal Malakar", "Vivek Mishra", "Nikhil Kapur", "Hasmukh Ranjan", "Hargunwant Randhawa", "Samit Rao", "Sajid Zia", "Sunil Ramaiah", "Rakesh Manocha", "Sujay Ramaiah", "Abhijit Joshi", "Abhijit Bhave", "Abhijit Gune", "Neeraj Kauts", "Sanchit Sharma", "Rajesh Wajge", "Deepak Mayya", "Charandeep Sehgal", "Panch Chandrasekaran", "Sanjiv Bhargava", "Anandkumar Shivajappa", "Rahul Pandit", "Raj Badani", "Savraj Dhillon", "Kulwant Sidhu", "Kanwaljit Mann", "Shashikant Rai", "Rajiv Malik", "Sunil Mehta", "Vineet Sharma", "Ranjan Bhasin", "Anil Gulati", "Vishal Goyal", "Ashok Vaid", "Atul Khanzode", "Nitin Buty", "Chhatrapal Bhende", "Ketki Mathuria", "Ajit Shanware", "Amol Lele"];
+/* ── COYOTE CREEK CLUB CHAMPIONSHIP PRE-LOADED PLAYERS ── */
+const COYOTE_PLAYERS = ["Aamir Akram", "Ajay Athale", "Raj Badani", "Vatsal Bakshi", "Raghava Bharadwaj", "Anurag Bhardwaj", "Sanjiv Bhargava", "Ranjan Bhasin", "Anudeep Bhatia", "Jash Bhayani", "Abhijit Bhave", "Chhatrapal Bhende", "Vir Brar", "Nitin Buty", "Panch Chandrasekaran", "Abhi Desai", "Divyang Desai", "Prabhjot Devgan", "Murali Dharan", "Amar Dhillon", "Karan Dhillon", "Savraj Dhillon", "Vikaas Dixit", "Jattin Dudakia", "Hassan Firzok", "Derek Fross", "Uthira Ganaprakasam", "Vishal Goradia", "Arush Goyal", "Tarun Goyal", "Vishal Goyal", "Alok Gole", "Abhijit Gune", "Amit Gupta", "Madhav Halbe", "Jeet Harika", "Abhijit Joshi", "Anirudh Joshi", "Manoj Joshi", "Nikhil Kapur", "Neeraj Kauts", "Virendra Kirloskar", "Ravi Krishnaiah", "Balwinder Malhi", "Rajiv Malik", "Felix Manickam", "Kanwaljit Mann", "Rakesh Manocha", "Ketki Mathuria", "Manish Mathuria", "Sunil Mayur", "Deepak Mayya", "Irfan Mehdi", "Munish Mehta", "Zoheb Mukhi", "Naresh Nagarajan", "Abhijeet Nikam", "Abhijit Pandit", "Rahul Pandit", "Pankaj Parashar", "Jigar Patel", "Mahesh Patil", "Ravi Pindiproli", "Valsan Ponnachath", "Chetan Pungaliya", "Shashikant Rai", "Sujay Ramaiah", "Sunil Ramaiah", "Hargunwant Randhawa", "Prabhjot Randhawa", "Hasmukh Ranjan", "Samit Rao", "Inderjot Singh Saggu", "Subhasish Saha", "Aman Sandhu", "Navneet Sandhu", "Harsha Sastry", "Charandeep Sehgal", "Kartik Sehgal", "Harminder Sehmi", "Ajit Shanware", "Sanchit Sharma", "Vineet Sharma", "Anandkumar Shivajappa", "Kulwant Sidhu", "Jimmy Singh", "Kuldeep Singh", "Satwant Singh", "Paramdeep Sodhi", "Felix Solomon", "Harpreet Soni", "Shan Swaminathan", "Pramod Thangali", "Pankaj Thapar", "Surinder Thind", "Ashok Vaid", "Ony Velez", "Kunal Verma", "Sajid Zia"];
 
-function loadWentePlayers() {
-  setPlayers(WENTE_PLAYERS, 'Loaded 72 players from Wente (June 27) tee sheet');
+function loadCoyotePlayers() {
+  setPlayers(COYOTE_PLAYERS, 'Loaded 99 players from Coyote Creek Club Championship roster');
   // Pre-fill tournament info
   const tn = document.getElementById('tournName');
   const td = document.getElementById('tournDate');
-  if (!tn.value) tn.value = 'Wente (June)';
-  if (!td.value || td.value === new Date().toISOString().split('T')[0]) td.value = '2025-06-27';
+  if (!tn.value) tn.value = 'Coyote Creek Club Championship';
+  if (!td.value || td.value === new Date().toISOString().split('T')[0]) td.value = '2026-10-03';
   applySetup();
 }
 
