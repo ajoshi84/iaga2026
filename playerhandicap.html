@@ -42,7 +42,10 @@
   #main tr.sel { background:#dbeafe !important; }
   td.pname { font-weight:600; }
   .pill { display:inline-block; min-width:44px; text-align:center; font-weight:800; color:var(--navy); background:#e3ecf9; border-radius:20px; padding:3px 10px; font-variant-numeric:tabular-nums; }
-  #detail { display:none; background:#fff; border:1px solid var(--line); border-radius:12px; margin-top:14px; overflow:hidden; }
+  .modal-backdrop { display:none; position:fixed; inset:0; background:rgba(9,31,68,.5); z-index:50; padding:18px 14px; overflow-y:auto; }
+  .modal-backdrop.open { display:block; }
+  .modal { background:#fff; border-radius:14px; max-width:620px; margin:4vh auto; overflow:hidden; box-shadow:0 12px 40px rgba(0,0,0,.25); }
+  body.modal-open { overflow:hidden; }
   .det-head { display:flex; align-items:center; gap:10px; padding:14px 18px 0; }
   .det-head h2 { margin:0; font-size:19px; flex:1; }
   .det-close { border:none; background:#eef2f7; width:32px; height:32px; border-radius:50%; font-size:15px; line-height:1; cursor:pointer; color:var(--muted); }
@@ -111,7 +114,7 @@
     <tbody></tbody>
   </table>
   </div></div>
-  <div id="detail"></div>
+  <div class="modal-backdrop" id="modalBk"><div class="modal" id="detail" role="dialog" aria-modal="true"></div></div>
 </div>
 <footer>Built Oct 5, 2026 &middot; Megatron, the IAGA agent</footer>
 <script>
@@ -119,6 +122,7 @@ const P = [{"name": "Aamir Akram", "ghin": "1995603", "ncga": 7.8, "rounds": 7, 
 const tb = document.querySelector('#main tbody');
 const q = document.getElementById('q');
 const det = document.getElementById('detail');
+const modalBk = document.getElementById('modalBk');
 const count = document.getElementById('count');
 let sortK = 'name', sortD = 1;
 const fmt = v => (v === null || v === undefined) ? '&mdash;' : v;
@@ -144,9 +148,13 @@ function render() {
   paintArrows();
 }
 function closeDetail() {
-  det.style.display = 'none'; det.innerHTML = '';
+  modalBk.classList.remove('open');
+  document.body.classList.remove('modal-open');
+  det.innerHTML = '';
   document.querySelectorAll('#main tbody tr').forEach(r => r.classList.remove('sel'));
 }
+modalBk.addEventListener('click', e => { if (e.target === modalBk) closeDetail(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDetail(); });
 tb.addEventListener('click', e => {
   const tr = e.target.closest('tr'); if (!tr) return;
   document.querySelectorAll('#main tbody tr').forEach(r => r.classList.remove('sel'));
@@ -162,7 +170,8 @@ tb.addEventListener('click', e => {
     const cut = [...ds].sort((a,b) => a.diff - b.diff)[p.used - 1];
     ds.forEach(r => { if (r.diff <= cut.diff) best.add(r); });
   }
-  det.style.display = 'block';
+  modalBk.classList.add('open');
+  document.body.classList.add('modal-open');
   det.innerHTML =
     `<div class="det-head"><h2>${p.name}</h2><button class="det-close" aria-label="Close">&times;</button></div>` +
     (p.ghin ? `<div class="det-sub">GHIN# ${p.ghin}</div>` : '') +
@@ -178,7 +187,6 @@ tb.addEventListener('click', e => {
         `</tbody></table></div>`
       : `<div class="usedline" style="padding-bottom:16px">No tournament rounds on record.</div>`);
   det.querySelector('.det-close').addEventListener('click', ev => { ev.stopPropagation(); closeDetail(); });
-  det.scrollIntoView({behavior:'smooth', block:'start'});
 });
 document.querySelectorAll('#main th').forEach(th => th.addEventListener('click', () => {
   const k = th.dataset.k;
