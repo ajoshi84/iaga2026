@@ -49,13 +49,23 @@ box-shadow:0 3px 12px rgba(20,30,60,.07);font-size:14.5px;line-height:1.7}
 box-shadow:0 3px 12px rgba(20,30,60,.07)}
 .teetime .big{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:8px}
 .teetime p{color:#5a6478;font-size:14px;margin:6px 0}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.flight-col{background:#fff;border:1px solid #e2ddcf;border-radius:14px;padding:18px 22px;
+box-shadow:0 3px 12px rgba(20,30,60,.07)}
+.flight-col h3{margin:0 0 10px;color:var(--navy);font-size:16px;border-bottom:2px solid var(--gold);padding-bottom:8px}
+.flight-col ul{margin:0;padding:0;list-style:none}
+.flight-col li{display:flex;justify-content:space-between;align-items:center;padding:6px 2px;
+border-bottom:1px solid #f0ece0;font-size:14px}
+.flight-col li:last-child{border-bottom:none}
+.flight-col li span{font-weight:800;color:var(--gold);font-size:13.5px}
+@media(max-width:640px){.field-row{grid-template-columns:1fr}}
 footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 </style></head><body>
 <header><img src="iaga_logo_2025.png" alt="IAGA Las Vegas logo">
 <div><h1>6th Annual PGA Vegas by IAGA <span class="gold">— Trip HQ</span><span class="live">VEGAS GOLF MAYHEM 2026</span></h1>
 <p>One page for everything: schedule, tournament info, tee times, and live winners.</p></div></header>
 <nav>
-<a href="#story">The Story</a><a href="#plan">Plan of Events</a><a href="#tourney">Tournament Info</a><a href="#playingfor">The Stakes</a><a href="#live">Live Scoring</a><a href="#teetimes">Tee Times</a><a href="#results">Winners &amp; Results</a>
+<a href="#story">The Story</a><a href="#field">The Field</a><a href="#plan">Plan of Events</a><a href="#tourney">Tournament Info</a><a href="#playingfor">The Stakes</a><a href="#past">Past Winners</a><a href="#live">Live Scoring</a><a href="#teetimes">Tee Times</a><a href="#results">Winners &amp; Results</a>
 </nav>
 <main>
 
@@ -67,6 +77,49 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 <p>Eleven months later, here we are: 32 golfers, two legendary courses, one bus, and absolutely zero chance anyone remembers their handicap by Saturday night. Whether you're chasing glory or just good vibes — this one's going to be special. &#127942;&#127920;</p>
 <p style="margin-bottom:0">Bring your A-game. Or at least your best excuses. &#128516;</p>
 </div>
+</section>
+
+<section id="field">
+<h2>The Field — 32 Golfers</h2>
+<div class="field-row">
+<div class="flight-col"><h3>Augusta Flight</h3><ul>
+<li>Irfan Mehdi <span>2.5</span></li>
+<li>Sunil Mayur <span>5.9</span></li>
+<li>Ravi Pindiproli <span>7.9</span></li>
+<li>Harsha Sastry <span>8.0</span></li>
+<li>Rohit D'Costa <span>8.3</span></li>
+<li>Sunil Ramaiah <span>9.3</span></li>
+<li>Felix Manickam <span>10.3</span></li>
+<li>Abhijeet Nikam <span>10.4</span></li>
+<li>Vineet Sharma <span>10.7</span></li>
+<li>Harpreet Soni <span>11.0</span></li>
+<li>Kunal Verma <span>11.0</span></li>
+<li>Anirudh Joshi <span>11.2</span></li>
+<li>Pankaj Thapar <span>11.4</span></li>
+<li>Chetan Pungaliya <span>11.8</span></li>
+<li>Murali Dharan <span>11.9</span></li>
+<li>Zoheb Mukhi <span>12.5</span></li>
+</ul></div>
+<div class="flight-col"><h3>Pebble Flight</h3><ul>
+<li>Subhasish Saha <span>12.7</span></li>
+<li>Vishal Malakar <span>13.2</span></li>
+<li>Hargunwant Randhawa <span>13.7</span></li>
+<li>Parag Deshpande <span>13.8</span></li>
+<li>Abhijit Pandit <span>14.2</span></li>
+<li>Rohit Panikar <span>14.9</span></li>
+<li>Jitender Gehlaut <span>15.3</span></li>
+<li>Charandeep Sehgal <span>16.5</span></li>
+<li>Manoj Joshi <span>16.7</span></li>
+<li>Samit Rao <span>17.4</span></li>
+<li>Jigar Patel <span>17.8</span></li>
+<li>Rahul Pandit <span>18.1</span></li>
+<li>Anudeep Bhatia <span>19.2</span></li>
+<li>Chhatrapal Bhende <span>19.7</span></li>
+<li>Manish Mathuria <span>21.2</span></li>
+<li>Ketki Mathuria <span>24.8</span></li>
+</ul></div>
+</div>
+<p style="font-size:12px;color:#8a93a8;text-align:center">NCGA handicap indexes, per the tournament tee sheet.</p>
 </section>
 
 <section id="plan">
@@ -99,7 +152,7 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 <section id="tourney">
 <h2>Tournament Info</h2>
 <div class="info">
-<p><b>Format:</b> 36-hole individual net tournament across two days, played in flights. Net scoring uses the net-double-bogey per-hole cap — ties share rank.</p>
+<p><b>Format:</b> 36-hole individual net tournament across two days, played in flights. <b>Handicaps:</b> NCGA handicap index applies. <b>Max score per hole:</b> 8 on par 3s, 9 on par 4s, 10 on par 5s. Ties share rank.</p>
 <p><b>Day 1:</b> Paiute Wolf Course (Oct 16) &nbsp;·&nbsp; <b>Day 2:</b> Reflection Bay (Oct 17)</p>
 <p><b>Prizes:</b> 36-hole flight prizes 1st–5th ($1,500 / $1,000 / $750 / $500 / $250 per flight), Day 2 individual winner per flight, Closest-to-Pin on every par 3 ($50/hole) both days, CTP-with-birdie on the signature hole, Best Net Par 3 / Par 5 each day, Skins ($450/flight/day), Team Match ($500/day) — and the beloved Worst Round award, per flight per day.</p>
 <p style="margin-bottom:0"><b>Winners are announced live</b> at the awards dinner and posted on the winners page the moment they're final.</p>
@@ -122,6 +175,28 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 <li><b>Trophies</b> — 2 winners only 🏆</li>
 </ul>
 </div>
+</section>
+
+<section id="past">
+<h2>Past Winners</h2>
+<div class="grid">
+<div class="card"><h3>2025 — 5th Annual</h3>
+<p style="font-size:13.5px;line-height:1.9;margin:0"><b>Augusta:</b> 🥇 Sunil Mayur (145) · 🥈 Anirudh Joshi (149)<br><b>Pebble:</b> 🥇 Subhasish Saha (151) · 🥈 Ketki Mathuria (157)</p>
+<p style="font-size:12px;color:#8a93a8;margin:8px 0 0">Wolf Creek + Snow Mountain</p></div>
+<div class="card"><h3>2024 — 4th Annual</h3>
+<p style="font-size:13.5px;line-height:1.9;margin:0"><b>Augusta:</b> 🥇 Irfan Mehdi (154) · 🥈 Sunil Mayur (154)<br><b>Pebble:</b> 🥇 Rohit Panikar (143) · 🥈 Sunil Mehta (148)</p>
+<p style="font-size:12px;color:#8a93a8;margin:8px 0 0">Paiute Wolf + Las Vegas Country Club</p></div>
+<div class="card"><h3>2023 — 3rd Annual</h3>
+<p style="font-size:13.5px;line-height:1.9;margin:0"><b>Augusta:</b> 🥇 Murali Dharan (148) · 🥈 Amitoj Ahluwalia (157)<br><b>Pebble:</b> 🥇 Harsha Sastry (153) · 🥈 Felix Manickam (156)</p>
+<p style="font-size:12px;color:#8a93a8;margin:8px 0 0">Snow Mountain + TPC Summerlin</p></div>
+<div class="card"><h3>2022 — 2nd Annual</h3>
+<p style="font-size:13.5px;line-height:1.9;margin:0"><b>Augusta:</b> 🥇 Uthira Ganaprakasam (156) · 🥈 Sunil Mayur (156)<br><b>Pebble:</b> 🥇 Savraj Dhillon (136) · 🥈 Kunal Verma (151)</p>
+<p style="font-size:12px;color:#8a93a8;margin:8px 0 0">TPC Las Vegas + Rio Secco</p></div>
+<div class="card"><h3>2021 — 1st Annual</h3>
+<p style="font-size:13.5px;line-height:1.9;margin:0"><b>Augusta:</b> 🥇 Monty Bhatia (138) · 🥈 Mahesh Karanth (151)<br><b>Pebble:</b> 🥇 Sunil Mehta (141) · 🥈 Manoj Joshi (157)</p>
+<p style="font-size:12px;color:#8a93a8;margin:8px 0 0">Paiute Wolf + Cascata</p></div>
+</div>
+<p style="font-size:12px;color:#8a93a8;text-align:center">36-hole net totals, per Golf Genius final leaderboards.</p>
 </section>
 
 <section id="live">
