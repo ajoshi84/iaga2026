@@ -1,7 +1,7 @@
 {
   "tournaments": [
     {
-      "id": "T_1790708256128_20260221",
+      "id": "T_1791245561945_20260221",
       "course": "Bayonet",
       "date": "2026-02-21",
       "name": "Bayonet",
@@ -536,7 +536,7 @@
       ]
     },
     {
-      "id": "T_1790708258576_20260321",
+      "id": "T_1791245563725_20260321",
       "course": "Coyote Creek",
       "date": "2026-03-21",
       "name": "Coyote Creek",
@@ -1298,7 +1298,7 @@
       ]
     },
     {
-      "id": "T_1790708259886_20260516",
+      "id": "T_1791245564931_20260516",
       "course": "Baylands",
       "date": "2026-05-16",
       "name": "Baylands",
@@ -1841,7 +1841,7 @@
       ]
     },
     {
-      "id": "T_1790708260961_20260606",
+      "id": "T_1791245565908_20260606",
       "course": "Poppy Ridge",
       "date": "2026-06-06",
       "name": "Poppy Ridge",
@@ -2334,7 +2334,7 @@
       ]
     },
     {
-      "id": "T_1790708262281_20260627",
+      "id": "T_1791245567063_20260627",
       "course": "Wente",
       "date": "2026-06-27",
       "name": "Wente",
@@ -2863,7 +2863,7 @@
       ]
     },
     {
-      "id": "T_1790708263495_20260726",
+      "id": "T_1791245568296_20260726",
       "course": "Poppy Hills",
       "date": "2026-07-26",
       "name": "Poppy Hills",
@@ -3399,7 +3399,7 @@
       ]
     },
     {
-      "id": "T_1790708264494_20260822",
+      "id": "T_1791245569156_20260822",
       "course": "Silverado",
       "date": "2026-08-22",
       "name": "Silverado",
@@ -3837,7 +3837,7 @@
       ]
     },
     {
-      "id": "T_1790708265590_20260913",
+      "id": "T_1791245570104_20260913",
       "course": "San Juan Oaks",
       "date": "2026-09-13",
       "name": "San Juan Oaks",
@@ -4328,6 +4328,1335 @@
           "diff": 20.25307692307692
         }
       ]
+    },
+    {
+      "id": "T_1791245570113_20261003",
+      "course": "Coyote Creek",
+      "date": "2026-10-03",
+      "name": "Club Championship - Round 1",
+      "par": 72,
+      "flights": {
+        "Maharaj": {
+          "tee": "Blue",
+          "slope": 135.0,
+          "courseRating": 72.7
+        },
+        "Hawk": {
+          "tee": "White",
+          "slope": 131.0,
+          "courseRating": 72.0
+        },
+        "Tiger": {
+          "tee": "White",
+          "slope": 131.0,
+          "courseRating": 72.0
+        },
+        "Cobra": {
+          "tee": "Yellow",
+          "slope": 128.0,
+          "courseRating": 70.6
+        }
+      },
+      "scores": [
+        {
+          "player": "Aamir Akram",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 82.0,
+          "diff": 7.784444444444442
+        },
+        {
+          "player": "Abhi Desai",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Abhijeet Nikam",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Abhijit Bhave",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 101.0,
+          "diff": 26.837500000000006
+        },
+        {
+          "player": "Abhijit Gune",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 93.0,
+          "diff": 18.114503816793892
+        },
+        {
+          "player": "Abhijit Joshi",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 97.0,
+          "diff": 23.306250000000006
+        },
+        {
+          "player": "Abhijit Pandit",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 90.0,
+          "diff": 15.526717557251908
+        },
+        {
+          "player": "Ajay Athale",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Ajit Shanware",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 102.0,
+          "diff": 27.720312500000006
+        },
+        {
+          "player": "Aman Sandhu",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 86.0,
+          "diff": 11.132592592592589
+        },
+        {
+          "player": "Amar Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Amit Gupta",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Anandkumar Shivajappa",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Anirudh Joshi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 84.0,
+          "diff": 10.351145038167939
+        },
+        {
+          "player": "Anudeep Bhatia",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 105.0,
+          "diff": 28.46564885496183
+        },
+        {
+          "player": "Anurag Bhardwaj",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 84.0,
+          "diff": 9.458518518518515
+        },
+        {
+          "player": "Arush Goyal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 95.0,
+          "diff": 19.83969465648855
+        },
+        {
+          "player": "Ashok Vaid",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 108.0,
+          "diff": 33.017187500000006
+        },
+        {
+          "player": "Balwinder Malhi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Charandeep Sehgal",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Chetan Pungaliya",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Chhatrapal Bhende",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 98.0,
+          "diff": 24.189062500000006
+        },
+        {
+          "player": "Deepak Mayya",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 101.0,
+          "diff": 25.015267175572518
+        },
+        {
+          "player": "Divyang Desai",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 101.0,
+          "diff": 25.015267175572518
+        },
+        {
+          "player": "Felix Manickam",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Hargunwant Randhawa",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Harminder Sehmi",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 103.0,
+          "diff": 26.740458015267176
+        },
+        {
+          "player": "Harpreet Soni",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Harsha Sastry",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 81.0,
+          "diff": 7.763358778625954
+        },
+        {
+          "player": "Hasmukh Ranjan",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 105.0,
+          "diff": 30.368750000000006
+        },
+        {
+          "player": "Hassan Firzok",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 77.0,
+          "diff": 3.599259259259257
+        },
+        {
+          "player": "Inderjot Singh Saggu",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 83.0,
+          "diff": 8.621481481481478
+        },
+        {
+          "player": "Irfan Mehdi",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 76.0,
+          "diff": 2.76222222222222
+        },
+        {
+          "player": "Jattin Dudakia",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 95.0,
+          "diff": 19.83969465648855
+        },
+        {
+          "player": "Jigar Patel",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Jimmy Singh",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 86.0,
+          "diff": 12.076335877862595
+        },
+        {
+          "player": "Kanwaljit Mann",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 101.0,
+          "diff": 25.015267175572518
+        },
+        {
+          "player": "Karan Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Kartik Sehgal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 86.0,
+          "diff": 12.076335877862595
+        },
+        {
+          "player": "Ketki Mathuria",
+          "flight": "Cobra",
+          "tee": "Red",
+          "gross": 108.0,
+          "diff": 33.44435483870968
+        },
+        {
+          "player": "Kulwant Sidhu",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Kunal Verma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Madhav Halbe",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 85.0,
+          "diff": 10.295555555555552
+        },
+        {
+          "player": "Mahesh Patil",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 99.0,
+          "diff": 23.290076335877863
+        },
+        {
+          "player": "Manish Mathuria",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 100.0,
+          "diff": 25.954687500000006
+        },
+        {
+          "player": "Manoj Joshi",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Munish Mehta",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Murali Dharan",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Naresh Nagarajan",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 84.0,
+          "diff": 10.351145038167939
+        },
+        {
+          "player": "Navneet Sandhu",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 110.0,
+          "diff": 34.782812500000006
+        },
+        {
+          "player": "Neeraj Kauts",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Nikhil Kapur",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 93.0,
+          "diff": 18.114503816793892
+        },
+        {
+          "player": "Nitin Buty",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Ony Velez",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 76.0,
+          "diff": 2.76222222222222
+        },
+        {
+          "player": "Panch Chandrasekaran",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Pankaj Parashar",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 97.0,
+          "diff": 23.306250000000006
+        },
+        {
+          "player": "Pankaj Thapar",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Paramdeep Sodhi",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 81.0,
+          "diff": 6.947407407407405
+        },
+        {
+          "player": "Prabhjot Devgan",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Prabhjot Randhawa",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 81.0,
+          "diff": 7.763358778625954
+        },
+        {
+          "player": "Raghava Bharadwaj",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Rahul Pandit",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Raj Badani",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Rajiv Malik",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 88.0,
+          "diff": 15.360937500000006
+        },
+        {
+          "player": "Rakesh Manocha",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 106.0,
+          "diff": 29.328244274809162
+        },
+        {
+          "player": "Ranjan Bhasin",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 114.0,
+          "diff": 38.314062500000006
+        },
+        {
+          "player": "Ravi Krishnaiah",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 83.0,
+          "diff": 8.621481481481478
+        },
+        {
+          "player": "Ravi Pindiproli",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 89.0,
+          "diff": 13.643703703703702
+        },
+        {
+          "player": "Sajid Zia",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Samit Rao",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 101.0,
+          "diff": 25.015267175572518
+        },
+        {
+          "player": "Sanchit Sharma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 102.0,
+          "diff": 25.87786259541985
+        },
+        {
+          "player": "Sanjiv Bhargava",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Satwant Singh",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 93.0,
+          "diff": 18.114503816793892
+        },
+        {
+          "player": "Savraj Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 93.0,
+          "diff": 18.114503816793892
+        },
+        {
+          "player": "Shan Swaminathan",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 95.0,
+          "diff": 19.83969465648855
+        },
+        {
+          "player": "Shashikant Rai",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Subhasish Saha",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Sujay Ramaiah",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Sunil Mayur",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 76.0,
+          "diff": 2.76222222222222
+        },
+        {
+          "player": "Sunil Ramaiah",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 82.0,
+          "diff": 8.625954198473282
+        },
+        {
+          "player": "Surinder Thind",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 104.0,
+          "diff": 27.603053435114504
+        },
+        {
+          "player": "Tarun Goyal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Uthira Ganaprakasam",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 85.0,
+          "diff": 10.295555555555552
+        },
+        {
+          "player": "Valsan Ponnachath",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Vikaas Dixit",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Vineet Sharma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Vir Brar",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 78.0,
+          "diff": 4.436296296296294
+        },
+        {
+          "player": "Virendra Kirloskar",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Vishal Goradia",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 88.0,
+          "diff": 13.801526717557252
+        },
+        {
+          "player": "Vishal Goyal",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 96.0,
+          "diff": 22.423437500000006
+        },
+        {
+          "player": "Zoheb Mukhi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        }
+      ]
+    },
+    {
+      "id": "T_1791245570123_20261004",
+      "course": "Coyote Creek",
+      "date": "2026-10-04",
+      "name": "Club Championship - Round 2",
+      "par": 72,
+      "flights": {
+        "Maharaj": {
+          "tee": "Blue",
+          "slope": 135.0,
+          "courseRating": 72.7
+        },
+        "Hawk": {
+          "tee": "White",
+          "slope": 131.0,
+          "courseRating": 72.0
+        },
+        "Tiger": {
+          "tee": "White",
+          "slope": 131.0,
+          "courseRating": 72.0
+        },
+        "Cobra": {
+          "tee": "Yellow",
+          "slope": 128.0,
+          "courseRating": 70.6
+        }
+      },
+      "scores": [
+        {
+          "player": "Aamir Akram",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 86.0,
+          "diff": 11.132592592592589
+        },
+        {
+          "player": "Abhi Desai",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Abhijeet Nikam",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Abhijit Bhave",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 96.0,
+          "diff": 22.423437500000006
+        },
+        {
+          "player": "Abhijit Gune",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Abhijit Joshi",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 104.0,
+          "diff": 29.485937500000006
+        },
+        {
+          "player": "Abhijit Pandit",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Ajay Athale",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 90.0,
+          "diff": 15.526717557251908
+        },
+        {
+          "player": "Ajit Shanware",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 104.0,
+          "diff": 29.485937500000006
+        },
+        {
+          "player": "Aman Sandhu",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 80.0,
+          "diff": 6.110370370370368
+        },
+        {
+          "player": "Amar Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Amit Gupta",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Anandkumar Shivajappa",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Anirudh Joshi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Anurag Bhardwaj",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 89.0,
+          "diff": 13.643703703703702
+        },
+        {
+          "player": "Arush Goyal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 103.0,
+          "diff": 26.740458015267176
+        },
+        {
+          "player": "Ashok Vaid",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 104.0,
+          "diff": 29.485937500000006
+        },
+        {
+          "player": "Balwinder Malhi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Charandeep Sehgal",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Chetan Pungaliya",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Chhatrapal Bhende",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 98.0,
+          "diff": 24.189062500000006
+        },
+        {
+          "player": "Deepak Mayya",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Divyang Desai",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 85.0,
+          "diff": 11.213740458015268
+        },
+        {
+          "player": "Felix Manickam",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Hargunwant Randhawa",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 95.0,
+          "diff": 19.83969465648855
+        },
+        {
+          "player": "Harminder Sehmi",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Harpreet Soni",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 86.0,
+          "diff": 12.076335877862595
+        },
+        {
+          "player": "Harsha Sastry",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 85.0,
+          "diff": 11.213740458015268
+        },
+        {
+          "player": "Hasmukh Ranjan",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 103.0,
+          "diff": 28.603125000000006
+        },
+        {
+          "player": "Hassan Firzok",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 80.0,
+          "diff": 6.110370370370368
+        },
+        {
+          "player": "Inderjot Singh Saggu",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 87.0,
+          "diff": 11.969629629629626
+        },
+        {
+          "player": "Irfan Mehdi",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 84.0,
+          "diff": 9.458518518518515
+        },
+        {
+          "player": "Jattin Dudakia",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 93.0,
+          "diff": 18.114503816793892
+        },
+        {
+          "player": "Jigar Patel",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 111.0,
+          "diff": 33.6412213740458
+        },
+        {
+          "player": "Jimmy Singh",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Kanwaljit Mann",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 131.0,
+          "diff": 50.89312977099237
+        },
+        {
+          "player": "Karan Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Kartik Sehgal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Ketki Mathuria",
+          "flight": "Cobra",
+          "tee": "Red",
+          "gross": 102.0,
+          "diff": 27.97661290322581
+        },
+        {
+          "player": "Kulwant Sidhu",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Kunal Verma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Madhav Halbe",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 87.0,
+          "diff": 11.969629629629626
+        },
+        {
+          "player": "Mahesh Patil",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 99.0,
+          "diff": 23.290076335877863
+        },
+        {
+          "player": "Manish Mathuria",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 99.0,
+          "diff": 25.071875000000006
+        },
+        {
+          "player": "Manoj Joshi",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Munish Mehta",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 85.0,
+          "diff": 11.213740458015268
+        },
+        {
+          "player": "Murali Dharan",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 85.0,
+          "diff": 11.213740458015268
+        },
+        {
+          "player": "Naresh Nagarajan",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 86.0,
+          "diff": 12.076335877862595
+        },
+        {
+          "player": "Navneet Sandhu",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 100.0,
+          "diff": 25.954687500000006
+        },
+        {
+          "player": "Neeraj Kauts",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Nikhil Kapur",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Nitin Buty",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Ony Velez",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 76.0,
+          "diff": 2.76222222222222
+        },
+        {
+          "player": "Panch Chandrasekaran",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 101.0,
+          "diff": 25.015267175572518
+        },
+        {
+          "player": "Pankaj Parashar",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 100.0,
+          "diff": 25.954687500000006
+        },
+        {
+          "player": "Pankaj Thapar",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 96.0,
+          "diff": 20.702290076335878
+        },
+        {
+          "player": "Paramdeep Sodhi",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 77.0,
+          "diff": 3.599259259259257
+        },
+        {
+          "player": "Prabhjot Devgan",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 102.0,
+          "diff": 25.87786259541985
+        },
+        {
+          "player": "Prabhjot Randhawa",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 89.0,
+          "diff": 14.664122137404581
+        },
+        {
+          "player": "Raghava Bharadwaj",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Rahul Pandit",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 92.0,
+          "diff": 17.251908396946565
+        },
+        {
+          "player": "Raj Badani",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 112.0,
+          "diff": 34.50381679389313
+        },
+        {
+          "player": "Rajiv Malik",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 96.0,
+          "diff": 22.423437500000006
+        },
+        {
+          "player": "Rakesh Manocha",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 107.0,
+          "diff": 30.19083969465649
+        },
+        {
+          "player": "Ranjan Bhasin",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 102.0,
+          "diff": 27.720312500000006
+        },
+        {
+          "player": "Ravi Krishnaiah",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 78.0,
+          "diff": 4.436296296296294
+        },
+        {
+          "player": "Ravi Pindiproli",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 79.0,
+          "diff": 5.273333333333331
+        },
+        {
+          "player": "Sajid Zia",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 105.0,
+          "diff": 28.46564885496183
+        },
+        {
+          "player": "Samit Rao",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Sanchit Sharma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 91.0,
+          "diff": 16.389312977099237
+        },
+        {
+          "player": "Sanjiv Bhargava",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Satwant Singh",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 95.0,
+          "diff": 19.83969465648855
+        },
+        {
+          "player": "Savraj Dhillon",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Shan Swaminathan",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Shashikant Rai",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Subhasish Saha",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 90.0,
+          "diff": 15.526717557251908
+        },
+        {
+          "player": "Sujay Ramaiah",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Sunil Mayur",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 83.0,
+          "diff": 8.621481481481478
+        },
+        {
+          "player": "Sunil Ramaiah",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 83.0,
+          "diff": 9.488549618320612
+        },
+        {
+          "player": "Surinder Thind",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 100.0,
+          "diff": 24.15267175572519
+        },
+        {
+          "player": "Tarun Goyal",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 87.0,
+          "diff": 12.938931297709924
+        },
+        {
+          "player": "Uthira Ganaprakasam",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 89.0,
+          "diff": 13.643703703703702
+        },
+        {
+          "player": "Valsan Ponnachath",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 98.0,
+          "diff": 22.427480916030536
+        },
+        {
+          "player": "Vikaas Dixit",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 88.0,
+          "diff": 13.801526717557252
+        },
+        {
+          "player": "Vineet Sharma",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 88.0,
+          "diff": 13.801526717557252
+        },
+        {
+          "player": "Vir Brar",
+          "flight": "Maharaj",
+          "tee": "Blue",
+          "gross": 79.0,
+          "diff": 5.273333333333331
+        },
+        {
+          "player": "Virendra Kirloskar",
+          "flight": "Tiger",
+          "tee": "White",
+          "gross": 97.0,
+          "diff": 21.564885496183205
+        },
+        {
+          "player": "Vishal Goradia",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 94.0,
+          "diff": 18.977099236641223
+        },
+        {
+          "player": "Vishal Goyal",
+          "flight": "Cobra",
+          "tee": "Yellow",
+          "gross": 97.0,
+          "diff": 23.306250000000006
+        },
+        {
+          "player": "Zoheb Mukhi",
+          "flight": "Hawk",
+          "tee": "White",
+          "gross": 90.0,
+          "diff": 15.526717557251908
+        }
+      ]
     }
   ],
   "roster": {
@@ -4734,11 +6063,11 @@
     "karan dhillon": {
       "name": "Karan Dhillon",
       "flight": "Hawk",
-      "ghin": null
+      "ghin": "2369086"
     },
     "vikaas dixit": {
       "name": "Vikaas Dixit",
-      "flight": "Hawk",
+      "flight": "Tiger",
       "ghin": "8706796"
     },
     "paul finn": {
@@ -4763,7 +6092,7 @@
     },
     "arush goyal": {
       "name": "Arush Goyal",
-      "flight": "Tiger",
+      "flight": "Hawk",
       "ghin": "10819246"
     },
     "tarun goyal": {
@@ -4854,7 +6183,7 @@
     "munish mehta": {
       "name": "Munish Mehta",
       "flight": "Hawk",
-      "ghin": null
+      "ghin": "1223615"
     },
     "sunil mehta": {
       "name": "Sunil Mehta",
@@ -4898,7 +6227,7 @@
     },
     "sanchit sharma": {
       "name": "Sanchit Sharma",
-      "flight": "Tiger",
+      "flight": "Hawk",
       "ghin": "13315657"
     },
     "vineet sharma": {
@@ -5035,6 +6364,11 @@
       "name": "Narinder Bhullar",
       "flight": "Cobra",
       "ghin": "13405021"
+    },
+    "surinder thind": {
+      "name": "Surinder Thind",
+      "flight": "Tiger",
+      "ghin": "213041"
     }
   },
   "ncgaIndex": {
@@ -5988,6 +7322,28 @@
           "ti": 7.5,
           "ncga": 7.1,
           "usable": 7.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 82.0,
+          "diff": 7.8,
+          "ti": 6.2,
+          "ncga": 7.5,
+          "usable": 6.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 86.0,
+          "diff": 11.1,
+          "ti": 6.2,
+          "ncga": 7.5,
+          "usable": 6.2
         }
       ]
     },
@@ -6082,6 +7438,28 @@
           "diff": 8.1,
           "ti": 7.3,
           "ncga": 8.8,
+          "usable": 7.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 7.3,
+          "ncga": 7.3,
+          "usable": 7.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 90.0,
+          "diff": 15.5,
+          "ti": 7.3,
+          "ncga": 7.3,
           "usable": 7.3
         }
       ]
@@ -6178,6 +7556,28 @@
           "ti": 8.1,
           "ncga": 8.1,
           "usable": 8.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 8.1,
+          "ncga": null,
+          "usable": 8.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 8.1,
+          "ncga": null,
+          "usable": 8.1
         }
       ]
     },
@@ -6273,6 +7673,28 @@
           "ti": 6.9,
           "ncga": 6.0,
           "usable": 6.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 6.9,
+          "ncga": null,
+          "usable": 6.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 6.9,
+          "ncga": null,
+          "usable": 6.9
         }
       ]
     },
@@ -6368,6 +7790,28 @@
           "ti": 22.3,
           "ncga": null,
           "usable": 22.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 21.5,
+          "ncga": 10.5,
+          "usable": 10.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 21.5,
+          "ncga": 10.5,
+          "usable": 10.5
         }
       ]
     },
@@ -6463,6 +7907,28 @@
           "ti": 18.2,
           "ncga": null,
           "usable": 18.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 18.2,
+          "ncga": 17.3,
+          "usable": 17.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 17.8,
+          "ncga": 17.3,
+          "usable": 17.3
         }
       ]
     },
@@ -6558,6 +8024,28 @@
           "ti": 31.6,
           "ncga": 19.4,
           "usable": 19.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 105.0,
+          "diff": 28.5,
+          "ti": 23.0,
+          "ncga": 19.2,
+          "usable": 19.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 23.0,
+          "ncga": 19.2,
+          "usable": 19.2
         }
       ]
     },
@@ -6652,6 +8140,28 @@
           "diff": 19.2,
           "ti": 17.9,
           "ncga": 19.5,
+          "usable": 17.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 98.0,
+          "diff": 24.2,
+          "ti": 17.9,
+          "ncga": 17.9,
+          "usable": 17.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 98.0,
+          "diff": 24.2,
+          "ti": 17.9,
+          "ncga": 17.9,
           "usable": 17.9
         }
       ]
@@ -6748,6 +8258,28 @@
           "ti": 7.1,
           "ncga": 5.9,
           "usable": 5.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 78.0,
+          "diff": 4.4,
+          "ti": 5.5,
+          "ncga": 6.3,
+          "usable": 5.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 79.0,
+          "diff": 5.3,
+          "ti": 4.7,
+          "ncga": 6.3,
+          "usable": 4.7
         }
       ]
     },
@@ -6843,6 +8375,28 @@
           "ti": 18.6,
           "ncga": 16.4,
           "usable": 16.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 16.9,
+          "ncga": 15.7,
+          "usable": 15.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 16.9,
+          "ncga": 15.7,
+          "usable": 15.7
         }
       ]
     },
@@ -6938,6 +8492,28 @@
           "ti": 11.7,
           "ncga": 8.3,
           "usable": 8.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 11.7,
+          "ncga": null,
+          "usable": 11.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 11.7,
+          "ncga": null,
+          "usable": 11.7
         }
       ]
     },
@@ -7033,6 +8609,28 @@
           "ti": 14.5,
           "ncga": 11.0,
           "usable": 11.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 14.1,
+          "ncga": 10.8,
+          "usable": 10.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 14.1,
+          "ncga": 10.8,
+          "usable": 10.8
         }
       ]
     },
@@ -7128,6 +8726,28 @@
           "ti": 18.4,
           "ncga": 16.9,
           "usable": 16.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 18.4,
+          "ncga": null,
+          "usable": 18.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 18.4,
+          "ncga": null,
+          "usable": 18.4
         }
       ]
     },
@@ -7223,6 +8843,28 @@
           "ti": 14.3,
           "ncga": 13.0,
           "usable": 13.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 14.3,
+          "ncga": null,
+          "usable": 14.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 14.3,
+          "ncga": null,
+          "usable": 14.3
         }
       ]
     },
@@ -7318,6 +8960,28 @@
           "ti": 17.9,
           "ncga": 16.7,
           "usable": 16.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 17.2,
+          "ncga": 16.6,
+          "usable": 16.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 102.0,
+          "diff": 25.9,
+          "ti": 17.2,
+          "ncga": 16.6,
+          "usable": 16.6
         }
       ]
     },
@@ -7413,6 +9077,28 @@
           "ti": 15.3,
           "ncga": null,
           "usable": 15.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 14.5,
+          "ncga": 12.2,
+          "usable": 12.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 85.0,
+          "diff": 11.2,
+          "ti": 12.0,
+          "ncga": 12.2,
+          "usable": 12.0
         }
       ]
     },
@@ -7508,6 +9194,28 @@
           "ti": 14.0,
           "ncga": 13.0,
           "usable": 13.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 93.0,
+          "diff": 18.1,
+          "ti": 14.0,
+          "ncga": 13.4,
+          "usable": 13.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 14.0,
+          "ncga": 13.4,
+          "usable": 13.4
         }
       ]
     },
@@ -7603,6 +9311,28 @@
           "ti": 15.3,
           "ncga": null,
           "usable": 15.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 95.0,
+          "diff": 19.8,
+          "ti": 15.3,
+          "ncga": 10.9,
+          "usable": 10.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 93.0,
+          "diff": 18.1,
+          "ti": 15.3,
+          "ncga": 10.9,
+          "usable": 10.9
         }
       ]
     },
@@ -7698,6 +9428,28 @@
           "ti": 6.9,
           "ncga": null,
           "usable": 6.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 77.0,
+          "diff": 3.6,
+          "ti": 3.9,
+          "ncga": 0.9,
+          "usable": 0.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 80.0,
+          "diff": 6.1,
+          "ti": 3.9,
+          "ncga": 0.9,
+          "usable": 0.9
         }
       ]
     },
@@ -7787,6 +9539,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 19.6,
+          "ncga": null,
+          "usable": 19.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 19.6,
+          "ncga": null,
+          "usable": 19.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -7888,6 +9662,28 @@
           "ti": 13.4,
           "ncga": null,
           "usable": 13.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 85.0,
+          "diff": 10.3,
+          "ti": 9.6,
+          "ncga": 5.8,
+          "usable": 5.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 89.0,
+          "diff": 13.6,
+          "ti": 9.6,
+          "ncga": 5.8,
+          "usable": 5.8
         }
       ]
     },
@@ -7983,6 +9779,28 @@
           "ti": 15.8,
           "ncga": 15.6,
           "usable": 15.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.8,
+          "ncga": null,
+          "usable": 15.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.8,
+          "ncga": null,
+          "usable": 15.8
         }
       ]
     },
@@ -8072,6 +9890,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 13.5,
+          "ncga": null,
+          "usable": 13.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 13.5,
+          "ncga": null,
+          "usable": 13.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Maharaj",
           "score": null,
           "diff": null,
@@ -8173,6 +10013,28 @@
           "ti": 9.9,
           "ncga": 6.1,
           "usable": 6.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 85.0,
+          "diff": 10.3,
+          "ti": 8.8,
+          "ncga": 6.2,
+          "usable": 6.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 87.0,
+          "diff": 12.0,
+          "ti": 8.8,
+          "ncga": 6.2,
+          "usable": 6.2
         }
       ]
     },
@@ -8262,6 +10124,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 20.9,
+          "ncga": null,
+          "usable": 20.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 20.9,
+          "ncga": null,
+          "usable": 20.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -8363,6 +10247,28 @@
           "ti": 24.9,
           "ncga": null,
           "usable": 24.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 24.9,
+          "ncga": null,
+          "usable": 24.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 24.9,
+          "ncga": null,
+          "usable": 24.9
         }
       ]
     },
@@ -8452,6 +10358,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 23.7,
+          "ncga": null,
+          "usable": 23.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 23.7,
+          "ncga": null,
+          "usable": 23.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -8553,6 +10481,28 @@
           "ti": 9.2,
           "ncga": 9.6,
           "usable": 9.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 84.0,
+          "diff": 10.4,
+          "ti": 9.2,
+          "ncga": 9.6,
+          "usable": 9.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 9.2,
+          "ncga": 9.6,
+          "usable": 9.2
         }
       ]
     },
@@ -8648,6 +10598,28 @@
           "ti": 34.9,
           "ncga": 22.3,
           "usable": 22.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 34.9,
+          "ncga": null,
+          "usable": 34.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 34.9,
+          "ncga": null,
+          "usable": 34.9
         }
       ]
     },
@@ -8743,6 +10715,28 @@
           "ti": 14.2,
           "ncga": 15.2,
           "usable": 14.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 13.0,
+          "ncga": 14.2,
+          "usable": 13.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 13.0,
+          "ncga": 14.2,
+          "usable": 13.0
         }
       ]
     },
@@ -8832,6 +10826,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 23.0,
+          "ncga": null,
+          "usable": 23.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 23.0,
+          "ncga": null,
+          "usable": 23.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Cobra",
           "score": null,
           "diff": null,
@@ -8933,6 +10949,28 @@
           "ti": 19.0,
           "ncga": null,
           "usable": 19.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 19.0,
+          "ncga": 17.8,
+          "usable": 17.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 19.0,
+          "ncga": 17.8,
+          "usable": 17.8
         }
       ]
     },
@@ -9028,6 +11066,28 @@
           "ti": 5.7,
           "ncga": 5.1,
           "usable": 5.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 83.0,
+          "diff": 8.6,
+          "ti": 5.7,
+          "ncga": 5.6,
+          "usable": 5.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 78.0,
+          "diff": 4.4,
+          "ti": 3.9,
+          "ncga": 5.6,
+          "usable": 3.9
         }
       ]
     },
@@ -9123,6 +11183,28 @@
           "ti": 17.2,
           "ncga": 19.2,
           "usable": 17.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 88.0,
+          "diff": 15.4,
+          "ti": 15.8,
+          "ncga": 17.2,
+          "usable": 15.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 96.0,
+          "diff": 22.4,
+          "ti": 15.8,
+          "ncga": 17.2,
+          "usable": 15.8
         }
       ]
     },
@@ -9218,6 +11300,28 @@
           "ti": 12.0,
           "ncga": null,
           "usable": 12.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 12.0,
+          "ncga": 10.3,
+          "usable": 10.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 12.0,
+          "ncga": 10.3,
+          "usable": 10.3
         }
       ]
     },
@@ -9313,6 +11417,28 @@
           "ti": 25.3,
           "ncga": null,
           "usable": 25.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 108.0,
+          "diff": 33.4,
+          "ti": 25.3,
+          "ncga": 23.3,
+          "usable": 23.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 102.0,
+          "diff": 28.0,
+          "ti": 24.2,
+          "ncga": 23.3,
+          "usable": 23.3
         }
       ]
     },
@@ -9408,6 +11534,28 @@
           "ti": 5.3,
           "ncga": 6.7,
           "usable": 5.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 76.0,
+          "diff": 2.8,
+          "ti": 3.2,
+          "ncga": 5.3,
+          "usable": 3.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 83.0,
+          "diff": 8.6,
+          "ti": 3.2,
+          "ncga": 5.3,
+          "usable": 3.2
         }
       ]
     },
@@ -9503,6 +11651,28 @@
           "ti": 2.7,
           "ncga": 2.7,
           "usable": 2.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 76.0,
+          "diff": 2.8,
+          "ti": 1.9,
+          "ncga": 2.7,
+          "usable": 1.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 84.0,
+          "diff": 9.5,
+          "ti": 1.9,
+          "ncga": 2.7,
+          "usable": 1.9
         }
       ]
     },
@@ -9592,6 +11762,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 13.2,
+          "ncga": null,
+          "usable": 13.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 13.2,
+          "ncga": null,
+          "usable": 13.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -9693,6 +11885,28 @@
           "ti": 16.9,
           "ncga": 11.7,
           "usable": 11.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 15.3,
+          "ncga": 11.7,
+          "usable": 11.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 90.0,
+          "diff": 15.5,
+          "ti": 14.5,
+          "ncga": 11.7,
+          "usable": 11.7
         }
       ]
     },
@@ -9788,6 +12002,28 @@
           "ti": 11.1,
           "ncga": 9.4,
           "usable": 9.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 84.0,
+          "diff": 10.4,
+          "ti": 10.3,
+          "ncga": 9.6,
+          "usable": 9.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 86.0,
+          "diff": 12.1,
+          "ti": 10.3,
+          "ncga": 9.6,
+          "usable": 9.6
         }
       ]
     },
@@ -9877,6 +12113,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 18.2,
+          "ncga": null,
+          "usable": 18.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 18.2,
+          "ncga": null,
+          "usable": 18.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -9978,6 +12236,28 @@
           "ti": 15.2,
           "ncga": 13.9,
           "usable": 13.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 90.0,
+          "diff": 15.5,
+          "ti": 14.4,
+          "ncga": 14.3,
+          "usable": 14.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 14.4,
+          "ncga": 14.3,
+          "usable": 14.3
         }
       ]
     },
@@ -10073,6 +12353,28 @@
           "ti": 18.2,
           "ncga": null,
           "usable": 18.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 18.2,
+          "ncga": 18.0,
+          "usable": 18.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 16.1,
+          "ncga": 18.0,
+          "usable": 16.1
         }
       ]
     },
@@ -10162,6 +12464,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 24.8,
+          "ncga": null,
+          "usable": 24.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 24.8,
+          "ncga": null,
+          "usable": 24.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -10263,6 +12587,28 @@
           "ti": 20.5,
           "ncga": 21.7,
           "usable": 20.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 97.0,
+          "diff": 23.3,
+          "ti": 20.5,
+          "ncga": 20.5,
+          "usable": 20.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 100.0,
+          "diff": 26.0,
+          "ti": 20.5,
+          "ncga": 20.5,
+          "usable": 20.5
         }
       ]
     },
@@ -10356,6 +12702,28 @@
           "score": 95,
           "diff": 21.1,
           "ti": 22.6,
+          "ncga": 18.2,
+          "usable": 18.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 18.4,
+          "ncga": 18.2,
+          "usable": 18.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 111.0,
+          "diff": 33.6,
+          "ti": 18.4,
           "ncga": 18.2,
           "usable": 18.2
         }
@@ -10453,6 +12821,28 @@
           "ti": 12.4,
           "ncga": 8.6,
           "usable": 8.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 89.0,
+          "diff": 13.6,
+          "ti": 12.4,
+          "ncga": 8.6,
+          "usable": 8.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 79.0,
+          "diff": 5.3,
+          "ti": 8.7,
+          "ncga": 8.6,
+          "usable": 8.6
         }
       ]
     },
@@ -10548,6 +12938,28 @@
           "ti": 23.7,
           "ncga": null,
           "usable": 23.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 22.0,
+          "ncga": 17.4,
+          "usable": 17.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 21.2,
+          "ncga": 17.4,
+          "usable": 17.4
         }
       ]
     },
@@ -10643,6 +13055,28 @@
           "ti": 10.1,
           "ncga": 9.7,
           "usable": 9.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 10.1,
+          "ncga": 10.1,
+          "usable": 10.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 10.1,
+          "ncga": 10.1,
+          "usable": 10.1
         }
       ]
     },
@@ -10737,6 +13171,28 @@
           "diff": 15.9,
           "ti": 17.1,
           "ncga": 18.3,
+          "usable": 17.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 17.1,
+          "ncga": 17.1,
+          "usable": 17.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 17.1,
+          "ncga": 17.1,
           "usable": 17.1
         }
       ]
@@ -10833,6 +13289,28 @@
           "ti": 17.4,
           "ncga": null,
           "usable": 17.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 17.4,
+          "ncga": 14.2,
+          "usable": 14.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 17.4,
+          "ncga": 14.2,
+          "usable": 14.2
         }
       ]
     },
@@ -10928,6 +13406,28 @@
           "ti": 15.9,
           "ncga": 16.5,
           "usable": 15.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 101.0,
+          "diff": 25.0,
+          "ti": 15.9,
+          "ncga": 15.9,
+          "usable": 15.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 15.5,
+          "ncga": 15.9,
+          "usable": 15.5
         }
       ]
     },
@@ -11017,6 +13517,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.7,
+          "ncga": null,
+          "usable": 15.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.7,
+          "ncga": null,
+          "usable": 15.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -11118,6 +13640,28 @@
           "ti": 18.1,
           "ncga": 12.4,
           "usable": 12.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 16.1,
+          "ncga": 12.6,
+          "usable": 12.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 90.0,
+          "diff": 15.5,
+          "ti": 14.5,
+          "ncga": 12.6,
+          "usable": 12.6
         }
       ]
     },
@@ -11212,6 +13756,28 @@
           "diff": null,
           "ti": 0.6,
           "ncga": null,
+          "usable": 0.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 86.0,
+          "diff": 11.1,
+          "ti": 0.6,
+          "ncga": 0.6,
+          "usable": 0.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 80.0,
+          "diff": 6.1,
+          "ti": 0.6,
+          "ncga": 0.6,
           "usable": 0.6
         }
       ]
@@ -11308,6 +13874,28 @@
           "ti": 26.5,
           "ncga": 22.0,
           "usable": 22.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 110.0,
+          "diff": 34.8,
+          "ti": 26.5,
+          "ncga": 22.1,
+          "usable": 22.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 100.0,
+          "diff": 26.0,
+          "ti": 23.0,
+          "ncga": 22.1,
+          "usable": 22.1
         }
       ]
     },
@@ -11403,6 +13991,28 @@
           "ti": 8.5,
           "ncga": 9.3,
           "usable": 8.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 81.0,
+          "diff": 7.8,
+          "ti": 7.1,
+          "ncga": 8.4,
+          "usable": 7.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 85.0,
+          "diff": 11.2,
+          "ti": 7.1,
+          "ncga": 8.4,
+          "usable": 7.1
         }
       ]
     },
@@ -11498,6 +14108,28 @@
           "ti": 20.8,
           "ncga": 15.9,
           "usable": 15.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 19.5,
+          "ncga": 16.3,
+          "usable": 16.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 17.9,
+          "ncga": 16.3,
+          "usable": 16.3
         }
       ]
     },
@@ -11592,6 +14224,28 @@
           "diff": 12.4,
           "ti": 11.3,
           "ncga": 11.3,
+          "usable": 11.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 11.3,
+          "ncga": null,
+          "usable": 11.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 11.3,
+          "ncga": null,
           "usable": 11.3
         }
       ]
@@ -11688,6 +14342,28 @@
           "ti": 21.3,
           "ncga": 26.2,
           "usable": 21.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 102.0,
+          "diff": 27.7,
+          "ti": 21.3,
+          "ncga": 21.3,
+          "usable": 21.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 104.0,
+          "diff": 29.5,
+          "ti": 21.3,
+          "ncga": 21.3,
+          "usable": 21.3
         }
       ]
     },
@@ -11777,6 +14453,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 16.6,
+          "ncga": null,
+          "usable": 16.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 16.6,
+          "ncga": null,
+          "usable": 16.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -11878,6 +14576,28 @@
           "ti": 14.6,
           "ncga": 16.9,
           "usable": 14.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 14.6,
+          "ncga": 14.6,
+          "usable": 14.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 14.6,
+          "ncga": 14.6,
+          "usable": 14.6
         }
       ]
     },
@@ -11973,6 +14693,28 @@
           "ti": 16.7,
           "ncga": 18.7,
           "usable": 16.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 15.9,
+          "ncga": 16.7,
+          "usable": 15.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 15.9,
+          "ncga": 16.7,
+          "usable": 15.9
         }
       ]
     },
@@ -12068,6 +14810,28 @@
           "ti": 14.4,
           "ncga": 8.9,
           "usable": 8.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 86.0,
+          "diff": 12.1,
+          "ti": 12.3,
+          "ncga": 9.0,
+          "usable": 9.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 12.3,
+          "ncga": 9.0,
+          "usable": 9.0
         }
       ]
     },
@@ -12163,6 +14927,28 @@
           "ti": 14.2,
           "ncga": null,
           "usable": 14.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 93.0,
+          "diff": 18.1,
+          "ti": 13.3,
+          "ncga": 12.8,
+          "usable": 12.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 95.0,
+          "diff": 19.8,
+          "ti": 13.3,
+          "ncga": 12.8,
+          "usable": 12.8
         }
       ]
     },
@@ -12258,6 +15044,28 @@
           "ti": 10.0,
           "ncga": 10.0,
           "usable": 10.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 10.0,
+          "ncga": 10.0,
+          "usable": 10.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 86.0,
+          "diff": 12.1,
+          "ti": 10.0,
+          "ncga": 10.0,
+          "usable": 10.0
         }
       ]
     },
@@ -12347,6 +15155,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 14.5,
+          "ncga": null,
+          "usable": 14.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 14.5,
+          "ncga": null,
+          "usable": 14.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -12448,6 +15278,28 @@
           "ti": 17.0,
           "ncga": 14.9,
           "usable": 14.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 95.0,
+          "diff": 19.8,
+          "ti": 17.0,
+          "ncga": 15.6,
+          "usable": 15.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 17.0,
+          "ncga": 15.6,
+          "usable": 15.6
         }
       ]
     },
@@ -12543,6 +15395,28 @@
           "ti": 17.9,
           "ncga": 11.1,
           "usable": 11.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 14.7,
+          "ncga": 11.4,
+          "usable": 11.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 14.7,
+          "ncga": 11.4,
+          "usable": 11.4
         }
       ]
     },
@@ -12637,6 +15511,28 @@
           "diff": -1.3,
           "ti": -0.9,
           "ncga": 0.8,
+          "usable": -0.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 76.0,
+          "diff": 2.8,
+          "ti": -0.9,
+          "ncga": -0.9,
+          "usable": -0.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 76.0,
+          "diff": 2.8,
+          "ti": -0.9,
+          "ncga": -0.9,
           "usable": -0.9
         }
       ]
@@ -12733,6 +15629,28 @@
           "ti": 21.0,
           "ncga": 17.4,
           "usable": 17.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 19.9,
+          "ncga": 17.4,
+          "usable": 17.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 105.0,
+          "diff": 28.5,
+          "ti": 19.9,
+          "ncga": 17.4,
+          "usable": 17.4
         }
       ]
     },
@@ -12811,6 +15729,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 24.1,
+          "ncga": null,
+          "usable": 24.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 24.1,
+          "ncga": null,
+          "usable": 24.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -12901,6 +15841,28 @@
           "ti": 4.7,
           "ncga": 4.7,
           "usable": 4.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 84.0,
+          "diff": 9.5,
+          "ti": 4.7,
+          "ncga": 4.7,
+          "usable": 4.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 89.0,
+          "diff": 13.6,
+          "ti": 4.7,
+          "ncga": 4.7,
+          "usable": 4.7
         }
       ]
     },
@@ -12984,6 +15946,28 @@
           "diff": 15.9,
           "ti": 15.8,
           "ncga": 18.5,
+          "usable": 15.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.8,
+          "ncga": null,
+          "usable": 15.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 15.8,
+          "ncga": null,
           "usable": 15.8
         }
       ]
@@ -13069,6 +16053,28 @@
           "ti": 27.1,
           "ncga": 26.2,
           "usable": 26.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 114.0,
+          "diff": 38.3,
+          "ti": 27.1,
+          "ncga": 26.8,
+          "usable": 26.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 102.0,
+          "diff": 27.7,
+          "ti": 26.5,
+          "ncga": 26.8,
+          "usable": 26.5
         }
       ]
     },
@@ -13153,6 +16159,28 @@
           "ti": 18.6,
           "ncga": null,
           "usable": 18.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 18.6,
+          "ncga": 16.8,
+          "usable": 16.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 101.0,
+          "diff": 25.0,
+          "ti": 18.6,
+          "ncga": 16.8,
+          "usable": 16.8
         }
       ]
     },
@@ -13231,6 +16259,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 19.3,
+          "ncga": null,
+          "usable": 19.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 19.3,
+          "ncga": null,
+          "usable": 19.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -13321,6 +16371,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 101.0,
+          "diff": 25.0,
+          "ti": 25.3,
+          "ncga": 17.2,
+          "usable": 17.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 85.0,
+          "diff": 11.2,
+          "ti": 17.4,
+          "ncga": 17.2,
+          "usable": 17.2
         }
       ]
     },
@@ -13405,13 +16477,35 @@
           "ti": 8.7,
           "ncga": 8.0,
           "usable": 8.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 8.7,
+          "ncga": 7.3,
+          "usable": 7.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 8.7,
+          "ncga": 7.3,
+          "usable": 7.3
         }
       ]
     },
     "karan dhillon": {
       "name": "Karan Dhillon",
       "flight": "Hawk",
-      "ghin": null,
+      "ghin": "2369086",
       "entries": [
         {
           "date": "2026-03-21",
@@ -13489,12 +16583,34 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 22.8,
+          "ncga": 10.6,
+          "usable": 10.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 21.1,
+          "ncga": 10.6,
+          "usable": 10.6
         }
       ]
     },
     "vikaas dixit": {
       "name": "Vikaas Dixit",
-      "flight": "Hawk",
+      "flight": "Tiger",
       "ghin": "8706796",
       "entries": [
         {
@@ -13573,6 +16689,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 20.7,
+          "ncga": 14.7,
+          "usable": 14.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 88.0,
+          "diff": 13.8,
+          "ti": 17.0,
+          "ncga": 14.7,
+          "usable": 14.7
         }
       ]
     },
@@ -13657,6 +16795,28 @@
           "ti": 19.2,
           "ncga": 16.7,
           "usable": 16.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 19.2,
+          "ncga": null,
+          "usable": 19.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 19.2,
+          "ncga": null,
+          "usable": 19.2
         }
       ]
     },
@@ -13735,6 +16895,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 22.8,
+          "ncga": null,
+          "usable": 22.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 22.8,
+          "ncga": null,
+          "usable": 22.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -13825,6 +17007,28 @@
           "ti": 15.0,
           "ncga": 11.6,
           "usable": 11.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 15.0,
+          "ncga": null,
+          "usable": 15.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 15.0,
+          "ncga": null,
+          "usable": 15.0
         }
       ]
     },
@@ -13909,12 +17113,34 @@
           "ti": 13.2,
           "ncga": null,
           "usable": 13.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 88.0,
+          "diff": 13.8,
+          "ti": 11.6,
+          "ncga": 10.4,
+          "usable": 10.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 11.6,
+          "ncga": 10.4,
+          "usable": 10.4
         }
       ]
     },
     "arush goyal": {
       "name": "Arush Goyal",
-      "flight": "Tiger",
+      "flight": "Hawk",
       "ghin": "10819246",
       "entries": [
         {
@@ -13993,6 +17219,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 95.0,
+          "diff": 19.8,
+          "ti": 21.1,
+          "ncga": 12.7,
+          "usable": 12.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 103.0,
+          "diff": 26.7,
+          "ti": 21.1,
+          "ncga": 12.7,
+          "usable": 12.7
         }
       ]
     },
@@ -14077,6 +17325,28 @@
           "ti": 19.0,
           "ncga": null,
           "usable": 19.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 19.0,
+          "ncga": 13.4,
+          "usable": 13.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 87.0,
+          "diff": 12.9,
+          "ti": 14.9,
+          "ncga": 13.4,
+          "usable": 13.4
         }
       ]
     },
@@ -14155,6 +17425,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 33.8,
+          "ncga": null,
+          "usable": 33.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 33.8,
+          "ncga": null,
+          "usable": 33.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Cobra",
           "score": null,
           "diff": null,
@@ -14245,6 +17537,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 22.0,
+          "ncga": 15.5,
+          "usable": 15.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 20.7,
+          "ncga": 15.5,
+          "usable": 15.5
         }
       ]
     },
@@ -14323,6 +17637,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 13.2,
+          "ncga": null,
+          "usable": 13.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 13.2,
+          "ncga": null,
+          "usable": 13.2
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Maharaj",
           "score": null,
           "diff": null,
@@ -14413,6 +17749,28 @@
           "ti": 20.9,
           "ncga": 15.7,
           "usable": 15.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 19.0,
+          "ncga": 15.7,
+          "usable": 15.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 19.0,
+          "ncga": 15.7,
+          "usable": 15.7
         }
       ]
     },
@@ -14491,6 +17849,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Maharaj",
           "score": null,
           "diff": null,
@@ -14581,6 +17961,28 @@
           "ti": 15.0,
           "ncga": null,
           "usable": 15.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 93.0,
+          "diff": 18.1,
+          "ti": 15.0,
+          "ncga": 13.3,
+          "usable": 13.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 14.9,
+          "ncga": 13.3,
+          "usable": 13.3
         }
       ]
     },
@@ -14659,6 +18061,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -14749,6 +18173,28 @@
           "ti": 26.1,
           "ncga": null,
           "usable": 26.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 26.1,
+          "ncga": null,
+          "usable": 26.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 26.1,
+          "ncga": null,
+          "usable": 26.1
         }
       ]
     },
@@ -14827,6 +18273,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -14917,6 +18385,28 @@
           "ti": 21.9,
           "ncga": null,
           "usable": 21.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 21.9,
+          "ncga": null,
+          "usable": 21.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 21.9,
+          "ncga": null,
+          "usable": 21.9
         }
       ]
     },
@@ -15001,6 +18491,28 @@
           "ti": 14.5,
           "ncga": null,
           "usable": 14.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 14.5,
+          "ncga": 10.5,
+          "usable": 10.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 14.5,
+          "ncga": 10.5,
+          "usable": 10.5
         }
       ]
     },
@@ -15085,6 +18597,28 @@
           "ti": 21.8,
           "ncga": null,
           "usable": 21.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 101.0,
+          "diff": 25.0,
+          "ti": 21.8,
+          "ncga": 19.8,
+          "usable": 19.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 131.0,
+          "diff": 50.9,
+          "ti": 21.8,
+          "ncga": 19.8,
+          "usable": 19.8
         }
       ]
     },
@@ -15163,6 +18697,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -15253,6 +18809,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
         }
       ]
     },
@@ -15337,6 +18915,28 @@
           "ti": 27.2,
           "ncga": 18.4,
           "usable": 18.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 106.0,
+          "diff": 29.3,
+          "ti": 24.6,
+          "ncga": 18.6,
+          "usable": 18.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 107.0,
+          "diff": 30.2,
+          "ti": 24.6,
+          "ncga": 18.6,
+          "usable": 18.6
         }
       ]
     },
@@ -15421,13 +19021,35 @@
           "ti": 24.9,
           "ncga": null,
           "usable": 24.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 100.0,
+          "diff": 26.0,
+          "ti": 23.6,
+          "ncga": 20.5,
+          "usable": 20.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 99.0,
+          "diff": 25.1,
+          "ti": 23.2,
+          "ncga": 20.5,
+          "usable": 20.5
         }
       ]
     },
     "munish mehta": {
       "name": "Munish Mehta",
       "flight": "Hawk",
-      "ghin": null,
+      "ghin": "1223615",
       "entries": [
         {
           "date": "2026-03-21",
@@ -15505,6 +19127,28 @@
           "ti": 11.5,
           "ncga": null,
           "usable": 11.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 11.5,
+          "ncga": 11.4,
+          "usable": 11.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 85.0,
+          "diff": 11.2,
+          "ti": 11.1,
+          "ncga": 11.4,
+          "usable": 11.1
         }
       ]
     },
@@ -15589,6 +19233,28 @@
           "ti": 15.0,
           "ncga": 13.2,
           "usable": 13.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 15.0,
+          "ncga": null,
+          "usable": 15.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 15.0,
+          "ncga": null,
+          "usable": 15.0
         }
       ]
     },
@@ -15673,6 +19339,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 92.0,
+          "diff": 17.3,
+          "ti": 19.9,
+          "ncga": 10.4,
+          "usable": 10.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 17.4,
+          "ncga": 10.4,
+          "usable": 10.4
         }
       ]
     },
@@ -15751,6 +19439,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 11.6,
+          "ncga": null,
+          "usable": 11.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 11.6,
+          "ncga": null,
+          "usable": 11.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Maharaj",
           "score": null,
           "diff": null,
@@ -15841,6 +19551,28 @@
           "ti": 9.6,
           "ncga": 10.1,
           "usable": 9.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 82.0,
+          "diff": 8.6,
+          "ti": 8.9,
+          "ncga": 9.6,
+          "usable": 8.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 83.0,
+          "diff": 9.5,
+          "ti": 8.7,
+          "ncga": 9.6,
+          "usable": 8.7
         }
       ]
     },
@@ -15925,6 +19657,28 @@
           "ti": 14.0,
           "ncga": 13.8,
           "usable": 13.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 13.8,
+          "ncga": 13.7,
+          "usable": 13.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 95.0,
+          "diff": 19.8,
+          "ti": 13.8,
+          "ncga": 13.7,
+          "usable": 13.7
         }
       ]
     },
@@ -16009,6 +19763,28 @@
           "ti": 10.5,
           "ncga": 9.2,
           "usable": 9.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 81.0,
+          "diff": 7.8,
+          "ti": 8.0,
+          "ncga": 9.1,
+          "usable": 8.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 8.0,
+          "ncga": 9.1,
+          "usable": 8.0
         }
       ]
     },
@@ -16091,6 +19867,28 @@
           "score": 89,
           "diff": 14.0,
           "ti": 7.7,
+          "ncga": 5.5,
+          "usable": 5.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 83.0,
+          "diff": 8.6,
+          "ti": 6.1,
+          "ncga": 5.5,
+          "usable": 5.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 87.0,
+          "diff": 12.0,
+          "ti": 6.1,
           "ncga": 5.5,
           "usable": 5.5
         }
@@ -16177,12 +19975,34 @@
           "ti": 12.0,
           "ncga": null,
           "usable": 12.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 12.0,
+          "ncga": null,
+          "usable": 12.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 12.0,
+          "ncga": null,
+          "usable": 12.0
         }
       ]
     },
     "sanchit sharma": {
       "name": "Sanchit Sharma",
-      "flight": "Tiger",
+      "flight": "Hawk",
       "ghin": "13315657",
       "entries": [
         {
@@ -16261,6 +20081,28 @@
           "ti": 24.7,
           "ncga": null,
           "usable": 24.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 102.0,
+          "diff": 25.9,
+          "ti": 24.4,
+          "ncga": 11.7,
+          "usable": 11.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 91.0,
+          "diff": 16.4,
+          "ti": 19.9,
+          "ncga": 11.7,
+          "usable": 11.7
         }
       ]
     },
@@ -16345,6 +20187,28 @@
           "ti": 14.6,
           "ncga": 10.2,
           "usable": 10.2
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 14.0,
+          "ncga": 10.5,
+          "usable": 10.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 88.0,
+          "diff": 13.8,
+          "ti": 13.6,
+          "ncga": 10.5,
+          "usable": 10.5
         }
       ]
     },
@@ -16429,6 +20293,28 @@
           "ti": 23.7,
           "ncga": null,
           "usable": 23.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 23.7,
+          "ncga": 6.5,
+          "usable": 6.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 23.7,
+          "ncga": 6.5,
+          "usable": 6.5
         }
       ]
     },
@@ -16513,6 +20399,28 @@
           "ti": 28.3,
           "ncga": null,
           "usable": 28.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 108.0,
+          "diff": 33.0,
+          "ti": 27.5,
+          "ncga": 23.4,
+          "usable": 23.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 104.0,
+          "diff": 29.5,
+          "ti": 25.8,
+          "ncga": 23.4,
+          "usable": 23.4
         }
       ]
     },
@@ -16591,6 +20499,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -16681,6 +20611,28 @@
           "ti": 14.3,
           "ncga": 11.4,
           "usable": 11.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 14.3,
+          "ncga": 11.0,
+          "usable": 11.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 89.0,
+          "diff": 14.7,
+          "ti": 13.7,
+          "ncga": 11.0,
+          "usable": 11.0
         }
       ]
     },
@@ -16765,6 +20717,28 @@
           "ti": 34.3,
           "ncga": null,
           "usable": 34.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 103.0,
+          "diff": 26.7,
+          "ti": 25.7,
+          "ncga": 17.8,
+          "usable": 17.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 98.0,
+          "diff": 22.4,
+          "ti": 23.6,
+          "ncga": 17.8,
+          "usable": 17.8
         }
       ]
     },
@@ -16832,6 +20806,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 18.6,
+          "ncga": null,
+          "usable": 18.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": null,
+          "diff": null,
+          "ti": 18.6,
+          "ncga": null,
+          "usable": 18.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Hawk",
           "score": null,
           "diff": null,
@@ -16911,6 +20907,28 @@
           "ti": 34.4,
           "ncga": null,
           "usable": 34.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 97.0,
+          "diff": 21.6,
+          "ti": 27.1,
+          "ncga": 18.1,
+          "usable": 18.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 112.0,
+          "diff": 34.5,
+          "ti": 26.9,
+          "ncga": 18.1,
+          "usable": 18.1
         }
       ]
     },
@@ -16984,6 +21002,28 @@
           "ti": 21.3,
           "ncga": null,
           "usable": 21.3
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 101.0,
+          "diff": 26.8,
+          "ti": 21.3,
+          "ncga": 21.3,
+          "usable": 21.3
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 96.0,
+          "diff": 22.4,
+          "ti": 21.1,
+          "ncga": 21.3,
+          "usable": 21.1
         }
       ]
     },
@@ -17051,6 +21091,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 33.5,
+          "ncga": null,
+          "usable": 33.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 33.5,
+          "ncga": null,
+          "usable": 33.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Cobra",
           "score": null,
           "diff": null,
@@ -17130,6 +21192,28 @@
           "ti": 20.9,
           "ncga": 21.1,
           "usable": 20.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 96.0,
+          "diff": 22.4,
+          "ti": 20.7,
+          "ncga": 20.9,
+          "usable": 20.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 97.0,
+          "diff": 23.3,
+          "ti": 20.7,
+          "ncga": 20.9,
+          "usable": 20.7
         }
       ]
     },
@@ -17203,6 +21287,28 @@
           "ti": 26.0,
           "ncga": null,
           "usable": 26.0
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 97.0,
+          "diff": 23.3,
+          "ti": 23.6,
+          "ncga": 22.5,
+          "usable": 22.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 104.0,
+          "diff": 29.5,
+          "ti": 23.6,
+          "ncga": 22.5,
+          "usable": 22.5
         }
       ]
     },
@@ -17270,6 +21376,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Maharaj",
           "score": null,
           "diff": null,
@@ -17349,6 +21477,28 @@
           "ti": 19.1,
           "ncga": null,
           "usable": 19.1
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 99.0,
+          "diff": 23.3,
+          "ti": 19.1,
+          "ncga": 12.4,
+          "usable": 12.4
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 99.0,
+          "diff": 23.3,
+          "ti": 19.1,
+          "ncga": 12.4,
+          "usable": 12.4
         }
       ]
     },
@@ -17422,6 +21572,28 @@
           "ti": 28.6,
           "ncga": null,
           "usable": 28.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 105.0,
+          "diff": 30.4,
+          "ti": 26.8,
+          "ncga": 21.5,
+          "usable": 21.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": 103.0,
+          "diff": 28.6,
+          "ti": 25.9,
+          "ncga": 21.5,
+          "usable": 21.5
         }
       ]
     },
@@ -17489,6 +21661,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 30.7,
+          "ncga": null,
+          "usable": 30.7
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 30.7,
+          "ncga": null,
+          "usable": 30.7
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Cobra",
           "score": null,
           "diff": null,
@@ -17568,6 +21762,28 @@
           "ti": 5.5,
           "ncga": null,
           "usable": 5.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 81.0,
+          "diff": 6.9,
+          "ti": 5.5,
+          "ncga": 2.0,
+          "usable": 2.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": 77.0,
+          "diff": 3.6,
+          "ti": 4.0,
+          "ncga": 2.0,
+          "usable": 2.0
         }
       ]
     },
@@ -17630,6 +21846,28 @@
           "ti": 19.7,
           "ncga": 16.8,
           "usable": 16.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 101.0,
+          "diff": 25.0,
+          "ti": 19.7,
+          "ncga": 16.5,
+          "usable": 16.5
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 96.0,
+          "diff": 20.7,
+          "ti": 18.8,
+          "ncga": 16.5,
+          "usable": 16.5
         }
       ]
     },
@@ -17681,6 +21919,28 @@
           "ti": 19.9,
           "ncga": null,
           "usable": 19.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 93.0,
+          "diff": 18.1,
+          "ti": 17.7,
+          "ncga": 15.0,
+          "usable": 15.0
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 17.7,
+          "ncga": 15.0,
+          "usable": 15.0
         }
       ]
     },
@@ -17726,6 +21986,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 42.6,
+          "ncga": null,
+          "usable": 42.6
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": 42.6,
+          "ncga": null,
+          "usable": 42.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Cobra",
           "score": null,
           "diff": null,
@@ -17783,6 +22065,28 @@
           "ti": 17.9,
           "ncga": null,
           "usable": 17.9
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 17.9,
+          "ncga": null,
+          "usable": 17.9
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": 17.9,
+          "ncga": null,
+          "usable": 17.9
         }
       ]
     },
@@ -17834,6 +22138,28 @@
           "ti": 21.6,
           "ncga": 14.4,
           "usable": 14.4
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 21.6,
+          "ncga": null,
+          "usable": 21.6
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 21.6,
+          "ncga": null,
+          "usable": 21.6
         }
       ]
     },
@@ -17879,6 +22205,28 @@
           "date": "2026-09-13",
           "tournament": "San Juan Oaks",
           "course": "San Juan Oaks",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
           "flight": "Tiger",
           "score": null,
           "diff": null,
@@ -17936,6 +22284,28 @@
           "ti": 22.8,
           "ncga": null,
           "usable": 22.8
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 22.8,
+          "ncga": null,
+          "usable": 22.8
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": null,
+          "diff": null,
+          "ti": 22.8,
+          "ncga": null,
+          "usable": 22.8
         }
       ]
     },
@@ -17976,6 +22346,28 @@
           "ti": null,
           "ncga": null,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Maharaj",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
         }
       ]
     },
@@ -18005,6 +22397,28 @@
           "ti": 17.9,
           "ncga": 10.5,
           "usable": 10.5
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 86.0,
+          "diff": 12.1,
+          "ti": 10.1,
+          "ncga": 10.3,
+          "usable": 10.1
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Hawk",
+          "score": 94.0,
+          "diff": 19.0,
+          "ti": 10.1,
+          "ncga": 10.3,
+          "usable": 10.1
         }
       ]
     },
@@ -18023,6 +22437,57 @@
           "ti": null,
           "ncga": 21.6,
           "usable": null
+        },
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Cobra",
+          "score": null,
+          "diff": null,
+          "ti": null,
+          "ncga": null,
+          "usable": null
+        }
+      ]
+    },
+    "surinder thind": {
+      "name": "Surinder Thind",
+      "flight": "Tiger",
+      "ghin": "213041",
+      "entries": [
+        {
+          "date": "2026-10-03",
+          "tournament": "Club Championship - Round 1",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 104.0,
+          "diff": 27.6,
+          "ti": null,
+          "ncga": 17.4,
+          "usable": null
+        },
+        {
+          "date": "2026-10-04",
+          "tournament": "Club Championship - Round 2",
+          "course": "Coyote Creek",
+          "flight": "Tiger",
+          "score": 100.0,
+          "diff": 24.2,
+          "ti": 24.8,
+          "ncga": 17.4,
+          "usable": 17.4
         }
       ]
     }
