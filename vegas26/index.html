@@ -7,7 +7,7 @@
 *{box-sizing:border-box}
 body{font-family:-apple-system,'Segoe UI',Roboto,Arial,sans-serif;margin:0;color:#1c2333;min-height:100vh;
 background-color:#fbfaf6;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='24' y='48' font-size='30' fill='%230f2452' fill-opacity='0.05'%3E%E2%99%A0%3C/text%3E%3Ctext x='98' y='42' font-size='24' fill='%23b8912a' fill-opacity='0.065'%3E%E2%99%A6%3C/text%3E%3Ctext x='58' y='122' font-size='26' fill='%23b8912a' fill-opacity='0.055'%3E%E2%99%A5%3C/text%3E%3Ctext x='122' y='130' font-size='22' fill='%230f2452' fill-opacity='0.05'%3E%E2%99%A3%3C/text%3E%3Cg fill-opacity='0.045'%3E%3Crect x='16' y='94' width='26' height='26' rx='6' fill='%230f2452'/%3E%3Ccircle cx='24' cy='102' r='2.6' fill='%23fbfaf6'/%3E%3Ccircle cx='34' cy='112' r='2.6' fill='%23fbfaf6'/%3E%3Ccircle cx='29' cy='107' r='2.6' fill='%23fbfaf6'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#fbfaf6 0%,#f4f2ea 100%);}
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Ctext x='24' y='48' font-size='30' fill='%230f2452' fill-opacity='0.05'%3E%E2%99%A0%3C/text%3E%3Ctext x='98' y='42' font-size='24' fill='%23b8912a' fill-opacity='0.065'%3E%E2%99%A6%3C/text%3E%3Ctext x='58' y='122' font-size='26' fill='%23b8912a' fill-opacity='0.055'%3E%E2%99%A5%3C/text%3E%3Ctext x='122' y='130' font-size='22' fill='%230f2452' fill-opacity='0.05'%3E%E2%99%A3%3C/text%3E%3Cg fill-opacity='0.045'%3E%3Crect x='16' y='94' width='26' height='26' rx='6' fill='%230f2452'/%3E%3Ccircle cx='24' cy='102' r='2.6' fill='%23fbfaf6'/%3E%3Ccircle cx='34' cy='112' r='2.6' fill='%23fbfaf6'/%3E%3Ccircle cx='29' cy='107' r='2.6' fill='%23fbfaf6'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#fbfaf6 0%,#f4f2ea 100%);}
 header{display:flex;align-items:center;gap:20px;padding:24px 30px;background:#fff;
 border-bottom:3px solid var(--gold);box-shadow:0 2px 10px rgba(0,0,0,.06)}
 header img{height:72px;background:#fff;border-radius:12px;padding:6px;border:1px solid #e5e0d2}
@@ -44,9 +44,6 @@ box-shadow:0 3px 12px rgba(20,30,60,.07);text-decoration:none;color:inherit;disp
 .card p{margin:0;font-size:13.5px;color:#5a6478;line-height:1.55}
 .card .go{display:inline-block;margin-top:10px;font-size:13px;font-weight:800;color:var(--gold)}
 .info{background:#fff;border:1px solid #e2ddcf;border-radius:14px;padding:20px 24px;
-
-
-
 box-shadow:0 3px 12px rgba(20,30,60,.07);font-size:14.5px;line-height:1.7}
 .info b{color:var(--navy)}
 .teetime{background:#fff;border:1px solid #e2ddcf;border-radius:14px;padding:26px;text-align:center;
@@ -62,23 +59,29 @@ box-shadow:0 3px 12px rgba(20,30,60,.07)}
 border-bottom:1px solid #f0ece0;font-size:14px}
 .flight-col li:last-child{border-bottom:none}
 .flight-col li span{font-weight:800;color:var(--gold);font-size:13.5px}
-edia(max-width:640px){.field-row{grid-template-columns:1fr}}
+@media(max-width:640px){.field-row{grid-template-columns:1fr}}
 section{scroll-margin-top:70px}
-@media(max-width:640px){section{scroll-margin-top:230px}} .ttable{border:1px solid #e8e2d2;border-radius:10px;overflow:hidden;background:#fff} .trow{display:flex;gap:12px;padding:10px 12px;border-bottom:1px solid #f0ece0;align-items:baseline} .trow:last-child{border-bottom:none} .thole{flex:0 0 78px;font-weight:800;color:var(--navy);font-size:13.5px;line-height:1.4} .thole span{display:block;font-weight:600;color:#8a93a8;font-size:11.5px} .tplayers{font-size:13.5px;line-height:1.8;color:#333} .tplayers b{color:var(--gold)}
-    
+@media(max-width:640px){section{scroll-margin-top:230px}}
+.ttable{border:1px solid #e8e2d2;border-radius:10px;overflow:hidden;background:#fff}
+.trow{display:flex;gap:12px;padding:10px 12px;border-bottom:1px solid #f0ece0;align-items:baseline}
+.trow:last-child{border-bottom:none}
+.thole{flex:0 0 78px;font-weight:800;color:var(--navy);font-size:13.5px;line-height:1.4}
+.thole span{display:block;font-weight:600;color:#8a93a8;font-size:11.5px}
+.tplayers{font-size:13.5px;line-height:1.8;color:#333}
+.tplayers b{color:var(--gold)}
 footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
-  .vegas-band{background:linear-gradient(90deg,#0f2452,#24407f 50%,#0f2452);border-top:2px solid var(--gold);
-              border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-space:nowrap;overflow:hidden}
-  .vegas-band .item{display:inline-block;vertical-align:middle;margin:0 10px;font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
-  .chip{display:inline-block;width:42px;height:42px;border-radius:50%;vertical-align:middle;margin:0 10px;position:relative}
-  .chip::before{content:"";position:absolute;inset:4px;border-radius:50%;border:5px dashed rgba(255,255,255,.9)}
-  .chip::after{content:"$";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:17px}
-  .chip.gold{background:#b8912a}.chip.navy{background:#1d3f7a}.chip.red{background:#a93226}
+.vegas-band{background:linear-gradient(90deg,#0f2452,#24407f 50%,#0f2452);border-top:2px solid var(--gold);
+border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-space:nowrap;overflow:hidden}
+.vegas-band .item{display:inline-block;vertical-align:middle;margin:0 10px;font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.chip{display:inline-block;width:42px;height:42px;border-radius:50%;vertical-align:middle;margin:0 10px;position:relative}
+.chip::before{content:"";position:absolute;inset:4px;border-radius:50%;border:5px dashed rgba(255,255,255,.9)}
+.chip::after{content:"$";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:17px}
+.chip.gold{background:#b8912a}.chip.navy{background:#1d3f7a}.chip.red{background:#a93226}
 </style></head><body>
 <header><img src="iaga_logo_2025.png" alt="IAGA Las Vegas logo">
 <div><h1>6th Annual PGA Vegas by IAGA <span class="gold">— Tournament Information</span><span class="live">VEGAS GOLF MAYHEM 2026</span></h1>
 <p>One page for everything: schedule, tournament info, tee times, and live winners.</p></div></header>
-  <div class="vegas-band"><span class="chip gold"></span><span class="item">&#127922;</span><span class="item">&#127183;</span><span class="chip navy"></span><span class="item">&#127920;</span><span class="item">&#9971;</span><span class="chip red"></span><span class="item">&#127948;</span></div>
+<div class="vegas-band"><span class="chip gold"></span><span class="item">&#127922;</span><span class="item">&#127183;</span><span class="chip navy"></span><span class="item">&#127920;</span><span class="item">&#9971;</span><span class="chip red"></span><span class="item">&#127948;</span></div>
 <div id="countdown" style="background:linear-gradient(90deg,#0f2452,#1d3f7a);color:#fff;text-align:center;padding:11px 16px;font-size:15px;letter-spacing:.2px"></div>
 <nav>
 <a href="#story">The Legend Begins</a><a href="#sarkar">Meet the Pit Bosses</a><a href="#sponsors">Our High Rollers</a><a href="#field">The Contenders</a><a href="#plan">The Weekend Playbook</a><a href="#tourney">House Rules</a><a href="#teetimes">Tee Times</a><a href="#playingfor">The Jackpot</a><a href="#pics">From the Vault</a><a href="#live">Live Action</a><a href="#results">The Payout</a>
@@ -122,7 +125,10 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 </section>
 
 <section id="field">
-<h2>The Contenders — 32 Golfers</h2><div class="info"><p><b>🏆 Did you know?</b> Only Rohit Panikar has ever won both the IAGA championship and PGA by Vegas in the same year. Sunil Ramaiah — the last entrant in this year's field — is looking to repeat the feat in 2026, and is being showered with nothing but love, support, and heartfelt good wishes from all 31 other players in the field. Absolutely nobody is quietly plotting to take him down. Nobody at all. 😉</p></div>
+<h2>The Contenders — 32 Golfers</h2>
+<div class="info">
+<p><b>🏆 Did you know?</b> Only Rohit Panikar has ever won both the IAGA championship and PGA by Vegas in the same year. Sunil Ramaiah — the last entrant in this year's field — is looking to repeat the feat in 2026, and is being showered with nothing but love, support, and heartfelt good wishes from all 31 other players in the field. Absolutely nobody is quietly plotting to take him down. Nobody at all. 😉</p>
+</div>
 <div class="field-row">
 <div class="flight-col"><h3>Augusta Flight</h3><ul>
 <li>Irfan Mehdi 🥇 <span>2.5</span></li>
@@ -166,7 +172,7 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 
 <section id="plan">
 <h2>The Weekend Playbook</h2>
-    <p style="font-size:14px;color:#5a6478;margin:0 0 14px">&#127922; <b>Team Match:</b> teams are drawn at random on both days — one Augusta and one Pebble player per team.</p>
+<p style="font-size:14px;color:#5a6478;margin:0 0 14px">&#127922; <b>Team Match:</b> teams are drawn at random on both days — one Augusta and one Pebble player per team.</p>
 <div class="timeline">
 <div class="day"><div class="dicon">&#127864;</div><div>
 <h3><span class="dwhen">Thu, Oct 15</span> — The calm before the storm</h3>
@@ -175,8 +181,7 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 <div class="day"><div class="dicon">&#128058;</div><div>
 <h3><span class="dwhen">Fri, Oct 16</span> — Day 1: Paiute (Wolf Course)</h3>
 <ul>
-<li><b>Bus leaves Aria — 9:00 
-    AM sharp.</b> Ride together, arrive together.</li>
+<li><b>Bus leaves Aria — 9:00 AM sharp.</b> Ride together, arrive together.</li>
 <li><b>Breakfast at Paiute</b> — fuel up, you'll need it.</li>
 <li>Golf: <b>Paiute Wolf Course — 12:30 PM shotgun start</b> (starting holes 1–5).</li>
 <li><b>Bus ride back</b> — the official score-roasting session. Good vibes for everyone… well, not really for the leaders. 😏</li>
@@ -205,7 +210,24 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 </div>
 </section>
 
-<section id="teetimes"> <h2>Tee Times</h2> <h3 style="color:var(--navy);font-size:16px;margin:0 0 4px">Day 1 — Fri Oct 16 · Paiute Wolf · 12:30 PM shotgun</h3> <p style="font-size:12.5px;color:#8a93a8;margin:0 0 12px">Gold number = course handicap.</p> <div class="ttable"> <div class="trow"><div class="thole">Hole 1A<span>Yellow</span></div><div class="tplayers">Irfan Mehdi <b>2</b> · Sunil Mayur <b>5</b> · Ravi Pindiproli <b>8</b> · Rohit D'Costa <b>8</b></div></div> <div class="trow"><div class="thole">Hole 1B<span>Yellow</span></div><div class="tplayers">Harsha Sastry <b>8</b> · Sunil Ramaiah <b>9</b> · Felix Manickam <b>10</b> · Murali Dharan <b>12</b></div></div> <div class="trow"><div class="thole">Hole 2A<span>Yellow</span></div><div class="tplayers">Pankaj Thapar <b>12</b> · Chetan Pungaliya <b>12</b> · Vineet Sharma <b>11</b> · Zoheb Mukhi <b>13</b></div></div> <div class="trow"><div class="thole">Hole 2B<span>White</span></div><div class="tplayers">Subhasish Saha <b>10</b> · Abhijit Pandit <b>11</b> · Vishal Malakar <b>10</b> · Parag Deshpande <b>11</b></div></div> <div class="trow"><div class="thole">Hole 3A<span>White · Ketki: Red</span></div><div class="tplayers">Jitender Gehlaut <b>13</b> · Rohit Panikar <b>12</b> · Ketki Mathuria <b>23</b> · Rahul Pandit <b>16</b></div></div> <div class="trow"><div class="thole">Hole 3B<span>White</span></div><div class="tplayers">Hargunwant Randhawa <b>11</b> · Samit Rao <b>15</b> · Manoj Joshi <b>14</b> · Charandeep Sehgal <b>14</b></div></div> <div class="trow"><div class="thole">Hole 4<span>White</span></div><div class="tplayers">Anudeep Bhatia <b>17</b> · Chhatrapal Bhende <b>17</b> · Jigar Patel <b>15</b> · Manish Mathuria <b>19</b></div></div> <div class="trow"><div class="thole">Hole 5<span>Yellow</span></div><div class="tplayers">Abhijeet Nikam <b>10</b> · Harpreet Soni <b>11</b> · Kunal Verma <b>11</b> · Anirudh Joshi <b>11</b></div></div> </div> <p style="font-size:13px;color:#8a93a8;margin:14px 0 0">Course handicaps per the Golf Genius tee setup. Day 2 — Sat Oct 17 · Reflection Bay: morning tee times, pairings dropping soon.</p> </section> <section id="playingfor">
+<section id="teetimes">
+<h2>Tee Times</h2>
+<h3 style="color:var(--navy);font-size:16px;margin:0 0 4px">Day 1 — Fri Oct 16 · Paiute Wolf · 12:30 PM shotgun</h3>
+<p style="font-size:12.5px;color:#8a93a8;margin:0 0 12px">Gold number = course handicap.</p>
+<div class="ttable">
+<div class="trow"><div class="thole">Hole 1A<span>Yellow</span></div><div class="tplayers">Irfan Mehdi <b>2</b> · Sunil Mayur <b>5</b> · Ravi Pindiproli <b>8</b> · Rohit D'Costa <b>8</b></div></div>
+<div class="trow"><div class="thole">Hole 1B<span>Yellow</span></div><div class="tplayers">Harsha Sastry <b>8</b> · Sunil Ramaiah <b>9</b> · Felix Manickam <b>10</b> · Murali Dharan <b>12</b></div></div>
+<div class="trow"><div class="thole">Hole 2A<span>Yellow</span></div><div class="tplayers">Pankaj Thapar <b>12</b> · Chetan Pungaliya <b>12</b> · Vineet Sharma <b>11</b> · Zoheb Mukhi <b>13</b></div></div>
+<div class="trow"><div class="thole">Hole 2B<span>White</span></div><div class="tplayers">Subhasish Saha <b>10</b> · Abhijit Pandit <b>11</b> · Vishal Malakar <b>10</b> · Parag Deshpande <b>11</b></div></div>
+<div class="trow"><div class="thole">Hole 3A<span>White · Ketki: Red</span></div><div class="tplayers">Jitender Gehlaut <b>13</b> · Rohit Panikar <b>12</b> · Ketki Mathuria <b>23</b> · Rahul Pandit <b>16</b></div></div>
+<div class="trow"><div class="thole">Hole 3B<span>White</span></div><div class="tplayers">Hargunwant Randhawa <b>11</b> · Samit Rao <b>15</b> · Manoj Joshi <b>14</b> · Charandeep Sehgal <b>14</b></div></div>
+<div class="trow"><div class="thole">Hole 4<span>White</span></div><div class="tplayers">Anudeep Bhatia <b>17</b> · Chhatrapal Bhende <b>17</b> · Jigar Patel <b>15</b> · Manish Mathuria <b>19</b></div></div>
+<div class="trow"><div class="thole">Hole 5<span>Yellow</span></div><div class="tplayers">Abhijeet Nikam <b>10</b> · Harpreet Soni <b>11</b> · Kunal Verma <b>11</b> · Anirudh Joshi <b>11</b></div></div>
+</div>
+<p style="font-size:13px;color:#8a93a8;margin:14px 0 0">Course handicaps per the Golf Genius tee setup. Day 2 — Sat Oct 17 · Reflection Bay: morning tee times, pairings dropping soon.</p>
+</section>
+
+<section id="playingfor">
 <h2>The Jackpot</h2>
 <div class="info">
 <ul style="margin:0;padding-left:20px;line-height:2">
@@ -223,12 +245,23 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 </div>
 </section>
 
-<section id="pics"><h2>From the Vault</h2><div class="grid"><a class="card" href="https://photos.app.goo.gl/Uv5hBtsXS5fJe5z7A" target="_blank" rel="noopener"><h3>&#128247; Las Vegas by IAGA 2025</h3><p>Photos from last year's outing — group shots, trophy moments, and everything in between.</p><span class="go">Browse the album &rarr;</span></a></div><span style="display:inline-block;background:var(--gold-l);color:var(--navy);font-size:13.5px;font-weight:700;padding:9px 20px;border-radius:999px;margin:14px 0 0;border:1px solid #e4d3a0">&#128247; Photos by Karthik — our man behind the lens for the last two years.</span></section><section id="live">
+
+
+<section id="pics">
+<h2>From the Vault</h2>
+<div class="grid">
+<a class="card" href="https://photos.app.goo.gl/Uv5hBtsXS5fJe5z7A" target="_blank" rel="noopener"><h3>&#128247; Las Vegas by IAGA 2025</h3>
+<p>Photos from last year's outing — group shots, trophy moments, and everything in between.</p><span class="go">Browse the album &rarr;</span></a>
+</div>
+<span style="display:inline-block;background:var(--gold-l);color:var(--navy);font-size:13.5px;font-weight:700;padding:9px 20px;border-radius:999px;margin:14px 0 0;border:1px solid #e4d3a0">&#128247; Photos by Karthik — our man behind the lens for the last two years.</span>
+</section>
+
+<section id="live">
 <h2>Live Action</h2>
 <div class="info">
 <p><b>Follow every shot live</b> in the <b>Golf Genius app</b> — download it on your phone, and enter the event GGID:</p>
-<p style="font-size:22px;font-weight:800;color:var(--navy);letter-spacing:.04em"><span style="color:var(--gold)">UUXHB6</span></p>
-<p style="margin-bottom:0">Leaderboards update hole by hole as groups post scores — no refreshing the group chat required.</p>
+<p style="font-size:22px;font-weight:800;color:var(--navy);letter-spacing:.04em">GGID: <span style="color:var(--gold)">UUXHB6</span></p>
+<p style="margin-bottom:0">The GGID goes up here once the tournament rounds are set up in Golf Genius. Leaderboards update hole by hole as groups post scores — no refreshing the group chat required.</p>
 </div>
 </section>
 
@@ -244,7 +277,6 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 
 </main>
 <footer>IAGA &mdash; Indo-American Golf Association &nbsp;·&nbsp; Vegas 2026 Tournament Information<br><span style="font-size:12px;color:#8a93a8">&#129302; Megatron, The IAGA agent</span></footer>
-    
 <script>
 (function(){
   var target = new Date('2026-10-15T00:00:00-07:00');
