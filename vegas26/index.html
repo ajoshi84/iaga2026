@@ -59,6 +59,7 @@ box-shadow:0 3px 12px rgba(20,30,60,.07)}
 border-bottom:1px solid #f0ece0;font-size:14px}
 .flight-col li:last-child{border-bottom:none}
 .flight-col li span{font-weight:800;color:var(--gold);font-size:13.5px}
+.flight-col li span.gbadge,.info li span.gbadge{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;font-size:11px;font-weight:800;color:#fff;background:var(--navy);border-radius:9px;padding:0 5px;margin:0 6px 0 0;vertical-align:2px}
 @media(max-width:640px){.field-row{grid-template-columns:1fr}}
 section{scroll-margin-top:70px}
 @media(max-width:640px){section{scroll-margin-top:230px}}
@@ -131,17 +132,17 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 </div>
 <div class="field-row">
 <div class="flight-col"><h3>Augusta Flight</h3><ul>
-<li>Irfan Mehdi 🥇 <span>2.5</span></li>
-<li>Sunil Mayur 🥇🥈🥈 <span>5.9</span></li>
-<li>Ravi Pindiproli <span>7.9</span></li>
+<li><span class="gbadge">G</span> Irfan Mehdi 🥇 <span>2.5</span></li>
+<li><span class="gbadge">G</span> Sunil Mayur 🥇🥈🥈 <span>5.9</span></li>
+<li><span class="gbadge">G</span> Ravi Pindiproli <span>7.9</span></li>
 <li>Harsha Sastry 🥇 <span>8.0</span></li>
-<li>Rohit D'Costa <span>8.3</span></li>
-<li>Sunil Ramaiah <span>9.3</span></li>
-<li>Felix Manickam 🥈 <span>10.3</span></li>
+<li><span class="gbadge">G</span> Rohit D'Costa <span>8.3</span></li>
+<li><span class="gbadge">G</span> Sunil Ramaiah <span>9.3</span></li>
+<li><span class="gbadge">G</span> Felix Manickam 🥈 <span>10.3</span></li>
 <li>Abhijeet Nikam <span>10.4</span></li>
 <li>Vineet Sharma <span>10.7</span></li>
-<li>Harpreet Soni <span>11.0</span></li>
-<li>Kunal Verma 🥇 <span>11.0</span></li>
+<li><span class="gbadge">G</span> Harpreet Soni <span>11.0</span></li>
+<li><span class="gbadge">G</span> Kunal Verma 🥇 <span>11.0</span></li>
 <li>Anirudh Joshi 🥈 <span>11.2</span></li>
 <li>Pankaj Thapar <span>11.4</span></li>
 <li>Chetan Pungaliya <span>11.8</span></li>
@@ -150,10 +151,10 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 </ul></div>
 <div class="flight-col"><h3>Pebble Flight</h3><ul>
 <li>Subhasish Saha 🥇 <span>12.7</span></li>
-<li>Vishal Malakar <span>13.2</span></li>
-<li>Hargunwant Randhawa <span>13.7</span></li>
-<li>Parag Deshpande <span>13.8</span></li>
-<li>Abhijit Pandit <span>14.2</span></li>
+<li><span class="gbadge">G</span> Vishal Malakar <span>13.2</span></li>
+<li><span class="gbadge">G</span> Hargunwant Randhawa <span>13.7</span></li>
+<li><span class="gbadge">G</span> Parag Deshpande <span>13.8</span></li>
+<li><span class="gbadge">G</span> Abhijit Pandit <span>14.2</span></li>
 <li>Rohit Panikar 🥇 <span>14.9</span></li>
 <li>Jitender Gehlaut <span>15.3</span></li>
 <li>Charandeep Sehgal <span>16.5</span></li>
@@ -167,7 +168,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <li>Ketki Mathuria 🥈 <span>24.8</span></li>
 </ul></div>
 </div>
-<p style="font-size:12px;color:#8a93a8;text-align:center">NCGA handicap indexes, per the tournament tee sheet. 🥇 past champion · 🥈 past runner-up.</p>
+<p style="font-size:12px;color:#8a93a8;text-align:center">NCGA handicap indexes, per the tournament tee sheet. 🥇 past champion · 🥈 past runner-up · <span class="gbadge">G</span> playing gross.</p>
 </section>
 
 <section id="plan">
@@ -232,6 +233,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <div class="info">
 <ul style="margin:0;padding-left:20px;line-height:2">
 <li><b>36-hole flight prizes</b> (per flight): 1st $1,500 · 2nd $1,000 · 3rd $750 · 4th $500</li>
+<li><b>Gross winner</b> <span class="gbadge">G</span> — per flight, select players only</li>
 <li><b>Day 2 individual winner</b> — per flight</li>
 <li><b>Closest to Pin</b> — every par 3, $50/hole, both days</li>
 <li><b>CTP with birdie</b> — signature hole, both days</li>
@@ -260,8 +262,8 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <h2>Live Action</h2>
 <div class="info">
 <p><b>Follow every shot live</b> in the <b>Golf Genius app</b> — download it on your phone, and enter the event GGID:</p>
-<p style="font-size:22px;font-weight:800;color:var(--navy);letter-spacing:.04em">GGID: <span style="color:var(--gold)">UUXHB6</span></p>
-<p style="margin-bottom:0">The GGID goes up here once the tournament rounds are set up in Golf Genius. Leaderboards update hole by hole as groups post scores — no refreshing the group chat required.</p>
+<p style="font-size:22px;font-weight:800;color:var(--navy);letter-spacing:.04em"><span style="color:var(--gold)">UUXHB6</span></p>
+<p style="margin-bottom:0">Leaderboards update hole by hole as groups post scores — no refreshing the group chat required.</p>
 </div>
 </section>
 
