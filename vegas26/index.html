@@ -64,6 +64,7 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 <header><img src="iaga_logo_2025.png" alt="IAGA Las Vegas logo">
 <div><h1>6th Annual PGA Vegas by IAGA <span class="gold">— Trip HQ</span><span class="live">VEGAS GOLF MAYHEM 2026</span></h1>
 <p>One page for everything: schedule, tournament info, tee times, and live winners.</p></div></header>
+<div id="countdown" style="background:linear-gradient(90deg,#0f2452,#1d3f7a);color:#fff;text-align:center;padding:11px 16px;font-size:15px;letter-spacing:.2px"></div>
 <nav>
 <a href="#story">The Story</a><a href="#sarkar">The Sarkar</a><a href="#sponsors">Sponsors</a><a href="#field">The Field</a><a href="#plan">Plan of Events</a><a href="#tourney">Tournament Info</a><a href="#playingfor">The Stakes</a><a href="#past">Past Winners</a><a href="#live">Live Scoring</a><a href="#teetimes">Tee Times</a><a href="#results">Winners &amp; Results</a>
 </nav>
@@ -254,4 +255,16 @@ footer{text-align:center;color:#9aa2b5;font-size:11px;padding:20px}
 
 </main>
 <footer>IAGA &mdash; Indo-American Golf Association &nbsp;·&nbsp; Vegas 2026 Trip HQ</footer>
+<script>
+(function(){
+  var target = new Date('2026-10-15T00:00:00-07:00');
+  var days = Math.ceil((target - new Date()) / 86400000);
+  var el = document.getElementById('countdown');
+  if (!el) return;
+  if (days > 1) el.innerHTML = '&#128747; <b>' + days + ' days</b> until wheels up — see you in Vegas!';
+  else if (days === 1) el.innerHTML = '&#128747; <b>1 day</b> until wheels up — see you in Vegas!';
+  else if (days === 0) el.innerHTML = '&#127881; <b>Today\u2019s the day</b> — welcome to Vegas!';
+  else el.innerHTML = '&#127948; The 6th Annual is <b>underway</b> — follow the live scoring below!';
+})();
+</script>
 </body></html>
