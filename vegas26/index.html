@@ -55,10 +55,13 @@ box-shadow:0 3px 12px rgba(20,30,60,.07)}
 box-shadow:0 3px 12px rgba(20,30,60,.07)}
 .flight-col h3{margin:0 0 10px;color:var(--navy);font-size:16px;border-bottom:2px solid var(--gold);padding-bottom:8px}
 .flight-col ul{margin:0;padding:0;list-style:none}
-.flight-col li{display:flex;justify-content:space-between;align-items:center;padding:6px 2px;
+.flight-col li{display:flex;justify-content:flex-start;align-items:center;padding:6px 2px;
 border-bottom:1px solid #f0ece0;font-size:14px}
 .flight-col li:last-child{border-bottom:none}
 .flight-col li span{font-weight:800;color:var(--gold);font-size:13.5px}
+.flight-col li span.pname{font-weight:400;color:#333;font-size:14px}
+.flight-col li span.gslot{flex:0 0 24px}
+.flight-col li span.pidx{margin-left:auto}
 .flight-col li span.gbadge,.info li span.gbadge{display:inline-block;min-width:18px;height:18px;line-height:18px;text-align:center;font-size:11px;font-weight:800;color:#fff;background:var(--navy);border-radius:9px;padding:0 5px;margin:0 6px 0 0;vertical-align:2px}
 @media(max-width:640px){.field-row{grid-template-columns:1fr}}
 section{scroll-margin-top:70px}
@@ -98,7 +101,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <p>The sun set before the golf was done — champions were crowned with the 18th hole still unconquered. But as the awards ceremony wrapped up, Irfan Mehdi looked around the room and called it: <i>"I do believe this is a start of something big in IAGA."</i></p>
 <p>He was right. Year two took over TPC Las Vegas and Rio Secco. Year three: Snow Mountain and TPC Summerlin. Year four: back to Paiute Wolf and Las Vegas Country Club. Year five: Wolf Creek and Snow Mountain — the year the bus joined the party, and the whole crew howled like wolves every time someone said the word "Wolf." Sunil Mayur claimed Augusta and Ketki Mathuria owned the par 3s.</p>
 <p>Now it's the 6th Annual — and we're back where it all started: Paiute, the Wolf course. Thirty-two golfers, our biggest field ever, two legendary courses, one bus. Six years after a spreadsheet and a sunset, we're bigger, louder — and still howling at the word "Wolf." The spreadsheets are gone; these days Megatron, The IAGA AI agent handles the heavy lifting.</p>
-<p style="margin-bottom:0">Time to howl. &#128058;</p>
+<p style="margin-bottom:0">Time to <a href="https://photos.app.goo.gl/d3eVeqWWam9KxEUW7" target="_blank" rel="noopener">howl</a>. &#128058;</p>
 </div>
 </section>
 
@@ -132,40 +135,40 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 </div>
 <div class="field-row">
 <div class="flight-col"><h3>Augusta Flight</h3><ul>
-<li><span class="gbadge">G</span> Irfan Mehdi 🥇 <span>2.5</span></li>
-<li><span class="gbadge">G</span> Sunil Mayur 🥇🥈🥈 <span>5.9</span></li>
-<li><span class="gbadge">G</span> Ravi Pindiproli <span>7.9</span></li>
-<li>Harsha Sastry 🥇 <span>8.0</span></li>
-<li><span class="gbadge">G</span> Rohit D'Costa <span>8.3</span></li>
-<li><span class="gbadge">G</span> Sunil Ramaiah <span>9.3</span></li>
-<li><span class="gbadge">G</span> Felix Manickam 🥈 <span>10.3</span></li>
-<li>Abhijeet Nikam <span>10.4</span></li>
-<li>Vineet Sharma <span>10.7</span></li>
-<li><span class="gbadge">G</span> Harpreet Soni <span>11.0</span></li>
-<li><span class="gbadge">G</span> Kunal Verma 🥇 <span>11.0</span></li>
-<li>Anirudh Joshi 🥈 <span>11.2</span></li>
-<li>Pankaj Thapar <span>11.4</span></li>
-<li>Chetan Pungaliya <span>11.8</span></li>
-<li>Murali Dharan 🥇 <span>11.9</span></li>
-<li>Zoheb Mukhi <span>12.5</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Irfan Mehdi 🥇</span><span class="pidx">2.5</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Sunil Mayur 🥇🥈🥈</span><span class="pidx">5.9</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Ravi Pindiproli</span><span class="pidx">7.9</span></li>
+<li><span class="gslot"></span><span class="pname">Harsha Sastry 🥇</span><span class="pidx">8.0</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Rohit D'Costa</span><span class="pidx">8.3</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Sunil Ramaiah</span><span class="pidx">9.3</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Felix Manickam 🥈</span><span class="pidx">10.3</span></li>
+<li><span class="gslot"></span><span class="pname">Abhijeet Nikam</span><span class="pidx">10.4</span></li>
+<li><span class="gslot"></span><span class="pname">Vineet Sharma</span><span class="pidx">10.7</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Harpreet Soni</span><span class="pidx">11.0</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Kunal Verma 🥇</span><span class="pidx">11.0</span></li>
+<li><span class="gslot"></span><span class="pname">Anirudh Joshi 🥈</span><span class="pidx">11.2</span></li>
+<li><span class="gslot"></span><span class="pname">Pankaj Thapar</span><span class="pidx">11.4</span></li>
+<li><span class="gslot"></span><span class="pname">Chetan Pungaliya</span><span class="pidx">11.8</span></li>
+<li><span class="gslot"></span><span class="pname">Murali Dharan 🥇</span><span class="pidx">11.9</span></li>
+<li><span class="gslot"></span><span class="pname">Zoheb Mukhi</span><span class="pidx">12.5</span></li>
 </ul></div>
 <div class="flight-col"><h3>Pebble Flight</h3><ul>
-<li>Subhasish Saha 🥇 <span>12.7</span></li>
-<li><span class="gbadge">G</span> Vishal Malakar <span>13.2</span></li>
-<li><span class="gbadge">G</span> Hargunwant Randhawa <span>13.7</span></li>
-<li><span class="gbadge">G</span> Parag Deshpande <span>13.8</span></li>
-<li><span class="gbadge">G</span> Abhijit Pandit <span>14.2</span></li>
-<li>Rohit Panikar 🥇 <span>14.9</span></li>
-<li>Jitender Gehlaut <span>15.3</span></li>
-<li>Charandeep Sehgal <span>16.5</span></li>
-<li>Manoj Joshi 🥈🥈 <span>16.7</span></li>
-<li>Samit Rao <span>17.4</span></li>
-<li>Jigar Patel <span>17.8</span></li>
-<li>Rahul Pandit <span>18.1</span></li>
-<li>Anudeep Bhatia <span>19.2</span></li>
-<li>Chhatrapal Bhende <span>19.7</span></li>
-<li>Manish Mathuria <span>21.2</span></li>
-<li>Ketki Mathuria 🥈 <span>24.8</span></li>
+<li><span class="gslot"></span><span class="pname">Subhasish Saha 🥇</span><span class="pidx">12.7</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Vishal Malakar</span><span class="pidx">13.2</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Hargunwant Randhawa</span><span class="pidx">13.7</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Parag Deshpande</span><span class="pidx">13.8</span></li>
+<li><span class="gslot"><span class="gbadge">G</span></span><span class="pname">Abhijit Pandit</span><span class="pidx">14.2</span></li>
+<li><span class="gslot"></span><span class="pname">Rohit Panikar 🥇</span><span class="pidx">14.9</span></li>
+<li><span class="gslot"></span><span class="pname">Jitender Gehlaut</span><span class="pidx">15.3</span></li>
+<li><span class="gslot"></span><span class="pname">Charandeep Sehgal</span><span class="pidx">16.5</span></li>
+<li><span class="gslot"></span><span class="pname">Manoj Joshi 🥈🥈</span><span class="pidx">16.7</span></li>
+<li><span class="gslot"></span><span class="pname">Samit Rao</span><span class="pidx">17.4</span></li>
+<li><span class="gslot"></span><span class="pname">Jigar Patel</span><span class="pidx">17.8</span></li>
+<li><span class="gslot"></span><span class="pname">Rahul Pandit</span><span class="pidx">18.1</span></li>
+<li><span class="gslot"></span><span class="pname">Anudeep Bhatia</span><span class="pidx">19.2</span></li>
+<li><span class="gslot"></span><span class="pname">Chhatrapal Bhende</span><span class="pidx">19.7</span></li>
+<li><span class="gslot"></span><span class="pname">Manish Mathuria</span><span class="pidx">21.2</span></li>
+<li><span class="gslot"></span><span class="pname">Ketki Mathuria 🥈</span><span class="pidx">24.8</span></li>
 </ul></div>
 </div>
 <p style="font-size:12px;color:#8a93a8;text-align:center">NCGA handicap indexes, per the tournament tee sheet. 🥇 past champion · 🥈 past runner-up · <span class="gbadge">G</span> playing gross.</p>
@@ -177,7 +180,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <div class="timeline">
 <div class="day"><div class="dicon">&#127864;</div><div>
 <h3><span class="dwhen">Thu, Oct 15</span> — The calm before the storm</h3>
-<ul><li>Kickoff night at the <b>Chandelier Bar, Cosmopolitan</b> <i>(optional)</i> — meet, greet, and question your life choices before a single ball is struck.</li></ul>
+<ul><li>Kickoff night at the <b>Chandelier Bar, Cosmopolitan around 9:00 PM</b> <i>(optional)</i> — meet, greet, and question your life choices before a single ball is struck.</li></ul>
 </div></div>
 <div class="day"><div class="dicon">&#128058;</div><div>
 <h3><span class="dwhen">Fri, Oct 16</span> — Day 1: Paiute (Wolf Course)</h3>
@@ -194,7 +197,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <ul>
 <li><b>Bus leaves Aria — 9:00 AM sharp.</b> Ride together, arrive together.</li>
 <li>Golf: <b>Reflection Bay</b> — morning tee times.</li>
-<li><b>Lunch at Reflection Bay</b> after the round — at your own time; <b>$25 provided</b> per person.</li>
+<li><b>Lunch at Reflection Bay</b> before/after the round — at your own time; <b>$25 provided</b> per person.</li>
 <li><b>Bus ride back</b> — reliving that missed putt and that pitching-wedge of a drive, all the way to Aria. 🚌</li>
 <li><b>Awards dinner at Lemongrass, Aria — 8:00 PM</b> — prizes, glory, and the traditional roasting of the Worst Round winners. &#127881;</li>
 </ul>
@@ -216,14 +219,14 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <h3 style="color:var(--navy);font-size:16px;margin:0 0 4px">Day 1 — Fri Oct 16 · Paiute Wolf · 12:30 PM shotgun</h3>
 <p style="font-size:12.5px;color:#8a93a8;margin:0 0 12px">Gold number = course handicap.</p>
 <div class="ttable">
-<div class="trow"><div class="thole">Hole 1A<span>Yellow</span></div><div class="tplayers">Irfan Mehdi <b>2</b> · Sunil Mayur <b>5</b> · Ravi Pindiproli <b>8</b> · Rohit D'Costa <b>8</b></div></div>
-<div class="trow"><div class="thole">Hole 1B<span>Yellow</span></div><div class="tplayers">Harsha Sastry <b>8</b> · Sunil Ramaiah <b>9</b> · Felix Manickam <b>10</b> · Murali Dharan <b>12</b></div></div>
-<div class="trow"><div class="thole">Hole 2A<span>Yellow</span></div><div class="tplayers">Pankaj Thapar <b>12</b> · Chetan Pungaliya <b>12</b> · Vineet Sharma <b>11</b> · Zoheb Mukhi <b>13</b></div></div>
-<div class="trow"><div class="thole">Hole 2B<span>White</span></div><div class="tplayers">Subhasish Saha <b>10</b> · Abhijit Pandit <b>11</b> · Vishal Malakar <b>10</b> · Parag Deshpande <b>11</b></div></div>
-<div class="trow"><div class="thole">Hole 3A<span>White · Ketki: Red</span></div><div class="tplayers">Jitender Gehlaut <b>13</b> · Rohit Panikar <b>12</b> · Ketki Mathuria <b>23</b> · Rahul Pandit <b>16</b></div></div>
-<div class="trow"><div class="thole">Hole 3B<span>White</span></div><div class="tplayers">Hargunwant Randhawa <b>11</b> · Samit Rao <b>15</b> · Manoj Joshi <b>14</b> · Charandeep Sehgal <b>14</b></div></div>
-<div class="trow"><div class="thole">Hole 4<span>White</span></div><div class="tplayers">Anudeep Bhatia <b>17</b> · Chhatrapal Bhende <b>17</b> · Jigar Patel <b>15</b> · Manish Mathuria <b>19</b></div></div>
-<div class="trow"><div class="thole">Hole 5<span>Yellow</span></div><div class="tplayers">Abhijeet Nikam <b>10</b> · Harpreet Soni <b>11</b> · Kunal Verma <b>11</b> · Anirudh Joshi <b>11</b></div></div>
+<div class="trow"><div class="thole">Hole 1A<span>Yellow</span></div><div class="tplayers">Irfan Mehdi · Sunil Mayur · Ravi Pindiproli · Rohit D'Costa</div></div>
+<div class="trow"><div class="thole">Hole 1B<span>Yellow</span></div><div class="tplayers">Harsha Sastry · Sunil Ramaiah · Felix Manickam · Murali Dharan</div></div>
+<div class="trow"><div class="thole">Hole 2A<span>Yellow</span></div><div class="tplayers">Pankaj Thapar · Chetan Pungaliya · Vineet Sharma · Zoheb Mukhi</div></div>
+<div class="trow"><div class="thole">Hole 2B<span>White</span></div><div class="tplayers">Subhasish Saha · Abhijit Pandit · Vishal Malakar · Parag Deshpande</div></div>
+<div class="trow"><div class="thole">Hole 3A<span>White · Ketki: Red</span></div><div class="tplayers">Jitender Gehlaut · Rohit Panikar · Ketki Mathuria · Rahul Pandit</div></div>
+<div class="trow"><div class="thole">Hole 3B<span>White</span></div><div class="tplayers">Hargunwant Randhawa · Samit Rao · Manoj Joshi · Charandeep Sehgal</div></div>
+<div class="trow"><div class="thole">Hole 4<span>White</span></div><div class="tplayers">Anudeep Bhatia · Chhatrapal Bhende · Jigar Patel · Manish Mathuria</div></div>
+<div class="trow"><div class="thole">Hole 5<span>Yellow</span></div><div class="tplayers">Abhijeet Nikam · Harpreet Soni · Kunal Verma · Anirudh Joshi</div></div>
 </div>
 <p style="font-size:13px;color:#8a93a8;margin:14px 0 0">Course handicaps per the Golf Genius tee setup. Day 2 — Sat Oct 17 · Reflection Bay: morning tee times, pairings dropping soon.</p>
 </section>
@@ -233,7 +236,7 @@ border-bottom:2px solid var(--gold);padding:12px 8px;text-align:center;white-spa
 <div class="info">
 <ul style="margin:0;padding-left:20px;line-height:2">
 <li><b>36-hole flight prizes</b> (per flight): 1st $1,500 · 2nd $1,000 · 3rd $750 · 4th $500</li>
-<li><b>Gross winner</b> <span class="gbadge">G</span> — per flight, select players only</li>
+<li><b>Gross winner</b> <span class="gbadge">G</span> — per flight, Per day select players only</li>
 <li><b>Day 2 individual winner</b> — per flight</li>
 <li><b>Closest to Pin</b> — every par 3, $50/hole, both days</li>
 <li><b>CTP with birdie</b> — signature hole, both days</li>
