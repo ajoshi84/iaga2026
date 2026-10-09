@@ -149,6 +149,28 @@
   .kpi .delta{ font-size:12.5px; margin-top:6px; font-weight:600; color:var(--text-secondary); }
   .kpi .delta.good{ color:var(--good); }
 
+  /* net-position hero card */
+  .net-card{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    padding:18px 22px; box-shadow:var(--shadow); margin-bottom:20px;
+    display:flex; align-items:center; gap:28px; flex-wrap:wrap;
+  }
+  .net-main{ flex:1 1 220px; }
+  .net-main .label{ font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.03em; margin-bottom:8px; }
+  .net-hero{ font-size:40px; font-weight:700; letter-spacing:-0.01em; line-height:1; }
+  .net-hero.good{ color:var(--good); }
+  .net-hero.warn{ color:var(--orange); }
+  .net-main .net-sub{ font-size:12.5px; color:var(--text-secondary); font-weight:600; margin-top:8px; }
+  .net-breakdown{
+    flex:1 1 280px; border-left:1px solid var(--border); padding-left:24px;
+    display:flex; flex-direction:column; gap:8px; min-width:240px;
+  }
+  @media (max-width:640px){ .net-breakdown{ border-left:none; padding-left:0; border-top:1px solid var(--border); padding-top:14px; } }
+  .net-line{ display:flex; justify-content:space-between; gap:12px; font-size:13.5px; color:var(--text-secondary); }
+  .net-line span:last-child{ font-weight:700; font-variant-numeric:tabular-nums; color:var(--text-primary); }
+  .net-line.net-total{ border-top:1px solid var(--border); padding-top:8px; margin-top:2px; font-weight:700; }
+  .net-line.net-total span:first-child{ color:var(--text-primary); }
+
   /* cards / chart containers */
   .grid2{ display:grid; grid-template-columns:1.3fr 1fr; gap:14px; margin-bottom:14px; }
   @media (max-width:860px){ .grid2{ grid-template-columns:1fr; } }
@@ -271,6 +293,19 @@
 
   <!-- OVERVIEW -->
   <section class="view active" id="view-overview">
+    <div class="net-card">
+      <div class="net-main">
+        <div class="label">Net available (bank &minus; unpaid card)</div>
+        <div class="net-hero" id="net-kpi-total"></div>
+        <div class="net-sub" id="net-kpi-sub"></div>
+      </div>
+      <div class="net-breakdown">
+        <div class="net-line"><span>Checking balance (…8097)</span><span id="net-bank-amt"></span></div>
+        <div class="net-line"><span id="net-card-label">Unpaid on card (…6943)</span><span id="net-card-amt"></span></div>
+        <div class="net-line net-total"><span>Net available</span><span id="net-total-amt"></span></div>
+      </div>
+    </div>
+
     <div class="kpi-row">
       <div class="kpi">
         <div class="label">Registration revenue</div>
@@ -743,12 +778,25 @@ function recompute(cardRows, bankRows){
   const spendByMonth = sumBy(sales, r=>monthKey(r.date), r=>r.spend);
   const monthlySpend = cardMonths.map(mk => ({month: monthLabel(mk), amount: round2(spendByMonth[mk]||0)}));
 
+  // Unpaid card balance = charges (minus any returns) posted after the most recent
+  // payment to the card. Chase's card export has no running/statement balance field,
+  // so this is reconstructed from transaction dates rather than read directly.
+  const cardPayments = cardRows.filter(r=>r.type==='Payment');
+  const lastPaymentDate = cardPayments.length ? cardPayments.map(r=>r.date).sort().slice(-1)[0] : null;
+  const salesSincePayment = lastPaymentDate ? sales.filter(r=>r.date > lastPaymentDate) : sales.slice();
+  const returnsSincePayment = cardRows.filter(r=>r.type==='Return' && (!lastPaymentDate || r.date > lastPaymentDate));
+  const unpaidCardBalance = round2(
+    salesSincePayment.reduce((s,r)=>s+r.spend,0) - returnsSincePayment.reduce((s,r)=>s+r.amount,0)
+  );
+
   const card = {
     dateRange: cardDatesSorted.length ? [fmtDateLong(cardDatesSorted[0]), fmtDateLong(cardDatesSorted[cardDatesSorted.length-1])] : ['—','—'],
     totalSpend: round2(sales.reduce((s,r)=>s+r.spend,0)),
     totalPayments: round2(cardRows.filter(r=>r.type==='Payment').reduce((s,r)=>s+r.amount,0)),
     totalReturns: round2(cardRows.filter(r=>r.type==='Return').reduce((s,r)=>s+r.amount,0)),
     txnCount: sales.length,
+    lastPaymentDate, lastPaymentDateLabel: lastPaymentDate ? fmtDateLong(lastPaymentDate) : null,
+    unpaidCardBalance, unpaidSinceCount: salesSincePayment.length,
     categoryTotals, merchantTotals, monthlySpend,
     transactions: [...cardRows].sort((a,b)=> b.date.localeCompare(a.date)).map(r => ({
       date: r.date, desc: r.desc,
@@ -870,7 +918,15 @@ function recompute(cardRows, bankRows){
   }
   categories.sort((a,b)=>b.total-a.total);
 
-  return {card, bank, categories, meta:{org:'Indo American Golf Association (IAGA)'}};
+  const net = {
+    bankBalance: bank.endBalance,
+    unpaidCardBalance: card.unpaidCardBalance,
+    netAvailable: round2(bank.endBalance - card.unpaidCardBalance),
+    lastPaymentDateLabel: card.lastPaymentDateLabel,
+    unpaidSinceCount: card.unpaidSinceCount
+  };
+
+  return {card, bank, categories, net, meta:{org:'Indo American Golf Association (IAGA)'}};
 }
 
 /* ---------- persistence (this browser only) ---------- */
@@ -1185,6 +1241,33 @@ function lineChart(containerId, points, opts={}){
 
 /* ---------- render everything ---------- */
 function renderOverview(){
+  const n = DATA.net;
+  const heroEl = document.getElementById('net-kpi-total');
+  heroEl.textContent = fmtUSD(n.netAvailable);
+  heroEl.className = 'net-hero ' + (n.netAvailable >= 0 ? 'good' : 'warn');
+  document.getElementById('net-bank-amt').textContent = fmtUSD(n.bankBalance);
+  const cardLabelEl = document.getElementById('net-card-label');
+  const cardAmtEl = document.getElementById('net-card-amt');
+  if (n.unpaidCardBalance > 0){
+    cardLabelEl.textContent = 'Unpaid on card since ' + (n.lastPaymentDateLabel || 'last payment');
+    cardAmtEl.textContent = '−' + fmtUSD(n.unpaidCardBalance);
+    cardAmtEl.style.color = 'var(--orange)';
+  } else if (n.unpaidCardBalance < 0){
+    cardLabelEl.textContent = 'Card credit balance since ' + (n.lastPaymentDateLabel || 'last payment');
+    cardAmtEl.textContent = '+' + fmtUSD(-n.unpaidCardBalance);
+    cardAmtEl.style.color = 'var(--good)';
+  } else {
+    cardLabelEl.textContent = 'Unpaid on card (fully paid)';
+    cardAmtEl.textContent = fmtUSD(0);
+    cardAmtEl.style.color = '';
+  }
+  const totalAmtEl = document.getElementById('net-total-amt');
+  totalAmtEl.textContent = fmtUSD(n.netAvailable);
+  totalAmtEl.style.color = n.netAvailable >= 0 ? 'var(--good)' : 'var(--orange)';
+  document.getElementById('net-kpi-sub').textContent = n.unpaidCardBalance > 0
+    ? (n.unpaidSinceCount + (n.unpaidSinceCount===1 ? ' charge' : ' charges') + ' on the card not yet paid')
+    : 'Card is fully paid off as of the last upload';
+
   document.getElementById('kpi-revenue').textContent = fmtUSD(DATA.bank.totalRevenue);
   document.getElementById('kpi-cardspend').textContent = fmtUSD(DATA.card.totalSpend);
   document.getElementById('kpi-endbal').textContent = fmtUSD(DATA.bank.endBalance);
