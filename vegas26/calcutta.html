@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>IAGA Vegas 2026 — Calcutta Field</title>
+<title>IAGA Vegas 2026 — Calcutta Auction</title>
 <style>
   :root { --navy:#14213d; --gold:#c9a227; --ink:#1d2330; --mut:#6b7280; --line:#e5e7eb; }
   * { box-sizing:border-box; }
@@ -28,23 +28,47 @@
   .idx { display:block; font-weight:400; font-size:11.5px; color:var(--mut); }
   td.ch { font-weight:700; color:var(--navy); font-size:15px; }
   td.tot { color:#7a5c00; }
-  td.bidcell { width:110px; }
+  td.bid { width:110px; }
+  td.bid input { width:100%; padding:7px 8px; font-size:15px; border:1.5px solid #d8c98a;
+                  border-radius:8px; text-align:right; background:#fffdf4; }
+  td.bid input:focus { outline:2px solid var(--gold); border-color:var(--gold); }
+  tfoot td { border-bottom:none; border-top:2px solid var(--navy); font-weight:700; }
+  .footlabel { text-align:right; color:var(--navy); text-transform:uppercase;
+                font-size:12.5px; letter-spacing:.4px; }
+  .bidtotal { text-align:center; font-size:17px; color:var(--navy); }
+  .expenses { display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+               margin-top:12px; padding:10px 12px; background:#f7f5ef; border-radius:8px; font-size:14px; }
+  .expenses input { width:64px; padding:6px 8px; font-size:15px; border:1.5px solid #d8c98a;
+                     border-radius:8px; text-align:right; }
+  .expcalc { color:var(--mut); } .expcalc b { color:var(--navy); }
+  #grand { background:var(--navy); color:#fff; border-radius:12px; padding:18px; text-align:center; }
+  #grand h2 { margin:0 0 10px; color:var(--gold); font-size:20px; }
+  #grand .g { display:flex; justify-content:center; gap:26px; flex-wrap:wrap; font-size:15px; }
+  #grand .g div span { display:block; font-size:11.5px; text-transform:uppercase;
+                        letter-spacing:.6px; color:#aeb6cc; margin-bottom:3px; }
+  #grand .g div b { font-size:22px; }
+  #grand .g div b.net { color:var(--gold); }
+  .actions { text-align:center; margin-top:16px; }
+  .actions button { background:#fff; border:1.5px solid var(--navy); color:var(--navy);
+                     border-radius:8px; padding:8px 18px; font-size:14px; cursor:pointer; }
   .note { font-size:12.5px; color:var(--mut); text-align:center; margin-top:14px; line-height:1.5; }
   @media print {
     body { background:#fff; } header { padding:14px; }
+    .actions, .note { display:none; }
     .flight { box-shadow:none; break-inside:avoid; }
+    td.bid input, .expenses input { border:none; background:none; }
   }
 </style>
 </head>
 <body>
 <header>
-  <h1>🎲 IAGA Vegas 2026 <span class="gold">— Calcutta Field</span></h1>
-  <p>36-hole Calcutta · Day 1 Paiute Wolf (Fri Oct 16) · Day 2 Reflection Bay (Sat Oct 17)</p>
+  <h1>🎲 IAGA Vegas 2026 <span class="gold">— Calcutta Auction</span></h1>
+  <p>36-hole tournament · Day 1 Paiute Wolf (Fri Oct 16) · Day 2 Reflection Bay (Sat Oct 17)</p>
   <p>Course handicaps from NCGA index · CH = index × (slope/113) + (rating − par), rounded</p>
 </header>
 <main>
 
-<section class="flight">
+<section class="flight" id="flight-augusta">
   <h2>Augusta Flight <span class="fcount">16 players</span></h2>
   <table>
     <thead><tr>
@@ -54,11 +78,20 @@
       <th class="num">36-hole<br><span class="teelbl">total</span></th>
       <th class="bidcol">Bid $</th>
     </tr></thead>
-    <tbody><tr><td class="num">1</td><td class="pname">Irfan Mehdi<span class="idx">idx 2.5</span></td><td class="num ch">1</td><td class="num ch">3</td><td class="num ch tot">4</td><td class="bidcell"></td></tr><tr><td class="num">2</td><td class="pname">Sunil Mayur<span class="idx">idx 5.9</span></td><td class="num ch">5</td><td class="num ch">7</td><td class="num ch tot">12</td><td class="bidcell"></td></tr><tr><td class="num">3</td><td class="pname">Ravi Pindiproli<span class="idx">idx 7.9</span></td><td class="num ch">8</td><td class="num ch">9</td><td class="num ch tot">17</td><td class="bidcell"></td></tr><tr><td class="num">4</td><td class="pname">Harsha Sastry<span class="idx">idx 8.0</span></td><td class="num ch">8</td><td class="num ch">9</td><td class="num ch tot">17</td><td class="bidcell"></td></tr><tr><td class="num">5</td><td class="pname">Rohit D'Costa<span class="idx">idx 8.3</span></td><td class="num ch">8</td><td class="num ch">10</td><td class="num ch tot">18</td><td class="bidcell"></td></tr><tr><td class="num">6</td><td class="pname">Sunil Ramaiah<span class="idx">idx 9.3</span></td><td class="num ch">9</td><td class="num ch">11</td><td class="num ch tot">20</td><td class="bidcell"></td></tr><tr><td class="num">7</td><td class="pname">Felix Manickam<span class="idx">idx 10.3</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bidcell"></td></tr><tr><td class="num">8</td><td class="pname">Abhijeet Nikam<span class="idx">idx 10.4</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bidcell"></td></tr><tr><td class="num">9</td><td class="pname">Vineet Sharma<span class="idx">idx 10.7</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">10</td><td class="pname">Harpreet Soni<span class="idx">idx 11.0</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">11</td><td class="pname">Kunal Verma<span class="idx">idx 11.0</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">12</td><td class="pname">Anirudh Joshi<span class="idx">idx 11.2</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">13</td><td class="pname">Pankaj Thapar<span class="idx">idx 11.4</span></td><td class="num ch">11</td><td class="num ch">14</td><td class="num ch tot">25</td><td class="bidcell"></td></tr><tr><td class="num">14</td><td class="pname">Chetan Pungaliya<span class="idx">idx 11.8</span></td><td class="num ch">12</td><td class="num ch">14</td><td class="num ch tot">26</td><td class="bidcell"></td></tr><tr><td class="num">15</td><td class="pname">Murali Dharan<span class="idx">idx 11.9</span></td><td class="num ch">12</td><td class="num ch">14</td><td class="num ch tot">26</td><td class="bidcell"></td></tr><tr><td class="num">16</td><td class="pname">Zoheb Mukhi<span class="idx">idx 12.5</span></td><td class="num ch">13</td><td class="num ch">15</td><td class="num ch tot">28</td><td class="bidcell"></td></tr></tbody>
+    <tbody><tr data-player="Irfan Mehdi"><td class="num">1</td><td class="pname">Irfan Mehdi<span class="idx">idx 2.5</span></td><td class="num ch">1</td><td class="num ch">3</td><td class="num ch tot">4</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Irfan Mehdi"></td></tr><tr data-player="Sunil Mayur"><td class="num">2</td><td class="pname">Sunil Mayur<span class="idx">idx 5.9</span></td><td class="num ch">5</td><td class="num ch">7</td><td class="num ch tot">12</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Sunil Mayur"></td></tr><tr data-player="Ravi Pindiproli"><td class="num">3</td><td class="pname">Ravi Pindiproli<span class="idx">idx 7.9</span></td><td class="num ch">8</td><td class="num ch">9</td><td class="num ch tot">17</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Ravi Pindiproli"></td></tr><tr data-player="Harsha Sastry"><td class="num">4</td><td class="pname">Harsha Sastry<span class="idx">idx 8.0</span></td><td class="num ch">8</td><td class="num ch">9</td><td class="num ch tot">17</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Harsha Sastry"></td></tr><tr data-player="Rohit D'Costa"><td class="num">5</td><td class="pname">Rohit D'Costa<span class="idx">idx 8.3</span></td><td class="num ch">8</td><td class="num ch">10</td><td class="num ch tot">18</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Rohit D'Costa"></td></tr><tr data-player="Sunil Ramaiah"><td class="num">6</td><td class="pname">Sunil Ramaiah<span class="idx">idx 9.3</span></td><td class="num ch">9</td><td class="num ch">11</td><td class="num ch tot">20</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Sunil Ramaiah"></td></tr><tr data-player="Felix Manickam"><td class="num">7</td><td class="pname">Felix Manickam<span class="idx">idx 10.3</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Felix Manickam"></td></tr><tr data-player="Abhijeet Nikam"><td class="num">8</td><td class="pname">Abhijeet Nikam<span class="idx">idx 10.4</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Abhijeet Nikam"></td></tr><tr data-player="Vineet Sharma"><td class="num">9</td><td class="pname">Vineet Sharma<span class="idx">idx 10.7</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Vineet Sharma"></td></tr><tr data-player="Harpreet Soni"><td class="num">10</td><td class="pname">Harpreet Soni<span class="idx">idx 11.0</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Harpreet Soni"></td></tr><tr data-player="Kunal Verma"><td class="num">11</td><td class="pname">Kunal Verma<span class="idx">idx 11.0</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Kunal Verma"></td></tr><tr data-player="Anirudh Joshi"><td class="num">12</td><td class="pname">Anirudh Joshi<span class="idx">idx 11.2</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Anirudh Joshi"></td></tr><tr data-player="Pankaj Thapar"><td class="num">13</td><td class="pname">Pankaj Thapar<span class="idx">idx 11.4</span></td><td class="num ch">11</td><td class="num ch">14</td><td class="num ch tot">25</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Pankaj Thapar"></td></tr><tr data-player="Chetan Pungaliya"><td class="num">14</td><td class="pname">Chetan Pungaliya<span class="idx">idx 11.8</span></td><td class="num ch">12</td><td class="num ch">14</td><td class="num ch tot">26</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Chetan Pungaliya"></td></tr><tr data-player="Murali Dharan"><td class="num">15</td><td class="pname">Murali Dharan<span class="idx">idx 11.9</span></td><td class="num ch">12</td><td class="num ch">14</td><td class="num ch tot">26</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Murali Dharan"></td></tr><tr data-player="Zoheb Mukhi"><td class="num">16</td><td class="pname">Zoheb Mukhi<span class="idx">idx 12.5</span></td><td class="num ch">13</td><td class="num ch">15</td><td class="num ch tot">28</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Zoheb Mukhi"></td></tr></tbody>
+    <tfoot><tr>
+      <td colspan="5" class="footlabel">Flight total</td>
+      <td class="num bidtotal" id="total-augusta">$0</td>
+    </tr></tfoot>
   </table>
+  <div class="expenses">
+    <label>Expenses <input type="number" min="0" max="100" step="0.5" value="0"
+      id="exp-augusta" aria-label="Expense percent for Augusta Flight"> %</label>
+    <span class="expcalc">expenses <b id="expamt-augusta">$0</b> · net pool <b id="net-augusta">$0</b></span>
+  </div>
 </section>
 
-<section class="flight">
+<section class="flight" id="flight-pebble">
   <h2>Pebble Flight <span class="fcount">16 players</span></h2>
   <table>
     <thead><tr>
@@ -68,12 +101,86 @@
       <th class="num">36-hole<br><span class="teelbl">total</span></th>
       <th class="bidcol">Bid $</th>
     </tr></thead>
-    <tbody><tr><td class="num">1</td><td class="pname">Subhasish Saha<span class="idx">idx 12.7</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bidcell"></td></tr><tr><td class="num">2</td><td class="pname">Vishal Malakar<span class="idx">idx 13.2</span></td><td class="num ch">10</td><td class="num ch">13</td><td class="num ch tot">23</td><td class="bidcell"></td></tr><tr><td class="num">3</td><td class="pname">Hargunwant Randhawa<span class="idx">idx 13.7</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">4</td><td class="pname">Parag Deshpande<span class="idx">idx 13.8</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bidcell"></td></tr><tr><td class="num">5</td><td class="pname">Abhijit Pandit<span class="idx">idx 14.2</span></td><td class="num ch">11</td><td class="num ch">14</td><td class="num ch tot">25</td><td class="bidcell"></td></tr><tr><td class="num">6</td><td class="pname">Rohit Panikar<span class="idx">idx 14.9</span></td><td class="num ch">12</td><td class="num ch">15</td><td class="num ch tot">27</td><td class="bidcell"></td></tr><tr><td class="num">7</td><td class="pname">Jitender Gehlaut<span class="idx">idx 15.3</span></td><td class="num ch">12</td><td class="num ch">15</td><td class="num ch tot">27</td><td class="bidcell"></td></tr><tr><td class="num">8</td><td class="pname">Charandeep Sehgal<span class="idx">idx 16.5</span></td><td class="num ch">14</td><td class="num ch">16</td><td class="num ch tot">30</td><td class="bidcell"></td></tr><tr><td class="num">9</td><td class="pname">Manoj Joshi<span class="idx">idx 16.7</span></td><td class="num ch">14</td><td class="num ch">17</td><td class="num ch tot">31</td><td class="bidcell"></td></tr><tr><td class="num">10</td><td class="pname">Samit Rao<span class="idx">idx 17.4</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bidcell"></td></tr><tr><td class="num">11</td><td class="pname">Jigar Patel<span class="idx">idx 17.8</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bidcell"></td></tr><tr><td class="num">12</td><td class="pname">Rahul Pandit<span class="idx">idx 18.1</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bidcell"></td></tr><tr><td class="num">13</td><td class="pname">Anudeep Bhatia<span class="idx">idx 19.2</span></td><td class="num ch">17</td><td class="num ch">20</td><td class="num ch tot">37</td><td class="bidcell"></td></tr><tr><td class="num">14</td><td class="pname">Chhatrapal Bhende<span class="idx">idx 19.7</span></td><td class="num ch">17</td><td class="num ch">20</td><td class="num ch tot">37</td><td class="bidcell"></td></tr><tr><td class="num">15</td><td class="pname">Manish Mathuria<span class="idx">idx 21.2</span></td><td class="num ch">19</td><td class="num ch">22</td><td class="num ch tot">41</td><td class="bidcell"></td></tr><tr><td class="num">16</td><td class="pname">Ketki Mathuria<span class="idx">idx 24.8</span></td><td class="num ch">22</td><td class="num ch">26</td><td class="num ch tot">48</td><td class="bidcell"></td></tr></tbody>
+    <tbody><tr data-player="Subhasish Saha"><td class="num">1</td><td class="pname">Subhasish Saha<span class="idx">idx 12.7</span></td><td class="num ch">10</td><td class="num ch">12</td><td class="num ch tot">22</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Subhasish Saha"></td></tr><tr data-player="Vishal Malakar"><td class="num">2</td><td class="pname">Vishal Malakar<span class="idx">idx 13.2</span></td><td class="num ch">10</td><td class="num ch">13</td><td class="num ch tot">23</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Vishal Malakar"></td></tr><tr data-player="Hargunwant Randhawa"><td class="num">3</td><td class="pname">Hargunwant Randhawa<span class="idx">idx 13.7</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Hargunwant Randhawa"></td></tr><tr data-player="Parag Deshpande"><td class="num">4</td><td class="pname">Parag Deshpande<span class="idx">idx 13.8</span></td><td class="num ch">11</td><td class="num ch">13</td><td class="num ch tot">24</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Parag Deshpande"></td></tr><tr data-player="Abhijit Pandit"><td class="num">5</td><td class="pname">Abhijit Pandit<span class="idx">idx 14.2</span></td><td class="num ch">11</td><td class="num ch">14</td><td class="num ch tot">25</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Abhijit Pandit"></td></tr><tr data-player="Rohit Panikar"><td class="num">6</td><td class="pname">Rohit Panikar<span class="idx">idx 14.9</span></td><td class="num ch">12</td><td class="num ch">15</td><td class="num ch tot">27</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Rohit Panikar"></td></tr><tr data-player="Jitender Gehlaut"><td class="num">7</td><td class="pname">Jitender Gehlaut<span class="idx">idx 15.3</span></td><td class="num ch">12</td><td class="num ch">15</td><td class="num ch tot">27</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Jitender Gehlaut"></td></tr><tr data-player="Charandeep Sehgal"><td class="num">8</td><td class="pname">Charandeep Sehgal<span class="idx">idx 16.5</span></td><td class="num ch">14</td><td class="num ch">16</td><td class="num ch tot">30</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Charandeep Sehgal"></td></tr><tr data-player="Manoj Joshi"><td class="num">9</td><td class="pname">Manoj Joshi<span class="idx">idx 16.7</span></td><td class="num ch">14</td><td class="num ch">17</td><td class="num ch tot">31</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Manoj Joshi"></td></tr><tr data-player="Samit Rao"><td class="num">10</td><td class="pname">Samit Rao<span class="idx">idx 17.4</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Samit Rao"></td></tr><tr data-player="Jigar Patel"><td class="num">11</td><td class="pname">Jigar Patel<span class="idx">idx 17.8</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Jigar Patel"></td></tr><tr data-player="Rahul Pandit"><td class="num">12</td><td class="pname">Rahul Pandit<span class="idx">idx 18.1</span></td><td class="num ch">15</td><td class="num ch">18</td><td class="num ch tot">33</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Rahul Pandit"></td></tr><tr data-player="Anudeep Bhatia"><td class="num">13</td><td class="pname">Anudeep Bhatia<span class="idx">idx 19.2</span></td><td class="num ch">17</td><td class="num ch">20</td><td class="num ch tot">37</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Anudeep Bhatia"></td></tr><tr data-player="Chhatrapal Bhende"><td class="num">14</td><td class="pname">Chhatrapal Bhende<span class="idx">idx 19.7</span></td><td class="num ch">17</td><td class="num ch">20</td><td class="num ch tot">37</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Chhatrapal Bhende"></td></tr><tr data-player="Manish Mathuria"><td class="num">15</td><td class="pname">Manish Mathuria<span class="idx">idx 21.2</span></td><td class="num ch">19</td><td class="num ch">22</td><td class="num ch tot">41</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Manish Mathuria"></td></tr><tr data-player="Ketki Mathuria"><td class="num">16</td><td class="pname">Ketki Mathuria<span class="idx">idx 24.8</span></td><td class="num ch">22</td><td class="num ch">26</td><td class="num ch tot">48</td><td class="bid"><input type="number" min="0" step="1" inputmode="numeric" placeholder="—" aria-label="Bid for Ketki Mathuria"></td></tr></tbody>
+    <tfoot><tr>
+      <td colspan="5" class="footlabel">Flight total</td>
+      <td class="num bidtotal" id="total-pebble">$0</td>
+    </tr></tfoot>
   </table>
+  <div class="expenses">
+    <label>Expenses <input type="number" min="0" max="100" step="0.5" value="0"
+      id="exp-pebble" aria-label="Expense percent for Pebble Flight"> %</label>
+    <span class="expcalc">expenses <b id="expamt-pebble">$0</b> · net pool <b id="net-pebble">$0</b></span>
+  </div>
 </section>
-<p class="note">Ketki plays Red tees at Wolf and Bronze tees at Reflection Bay (women's ratings).
-Ratings: Wolf Yellow 70.7/126, White 67.8/122, Red (W) 68.4/118 ·
-Reflection Bay White 71.8/136, Silver 69.5/130, Bronze (W) 70.1/129. Par 72.</p>
+<section id="grand">
+  <h2>Grand Total</h2>
+  <div class="g">
+    <div><span>Total bids</span><b id="gross">$0</b></div>
+    <div><span>Expenses</span><b id="gexp">$0</b></div>
+    <div><span>Net pool</span><b class="net" id="gnet">$0</b></div>
+  </div>
+</section>
+<div class="actions"><button id="reset" type="button">Reset all bids</button></div>
+<p class="note">Bids and expense % are saved on this device as you type. Ketki plays Red tees at Wolf and
+Bronze tees at Reflection Bay (women's ratings). Ratings: Wolf Yellow 70.7/126, White 67.8/122,
+Red (W) 68.4/118 · Reflection Bay White 71.8/136, Silver 69.5/130, Bronze (W) 70.1/129. Par 72.</p>
 </main>
+<script>
+const FLIGHTS = ["augusta", "pebble"];
+const $ = id => document.getElementById(id);
+const money = n => "$" + n.toLocaleString("en-US");
+function save() {
+  const bids = {};
+  document.querySelectorAll("tbody tr[data-player]").forEach(tr => {
+    const v = tr.querySelector("input").value;
+    if (v !== "" && +v > 0) bids[tr.dataset.player] = +v;
+  });
+  try {
+    localStorage.setItem("calcutta2026-bids", JSON.stringify(bids));
+    localStorage.setItem("calcutta2026-exp-augusta", $("exp-augusta").value);
+    localStorage.setItem("calcutta2026-exp-pebble", $("exp-pebble").value);
+  } catch(e) {}
+}
+function load() {
+  try {
+    const bids = JSON.parse(localStorage.getItem("calcutta2026-bids") || "{}");
+    document.querySelectorAll("tbody tr[data-player]").forEach(tr => {
+      if (bids[tr.dataset.player] != null) tr.querySelector("input").value = bids[tr.dataset.player];
+    });
+    if (localStorage.getItem("calcutta2026-exp-augusta") != null)
+      $("exp-augusta").value = localStorage.getItem("calcutta2026-exp-augusta");
+    if (localStorage.getItem("calcutta2026-exp-pebble") != null)
+      $("exp-pebble").value = localStorage.getItem("calcutta2026-exp-pebble");
+  } catch(e) {}
+}
+function recalc() {
+  let grand = 0, gexp = 0;
+  FLIGHTS.forEach(f => {
+    let t = 0;
+    document.querySelectorAll(`#flight-${f} tbody tr`).forEach(tr => {
+      t += +(tr.querySelector("input").value || 0);
+    });
+    const pct = +($(`exp-${f}`).value || 0);
+    const exp = Math.round(t * pct / 100);
+    $("total-" + f).textContent = money(t);
+    $("expamt-" + f).textContent = money(exp);
+    $("net-" + f).textContent = money(t - exp);
+    grand += t; gexp += exp;
+  });
+  $("gross").textContent = money(grand);
+  $("gexp").textContent = money(gexp);
+  $("gnet").textContent = money(grand - gexp);
+  save();
+}
+document.querySelectorAll("input").forEach(i => i.addEventListener("input", recalc));
+$("reset").addEventListener("click", () => {
+  if (!confirm("Clear all bids and expense %?")) return;
+  document.querySelectorAll("tbody input").forEach(i => i.value = "");
+  FLIGHTS.forEach(f => $("exp-" + f).value = 0);
+  recalc();
+});
+load(); recalc();
+</script>
 </body>
 </html>
